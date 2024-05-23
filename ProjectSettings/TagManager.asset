@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Floor
+  - Wall
+  - Monster
+  - Coin
+  - PlayerProjectile
+  - MonsterProjectile
+  - NPC
+  - MeleeWeapon
+  - RangeWeapon
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Player
+  - Monster
+  - MonsterDead
+  - Coin
+  - Floor
+  - Wall
+  - PlayerProjectile
+  - MonsterProjectile
+  - Grenade
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: New Layer 1
+    uniqueID: 459707029
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 1365124989
+    locked: 0

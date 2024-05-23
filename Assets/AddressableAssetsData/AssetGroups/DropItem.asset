@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DropItem
+  m_EditorClassIdentifier: 
+  m_GroupName: DropItem
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 95b32df8b224fea41a695d49f0f9265c
+  m_SerializeEntries:
+  - m_GUID: 2f9a4539527006348a5a022abeb2d11a
+    m_Address: Coin_Bronze
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 9e030775812aa1545b30da49806ee430
+    m_Address: Coin_Gold
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 46dfa14b6b1521e4f853ade688241f67
+    m_Address: Coin_Silver
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b84a10a7fab21534191c33cab5f41b30, type: 2}
+    - {fileID: 11400000, guid: 223776926dc6d1b41a1aff4b38781aa8, type: 2}
