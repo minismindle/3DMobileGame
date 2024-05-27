@@ -124,6 +124,8 @@ public class MonsterAController : MonsterController
     }
     void StopAttack(BaseController attacker, int damage)
     {
+        if (_coAttack == null)
+            return;
         StopCoroutine(_coAttack);
         _coAttack = null;
     }
