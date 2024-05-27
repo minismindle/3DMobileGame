@@ -58,12 +58,14 @@ public class MonsterAController : MonsterController
     public override void MoveMonster()
     {
         CreatureState = CreatureState.Moving;
+        StopAttack(this, 10);
         _nav.SetDestination(Target.transform.position);
     }
     public override void AttackMonster()
     {
         CreatureState = CreatureState.Attack;
         _nav.SetDestination(transform.position);
+        StartAttack(this, 10);
     }
     public override void TurnMonster(Vector3 dir)
     {
