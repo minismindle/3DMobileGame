@@ -351,6 +351,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MakeDead: 0
   _animator: {fileID: 0}
+  _meleeWeapon: {fileID: 0}
+  _rangeWeapon: {fileID: 0}
   _collider: {fileID: 0}
   CreatureData:
     DataId: 0
@@ -369,6 +371,7 @@ MonoBehaviour:
     MoveSpeedRate: 0
     IconLabel: 
     SkillTypeList: 
+  _AttackPos: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +472,132 @@ MonoBehaviour:
   _mode: 0
   _delta: {x: 0, y: 9, z: -7.5}
   _player: {fileID: 0}
+--- !u!1001 &1077293918
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 131481910953573043, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 19.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.569
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.802
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062362018885022397, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320669544841490502, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy C
+      objectReference: {fileID: 0}
+    - target: {fileID: 6773839420693430966, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149831544721602993, guid: 06d503bba93001142b96e3510906db62,
+        type: 3}
+      propertyPath: m_Name
+      value: AttackPos
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1307015000406358337, guid: 06d503bba93001142b96e3510906db62, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 06d503bba93001142b96e3510906db62, type: 3}
+--- !u!1 &1077293919 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3320669544841490502, guid: 06d503bba93001142b96e3510906db62,
+    type: 3}
+  m_PrefabInstance: {fileID: 1077293918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1077293920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077293919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae81c032a95486e468bd149010510d23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MakeDead: 0
+  _animator: {fileID: 0}
+  _meleeWeapon: {fileID: 0}
+  _rangeWeapon: {fileID: 1703159654}
+  _collider: {fileID: 0}
+  CreatureData:
+    DataId: 0
+    DescriptionTextID: 
+    PrefabLabel: 
+    MaxHp: 0
+    MaxHpBonus: 0
+    Atk: 0
+    AtkBonus: 0
+    Def: 0
+    MoveSpeed: 0
+    TotalExp: 0
+    HpRate: 0
+    AtkRate: 0
+    DefRate: 0
+    MoveSpeedRate: 0
+    IconLabel: 
+    SkillTypeList: 
+  _AttackPos: {fileID: 1703159652}
 --- !u!1 &1126152364
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +687,7 @@ PrefabInstance:
     - target: {fileID: 9133255185617633366, guid: 83dab506297948d4d8d34c4fe12431ee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9133255185617633366, guid: 83dab506297948d4d8d34c4fe12431ee,
         type: 3}
@@ -633,6 +762,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MakeDead: 0
   _animator: {fileID: 0}
+  _meleeWeapon: {fileID: 0}
+  _rangeWeapon: {fileID: 0}
   _collider: {fileID: 0}
   CreatureData:
     DataId: 0
@@ -651,6 +782,7 @@ MonoBehaviour:
     MoveSpeedRate: 0
     IconLabel: 
     SkillTypeList: 
+  _AttackPos: {fileID: 0}
   _missilePos1: {fileID: 0}
   _missilePos2: {fileID: 0}
   _RockPos: {fileID: 0}
@@ -888,6 +1020,24 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5881933375027157378, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
+--- !u!1 &1703159652 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9149831544721602993, guid: 06d503bba93001142b96e3510906db62,
+    type: 3}
+  m_PrefabInstance: {fileID: 1077293918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1703159654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3398471544541285026, guid: 06d503bba93001142b96e3510906db62,
+    type: 3}
+  m_PrefabInstance: {fileID: 1077293918}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703159652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0229a8ee3627a084797c510c9dd021ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1844198734
 GameObject:
   m_ObjectHideFlags: 0

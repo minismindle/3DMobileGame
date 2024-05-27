@@ -16,8 +16,8 @@ public class MonsterController : CreatureController
     public GameObject _AttackPos;
     protected Vector3 _destPos;
     public MonsterName MonsterName { get; set; }
-    public float ScanRange { get; set; } = 20f;
-    public float AttackRange { get; set; } = 2f;
+    public virtual float ScanRange { get; set; } 
+    public virtual float AttackRange { get; set; } 
     public GameObject Target { get; set; }
 
     protected Define.MonsterName _monsterName;
@@ -45,10 +45,12 @@ public class MonsterController : CreatureController
 
     public virtual void TurnMonster(Vector3 dir)
     {
+        transform.LookAt(dir);
     }
     public virtual void FreezeVelocity()
     {
-
+        _rigid.velocity = Vector3.zero;
+        _rigid.angularVelocity = Vector3.zero;
     }
     public override bool Init()
     {

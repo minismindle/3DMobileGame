@@ -6,124 +6,64 @@ using static Define;
 
 public class MonsterCController : MonsterController
 {
+   
     public override void UpdateAnimation()
     {
         switch (CreatureState)
         {
             case Define.CreatureState.Idle:
-                _animator.CrossFade("Idle", 0.1f);
+                _animator.SetBool("IsWalk", false);
                 break;
             case Define.CreatureState.Moving:
-                _animator.CrossFade("Walk", 0.1f);
+                _animator.SetBool("IsWalk", true);
+                _animator.SetBool("IsAttack", false);
                 break;
             case Define.CreatureState.Attack:
-                _animator.CrossFade("Attack", 0.1f, -1, 0);
+                _animator.SetBool("IsAttack", true);
                 break;
             case Define.CreatureState.Dead:
                 break;
         }
     }
-
     public override void MonsterAI()
     {
-        switch (CreatureState)
-        {
-            case Define.CreatureState.Idle:
-                IdleMonster();
-                break;
-            case Define.CreatureState.Moving:
-                MoveMonster();
-                break;
-            case Define.CreatureState.Attack:
-                AttackMonster();
-                break;
-        }
-        if (Target != null)
-            TurnMonster(Target.transform.position);
-    }
-
-    public override void IdleMonster()
-    {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
         if (player == null)
             return;
 
         float dist = (player.transform.position - this.transform.position).magnitude;
 
-        if (dist <= ScanRange)
+        if (dist <= AttackRange)
+        {
+            AttackMonster();
+        }
+        else if (dist <= ScanRange)
         {
             Target = player;
-
-            CreatureState = CreatureState.Moving;
-            return;
+            MoveMonster();
         }
-    }
+        else if (dist > ScanRange)
+        {
+            IdleMonster();
+        }
 
+        if (Target != null)
+            TurnMonster(Target.transform.position);
+    }
+    public override void IdleMonster()
+    {
+        CreatureState = CreatureState.Idle;
+    }
     public override void MoveMonster()
     {
-        if (Target != null)
-        {
-            _nav.avoidancePriority = 51;
-
-            _destPos = Target.transform.position;
-            float dist = (_destPos - this.transform.position).magnitude;
-            if (dist <= AttackRange)
-
-            {
-                _nav.avoidancePriority = 50;
-                _nav.SetDestination(transform.position);
-                CreatureState = Define.CreatureState.Attack;
-                return;
-            }
-        }
-
-        Vector3 _dir = _destPos - transform.position;
-
-        if (_dir.magnitude < 0.1f)
-        {
-            CreatureState = Define.CreatureState.Idle;
-        }
-        else if (_dir.magnitude <= ScanRange)
-
-        {
-            _nav.SetDestination(_destPos);
-        }
-        else
-        {
-            _nav.SetDestination(transform.position);
-            CreatureState = Define.CreatureState.Idle;
-            Target = null;
-
-        }
+        CreatureState = CreatureState.Moving;
+        _nav.SetDestination(Target.transform.position);
     }
-
     public override void AttackMonster()
     {
-        if (Target != null)
-
-        {
-
-            StartAttack(this, 10);
-
-            float dist = (Target.transform.position - transform.position).magnitude;
-
-            if (dist <= AttackRange)
-
-            {
-                if (CreatureState != CreatureState.Attack)
-                    CreatureState = Define.CreatureState.Attack;
-            }
-            else
-            {
-                CreatureState = Define.CreatureState.Moving;
-                StopAttack(this, 10);
-            }
-        }
-        else
-        {
-            CreatureState = Define.CreatureState.Idle;
-            StopAttack(this, 10);
-        }
+        CreatureState = CreatureState.Attack;
+        _nav.SetDestination(transform.position);
     }
     public override void TurnMonster(Vector3 dir)
     {
@@ -141,7 +81,7 @@ public class MonsterCController : MonsterController
     public override bool Init()
     {
         base.Init();
-        SetInfo(0);
+        SetInfo(3);
         return true;
     }
     public override void SetInfo(int templateID)
@@ -152,7 +92,9 @@ public class MonsterCController : MonsterController
         _nav = GetComponent<NavMeshAgent>();
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
-        MonsterName = MonsterName.MonsterA;
+        ScanRange = 25f;
+        AttackRange = 15f;
+        MonsterName = MonsterName.MonsterC;
         ObjectType = ObjectType.Monster;
         CreatureState = CreatureState.Idle;
     }
@@ -165,18 +107,18 @@ public class MonsterCController : MonsterController
     }
     #region Attack
     Coroutine _coAttack;
-    IEnumerator CoMonsterA(BaseController attacker, int damage)
+    IEnumerator CoMonsterC(BaseController attacker, int damage)
     {
-        yield return new WaitForSeconds(0.5f);
-        Target.gameObject.GetComponent<PlayerController>().OnDotDamage(attacker, damage);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
+        _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward, "Missile");
+        yield return new WaitForSeconds(3f);
         _coAttack = null;
     }
     void StartAttack(BaseController attacker, int damage)
     {
         if (_coAttack != null)
             return;
-        _coAttack = StartCoroutine(CoMonsterA(attacker, damage));
+        _coAttack = StartCoroutine(CoMonsterC(attacker, damage));
     }
     void StopAttack(BaseController attacker, int damage)
     {

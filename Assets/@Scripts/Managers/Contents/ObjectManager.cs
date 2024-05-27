@@ -62,7 +62,7 @@ public class ObjectManager
 		{
             GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
 			go.transform.position = position;
-			go.transform.rotation = Managers.Game.Player.transform.rotation;
+			go.transform.rotation = Managers.Game.Player.transform.rotation ;
 
 			ProjectileController pc = go.GetOrAddComponent<ProjectileController>();
 			Projectiles.Add(pc);
