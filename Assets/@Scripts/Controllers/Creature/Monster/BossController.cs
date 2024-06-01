@@ -34,7 +34,7 @@ public class BossController : MonsterController
 
         }
     }
-    void MonsterAI()
+    public override void MonsterAI()
     {
         switch (CreatureState)
         {
@@ -57,7 +57,7 @@ public class BossController : MonsterController
         if (Target != null)
             TurnMonster(Target.transform.position);
     }
-    void IdleMonster()
+    public override void IdleMonster()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -68,7 +68,7 @@ public class BossController : MonsterController
         CreatureState = CreatureState.Attack;
         return;
     }
-    void AttackMonster()
+    public override void AttackMonster()
     {
         if (Target != null)
         {
@@ -91,9 +91,9 @@ public class BossController : MonsterController
     {
 
     }
-    void TurnMonster(Vector3 dir)
+    public override void TurnMonster(Vector3 dir)
     {
-        transform.LookAt(dir);
+        base.TurnMonster(dir);
     }
 
     public override bool Init()

@@ -53,16 +53,19 @@ public class MonsterCController : MonsterController
     public override void IdleMonster()
     {
         CreatureState = CreatureState.Idle;
+        _nav.avoidancePriority = 51;
     }
     public override void MoveMonster()
     {
         CreatureState = CreatureState.Moving;
+        _nav.avoidancePriority = 51;
         _nav.SetDestination(Target.transform.position);
     }
     public override void AttackMonster()
     {
-        _nav.SetDestination(transform.position);
         StartAttack(this, 10);
+        _nav.avoidancePriority = 50;
+        _nav.SetDestination(transform.position);
     }
     public override void TurnMonster(Vector3 dir)
     {
