@@ -313,6 +313,7 @@ public class Define
         Reload,
         Attack,
         Tanut,
+        Wait,
     }
 
     public enum ObjectType

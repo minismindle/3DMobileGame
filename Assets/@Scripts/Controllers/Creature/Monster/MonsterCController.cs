@@ -62,8 +62,8 @@ public class MonsterCController : MonsterController
     }
     public override void AttackMonster()
     {
-        CreatureState = CreatureState.Attack;
         _nav.SetDestination(transform.position);
+        StartAttack(this, 10);
     }
     public override void TurnMonster(Vector3 dir)
     {
@@ -109,8 +109,10 @@ public class MonsterCController : MonsterController
     Coroutine _coAttack;
     IEnumerator CoMonsterC(BaseController attacker, int damage)
     {
-        yield return new WaitForSeconds(1f);
+        CreatureState = CreatureState.Attack;
         _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward, "Missile");
+        yield return new WaitForSeconds(0.5f);
+        CreatureState = CreatureState.Idle;
         yield return new WaitForSeconds(3f);
         _coAttack = null;
     }
