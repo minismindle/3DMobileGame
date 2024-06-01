@@ -235,7 +235,7 @@ public class PlayerController : CreatureController
 
         CreatureState = Define.CreatureState.Shot;
 
-        _rangeWeapon.Use(this, _shootPos.position, transform.forward, "Bullet_SubMachineGun");
+        _rangeWeapon.Use(this, _shootPos.position, transform.forward, this.transform.rotation,"Bullet_SubMachineGun");
 
 
         SetAnimationDelay(AttackCoolTime);

@@ -22,7 +22,7 @@ public class ObjectManager
 		DamageFont damageText = go.GetOrAddComponent<DamageFont>();
 		damageText.SetInfo(pos, damage, parent,isCritical);
 	}
-	public T Spawn<T>(Vector3 position, int templateID = 0, string prefabName = "") where T : BaseController
+	public T Spawn<T>(Vector3 position,Quaternion rotation, int templateID = 0, string prefabName = "") where T : BaseController
 	{
 		System.Type type = typeof(T);
 
@@ -62,7 +62,7 @@ public class ObjectManager
 		{
             GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
 			go.transform.position = position;
-			go.transform.rotation = Managers.Game.Player.transform.rotation ;
+			go.transform.rotation = rotation;
 
 			ProjectileController pc = go.GetOrAddComponent<ProjectileController>();
 			Projectiles.Add(pc);

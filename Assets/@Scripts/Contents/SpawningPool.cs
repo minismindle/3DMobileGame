@@ -44,7 +44,7 @@ public class SpawningPool : MonoBehaviour
 			return;
 
 		Vector3 randPos = Utils.GenerateMonsterSpawnPosition(Managers.Game.Player.transform.position, 10, 20);
-		MonsterController mc = Managers.Object.Spawn<MonsterController>(randPos);
+		MonsterController mc = Managers.Object.Spawn<MonsterController>(randPos,transform.rotation);
 	}
 	
 }

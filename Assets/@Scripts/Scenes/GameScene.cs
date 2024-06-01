@@ -29,7 +29,7 @@ public class GameScene : BaseScene
 
         _spawningPool = gameObject.GetOrAddComponent<SpawningPool>();
 
-        var player = Managers.Object.Spawn<PlayerController>(Vector3.zero);
+        var player = Managers.Object.Spawn<PlayerController>(Vector3.zero,transform.rotation);
 
 
 

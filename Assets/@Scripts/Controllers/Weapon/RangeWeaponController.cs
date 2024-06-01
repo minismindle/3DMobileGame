@@ -13,24 +13,24 @@ public class RangeWeaponController : WeaponController
         SetInfo("SubMachineGun");
         return true;
     }
-    public void Use(CreatureController owner, Vector3 startPos, Vector3 dir, string prefabName)
+    public void Use(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
-        Attack(owner, startPos, dir, prefabName);
+        Attack(owner, startPos, dir, rotation, prefabName);
     }
 
     #region Attack
     public Coroutine _coAttack;
-    IEnumerator ShotSubMachineGun(CreatureController owner, Vector3 startPos, Vector3 dir, string prefabName)
+    IEnumerator ShotSubMachineGun(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
         yield return new WaitForSeconds(0.1f);
-        GenerateProjectile(owner, startPos, dir, prefabName);
+        GenerateProjectile(owner, startPos, dir, rotation, prefabName);
         yield return new WaitForSeconds(CoolTime);
     }
-    void Attack(CreatureController owner, Vector3 startPos, Vector3 dir, string prefabName)
+    void Attack(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
         if (_coAttack != null)
             _coAttack = null;
-        _coAttack = StartCoroutine(ShotSubMachineGun(owner, startPos, dir, prefabName));
+        _coAttack = StartCoroutine(ShotSubMachineGun(owner, startPos, dir, rotation, prefabName));
     }
     #endregion
 
@@ -44,10 +44,9 @@ public class RangeWeaponController : WeaponController
         _weapon.SetActive(true);
         CoolTime = 0.1f;
     }
-    void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir, string prefabName)
+    void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation,string prefabName)
     {
-        ProjectileController pc = Managers.Object.Spawn<ProjectileController>(startPos, 0, prefabName);
+        ProjectileController pc = Managers.Object.Spawn<ProjectileController>(startPos, rotation, 0, prefabName);
         pc.SetInfo(owner, prefabName, startPos, dir);
-
     }
 }

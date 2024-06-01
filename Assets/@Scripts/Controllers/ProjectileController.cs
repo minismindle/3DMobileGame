@@ -154,6 +154,7 @@ public class ProjectileController : BaseController
                 yield return new WaitForSeconds(3.0f);
                 break;
             case "Missile":
+                _rigid.angularVelocity = Vector3.zero;
                 yield return new WaitForSeconds(1f);
                 break;
             case "Rock_Boss":

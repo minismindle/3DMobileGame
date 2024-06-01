@@ -16,10 +16,9 @@ public class MonsterCController : MonsterController
                 break;
             case Define.CreatureState.Moving:
                 _animator.SetBool("IsWalk", true);
-                _animator.SetBool("IsAttack", false);
                 break;
             case Define.CreatureState.Attack:
-                _animator.SetBool("IsAttack", true);
+                _animator.SetTrigger("DoAttack");
                 break;
             case Define.CreatureState.Dead:
                 break;
@@ -110,8 +109,8 @@ public class MonsterCController : MonsterController
     IEnumerator CoMonsterC(BaseController attacker, int damage)
     {
         CreatureState = CreatureState.Attack;
-        _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward, "Missile");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.5f); 
+        _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
         CreatureState = CreatureState.Idle;
         yield return new WaitForSeconds(3f);
         _coAttack = null;

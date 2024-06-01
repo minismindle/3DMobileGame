@@ -39,7 +39,7 @@ public class GrenadeController : WeaponController
     }
     void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir)
     {
-        ProjectileController pc = Managers.Object.Spawn<ProjectileController>(startPos, 0, ProjectileName);
+        ProjectileController pc = Managers.Object.Spawn<ProjectileController>(startPos, transform.rotation,0,ProjectileName);
         pc.SetInfo(owner, ProjectileName,startPos, dir);
     }
 }
