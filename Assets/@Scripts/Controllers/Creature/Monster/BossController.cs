@@ -18,20 +18,18 @@ public class BossController : MonsterController
             case Define.CreatureState.Idle:
                 _animator.CrossFade("Idle", 0.1f);
                 break;
-            case Define.CreatureState.Moving:
-                _animator.CrossFade("Walk", 0.1f);
-                break;
             case Define.CreatureState.Tanut:
-                _animator.CrossFade("Tanut", 0.1f, -1, 0);
+                _animator.SetTrigger("DoTanut");
                 break;
             case Define.CreatureState.Skill1:
-                _animator.CrossFade("Shot", 0.1f, -1, 0);
+                _animator.SetTrigger("DoShot");
                 break;
             case Define.CreatureState.Skill2:
-                _animator.CrossFade("BigShot", 0.1f, -1, 0);
-
+                _animator.SetTrigger("DoBigShot");
                 break;
-
+            case Define.CreatureState.Dead:
+                _animator.SetTrigger("DoDie");
+                break;
         }
     }
     public override void MonsterAI()
@@ -59,25 +57,11 @@ public class BossController : MonsterController
     }
     public override void IdleMonster()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player != null)
-            return;
-
-        Target = player;
-        CreatureState = CreatureState.Attack;
-        return;
+        CreatureState = Define.CreatureState.Idle;
     }
     public override void AttackMonster()
     {
-        if (Target != null)
-        {
-
-        }
-        else
-        {
-
-        }
+        
     }
     void TanutMonster()
     {
@@ -85,7 +69,7 @@ public class BossController : MonsterController
     }
     void ShotMonster()
     {
-
+        CreatureState = Define.CreatureState.Skill1;
     }
     void BigShotMonster()
     {
