@@ -106,14 +106,14 @@ public class PlayerController : CreatureController
     public override void SetInfoInit(int templateID)
     {
         CreatureData = Managers.Data.CreatureDic[templateID];
-        ObjectType = Define.ObjectType.Player;
-        CreatureState = Define.CreatureState.Idle;
+        ObjectType = ObjectType.Player;
+        CreatureState = CreatureState.Idle;
 
         Managers.UI.GetSceneUI<UI_GameScene>().SetCharaterLevelInfo(level);
     }
     void FixedUpdate()
     {
-        if (CreatureState == Define.CreatureState.Dead)
+        if (CreatureState == CreatureState.Dead)
             return;
         TurnPlayer();
         MovePlayer();
@@ -133,9 +133,9 @@ public class PlayerController : CreatureController
     }
     public void ClickJumpButton()
     {
-        if (CreatureState == Define.CreatureState.Idle)
+        if (CreatureState == CreatureState.Idle)
             JumpPlayer();
-        else if (CreatureState == Define.CreatureState.Moving)
+        else if (CreatureState == CreatureState.Moving)
             DodgePlayer();
     }
     public void ClickAttackButton()
@@ -168,11 +168,11 @@ public class PlayerController : CreatureController
     }
     void MovePlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle && CreatureState != Define.CreatureState.Moving)
+        if (CreatureState != CreatureState.Idle && CreatureState != CreatureState.Moving)
             return;
 
-        if (MoveDir == Vector3.zero) CreatureState = Define.CreatureState.Idle;
-        else CreatureState = Define.CreatureState.Moving;
+        if (MoveDir == Vector3.zero) CreatureState = CreatureState.Idle;
+        else CreatureState = CreatureState.Moving;
 
         if (IsOnSlope())
         {
@@ -192,25 +192,25 @@ public class PlayerController : CreatureController
     }
     void TurnPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle && CreatureState != Define.CreatureState.Moving && CreatureState != Define.CreatureState.Shot)
+        if (CreatureState != CreatureState.Idle && CreatureState != CreatureState.Moving && CreatureState != Define.CreatureState.Shot)
             return;
         transform.LookAt(transform.position + _moveDir);
     }
     public void JumpPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
 
-        CreatureState = Define.CreatureState.Jump;
+        CreatureState = CreatureState.Jump;
 
         _rigid.AddForce(Vector3.up * 30f, ForceMode.Impulse);
     }
     public void DodgePlayer()
     {
-        if (CreatureState != Define.CreatureState.Moving)
+        if (CreatureState != CreatureState.Moving)
             return;
 
-        CreatureState = Define.CreatureState.Dodge;
+        CreatureState = CreatureState.Dodge;
 
         _rigid.AddForce(MoveDir * 30f, ForceMode.Impulse);
 
@@ -218,22 +218,22 @@ public class PlayerController : CreatureController
     }
     public void SwingPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
-        CreatureState = Define.CreatureState.Swing;
+        CreatureState = CreatureState.Swing;
 
-        _meleeWeapon.Use();
+        _meleeWeapon.Use("Hammer");
 
         SetAnimationDelay(AttackCoolTime);
     }
     public void ShotPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
-        if (CreatureState == Define.CreatureState.Shot)
+        if (CreatureState == CreatureState.Shot)
             return;
 
-        CreatureState = Define.CreatureState.Shot;
+        CreatureState = CreatureState.Shot;
 
         _rangeWeapon.Use(this, _shootPos.position, transform.forward, this.transform.rotation,"Bullet_SubMachineGun");
 
@@ -242,16 +242,16 @@ public class PlayerController : CreatureController
     }
     public void SwapPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
 
-        CreatureState = Define.CreatureState.Swap;
+        CreatureState = CreatureState.Swap;
 
         SetAnimationDelay(0.4f);
     }
     public void SwapToMeleeWeapon()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
         SwapPlayer();
         this.PlayerWeaponType = PlayerWeaponType.Melee;
@@ -261,7 +261,7 @@ public class PlayerController : CreatureController
     }
     public void SwapToRangeWeapon()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
         SwapPlayer();
         this.PlayerWeaponType = PlayerWeaponType.Range;
@@ -271,10 +271,10 @@ public class PlayerController : CreatureController
     }
     public void ThrowPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
 
-        CreatureState = Define.CreatureState.Throw;
+        CreatureState = CreatureState.Throw;
 
         NoneWeapon();
 
@@ -300,35 +300,35 @@ public class PlayerController : CreatureController
     }
     public void ReloadPlayer()
     {
-        if (CreatureState != Define.CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle)
             return;
 
-        CreatureState = Define.CreatureState.Reload;
+        CreatureState = CreatureState.Reload;
 
         SetAnimationDelay(2.7f);
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
-        if (CreatureState == Define.CreatureState.Dead)
+        if (CreatureState == CreatureState.Dead)
             return;
 
         base.OnDamaged(attacker, 10);
     }
     protected override void OnDead()
     {
-        if (CreatureState == Define.CreatureState.Dead)
+        if (CreatureState == CreatureState.Dead)
             return;
 
-        CreatureState = Define.CreatureState.Dead;
+        CreatureState = CreatureState.Dead;
     }
     private void OnCollisionEnter(Collision other)
     {
         switch (other.gameObject.tag)
         {
             case "Floor":
-                if (CreatureState != Define.CreatureState.Jump)
+                if (CreatureState != CreatureState.Jump)
                     return;
-                CreatureState = Define.CreatureState.Land;
+                CreatureState = CreatureState.Land;
                 SetAnimationDelay(0.5f);
                 break;
         }
@@ -352,15 +352,15 @@ public class PlayerController : CreatureController
     {
         yield return new WaitForSeconds(delay);
         ThrowAnimation();
-        CreatureState = Define.CreatureState.Idle;
+        CreatureState = CreatureState.Idle;
     }
     void ThrowAnimation()
     {
-        if (CreatureState != Define.CreatureState.Throw)
+        if (CreatureState != CreatureState.Throw)
             return;
-        if (PlayerWeaponType == Define.PlayerWeaponType.Melee)
+        if (PlayerWeaponType == PlayerWeaponType.Melee)
             UseMeleeWeapon();
-        else if (PlayerWeaponType == Define.PlayerWeaponType.Range)
+        else if (PlayerWeaponType == PlayerWeaponType.Range)
             UseRangeWeapon();
 
     }

@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Define;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class MeleeWeaponController : WeaponController
 {
     GameObject _weapon;
-    public void Use()
+
+    public void Use(string weaponName)
     {
-        Attack();
+        Attack(weaponName);
     }
     #region Attack
     Coroutine _coAttack;
@@ -22,11 +24,17 @@ public class MeleeWeaponController : WeaponController
         _collider.enabled = false;
         _trailRenderer.enabled = false;
     }
-    void Attack()
+    IEnumerator MonsterB()
+    {
+        _collider.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        _collider.enabled = false;
+    }
+    void Attack(string weaponName)
     {
         if (_coAttack != null)
             _coAttack = null;
-        _coAttack = StartCoroutine(Hammer());
+        _coAttack = StartCoroutine(weaponName);
     }
     #endregion
     public override bool Init()
@@ -36,24 +44,46 @@ public class MeleeWeaponController : WeaponController
     }
     public void SetInfo(string WeaponName) 
     {
-        WeaponType = Define.WeaponType.Melee;
-        ObjectType = Define.ObjectType.Weapon;
+        WeaponType = WeaponType.Melee;
+        ObjectType = ObjectType.Weapon;
         _weapon = this.transform.Find(WeaponName).gameObject;
         _collider = _weapon.GetComponent<BoxCollider>();
         _trailRenderer = _weapon.GetComponentInChildren<TrailRenderer>();
         _owner = Managers.Game.Player;
         CoolTime = 0.6f;
     }
-
     private void OnTriggerEnter(Collider target)
+    {
+        switch(target.gameObject.tag)
+        {
+            case "Monster":
+                Player(target);
+                break;
+            case "Player":
+                Monster(target);
+                break;
+        }
+    }
+
+    void Monster(Collider target)
+    {
+        PlayerController player = target.GetComponent<PlayerController>();
+        if (player.IsValid() == false)
+            return;
+        if (this.IsValid() == false)
+            return;
+        player.OnDotDamage(_owner, 10);
+    }
+    void Player(Collider target)
     {
         if (Managers.Game.Player.CreatureState != CreatureState.Swing)
             return;
         MonsterController monster = target.GetComponent<MonsterController>();
         if (monster.IsValid() == false)
             return;
-        if(this.IsValid() == false) 
+        if (this.IsValid() == false)
             return;
         monster.OnDotDamage(_owner, 10);
     }
+
 }

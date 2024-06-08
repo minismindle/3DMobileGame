@@ -92,6 +92,7 @@ public class MonsterCController : MonsterController
         Hp = 100;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
+        _rangeWeapon = GetComponent<RangeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 25f;
@@ -111,10 +112,10 @@ public class MonsterCController : MonsterController
     Coroutine _coAttack;
     IEnumerator CoMonsterC(BaseController attacker, int damage)
     {
+        CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.5f); 
         _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
-        CreatureState = CreatureState.Idle;
         yield return new WaitForSeconds(3f);
         _coAttack = null;
     }
@@ -126,6 +127,8 @@ public class MonsterCController : MonsterController
     }
     void StopAttack(BaseController attacker, int damage)
     {
+        if (_coAttack != null)
+            return;
         StopCoroutine(_coAttack);
         _coAttack = null;
     }
