@@ -92,6 +92,7 @@ public class MonsterCController : MonsterController
         Hp = 100;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
+        _rangeWeapon = GetComponent<RangeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 25f;
@@ -114,8 +115,9 @@ public class MonsterCController : MonsterController
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.5f); 
         _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
+        yield return new WaitForSeconds(0.5f);
         CreatureState = CreatureState.Idle;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         _coAttack = null;
     }
     void StartAttack(BaseController attacker, int damage)
