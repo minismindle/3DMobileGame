@@ -115,9 +115,12 @@ public class MonsterCController : MonsterController
         yield return new WaitForSeconds(0.5f); 
         _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
 <<<<<<< HEAD
+<<<<<<< HEAD
         yield return new WaitForSeconds(0.5f);
         yield return new WaitForSeconds(2f);
 =======
+=======
+>>>>>>> parent of 6105381 (v0.3)
         CreatureState = CreatureState.Idle;
         yield return new WaitForSeconds(3f);
 >>>>>>> parent of 6105381 (v0.3)

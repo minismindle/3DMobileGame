@@ -713,6 +713,7 @@ PrefabInstance:
     - target: {fileID: 6773839420693430966, guid: 06d503bba93001142b96e3510906db62,
         type: 3}
 <<<<<<< HEAD
+<<<<<<< HEAD
       propertyPath: m_IsActive
 <<<<<<< Updated upstream
 <<<<<<< HEAD
@@ -723,6 +724,10 @@ PrefabInstance:
 =======
       value: 1
 >>>>>>> Stashed changes
+=======
+      propertyPath: m_LocalPosition.y
+      value: 1.36
+>>>>>>> parent of 6105381 (v0.3)
 =======
       propertyPath: m_LocalPosition.y
       value: 1.36
@@ -1136,6 +1141,14 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Acceleration
       value: 10
+<<<<<<< HEAD
+=======
+      objectReference: {fileID: 0}
+    - target: {fileID: 3998371344844681580, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a,
+        type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 4
+>>>>>>> parent of 6105381 (v0.3)
       objectReference: {fileID: 0}
     - target: {fileID: 3998371344844681580, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a,
         type: 3}
@@ -1248,10 +1261,13 @@ PrefabInstance:
     m_Modifications:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     - target: {fileID: 164819133, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+=======
+>>>>>>> parent of 6105381 (v0.3)
 =======
 >>>>>>> parent of 6105381 (v0.3)
     - target: {fileID: 1783161591, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
@@ -1265,6 +1281,13 @@ PrefabInstance:
     - target: {fileID: 1783161591, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
       propertyPath: m_Radius
       value: 1.8
+<<<<<<< HEAD
+=======
+      objectReference: {fileID: 0}
+    - target: {fileID: 1783161591, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
+      propertyPath: m_Acceleration
+      value: 5
+>>>>>>> parent of 6105381 (v0.3)
       objectReference: {fileID: 0}
     - target: {fileID: 1783161591, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
       propertyPath: m_Acceleration
