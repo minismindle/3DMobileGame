@@ -116,13 +116,9 @@ public class MonsterCController : MonsterController
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.5f); 
         _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
-<<<<<<< HEAD
-        yield return new WaitForSeconds(3f);
-=======
         yield return new WaitForSeconds(0.5f);
         CreatureState = CreatureState.Idle;
         yield return new WaitForSeconds(2f);
->>>>>>> f00b80f0b91d522662cf785c62b9a1a026e1ee38
         _coAttack = null;
     }
     void StartAttack(BaseController attacker, int damage)
