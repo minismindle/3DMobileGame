@@ -115,8 +115,13 @@ public class MonsterBController : MonsterController
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.3f);
+<<<<<<< HEAD
         _meleeWeapon.Use("MonsterB");
         yield return new WaitForSeconds(2f);
+=======
+        Target.gameObject.GetComponent<PlayerController>().OnDotDamage(attacker, damage);
+        yield return new WaitForSeconds(1f);
+>>>>>>> f00b80f0b91d522662cf785c62b9a1a026e1ee38
         _coAttack = null;
     }
     void StartAttack(BaseController attacker, int damage)

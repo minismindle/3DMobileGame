@@ -501,7 +501,11 @@ PrefabInstance:
     - target: {fileID: 3320669544841490502, guid: 06d503bba93001142b96e3510906db62,
         type: 3}
       propertyPath: m_IsActive
+<<<<<<< HEAD
       value: 0
+=======
+      value: 1
+>>>>>>> f00b80f0b91d522662cf785c62b9a1a026e1ee38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06d503bba93001142b96e3510906db62, type: 3}
@@ -803,6 +807,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy A
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 328409505970683906, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a,
         type: 3}
       propertyPath: m_IsActive
@@ -818,6 +823,8 @@ PrefabInstance:
       propertyPath: m_Acceleration
       value: 6
       objectReference: {fileID: 0}
+=======
+>>>>>>> f00b80f0b91d522662cf785c62b9a1a026e1ee38
     - target: {fileID: 4462523135328065168, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a,
         type: 3}
       propertyPath: m_RootOrder
@@ -882,6 +889,7 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+<<<<<<< HEAD
     - target: {fileID: 164819133, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -894,6 +902,8 @@ PrefabInstance:
       propertyPath: m_Acceleration
       value: 6
       objectReference: {fileID: 0}
+=======
+>>>>>>> f00b80f0b91d522662cf785c62b9a1a026e1ee38
     - target: {fileID: 5052845572594401124, guid: 4198e2587d1fcca4cb87c16c3cfed34d,
         type: 3}
       propertyPath: m_RootOrder
@@ -953,6 +963,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy B
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187343066701982198, guid: 4198e2587d1fcca4cb87c16c3cfed34d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
