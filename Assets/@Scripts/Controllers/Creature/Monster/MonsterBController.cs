@@ -15,9 +15,10 @@ public class MonsterBController : MonsterController
                 break;
             case Define.CreatureState.Moving:
                 _animator.SetBool("IsWalk", true);
+                _animator.SetBool("IsAttack", false);
                 break;
             case Define.CreatureState.Attack:
-                _animator.SetTrigger("DoAttack");
+                _animator.SetBool("IsAttack", true);
                 break;
             case Define.CreatureState.Dead:
                 break;
@@ -63,6 +64,7 @@ public class MonsterBController : MonsterController
     }
     public override void AttackMonster()
     {
+        CreatureState = CreatureState.Attack;
         StartAttack(this, 10);
         _nav.avoidancePriority = 50;
         _nav.SetDestination(transform.position);
@@ -92,7 +94,6 @@ public class MonsterBController : MonsterController
         Hp = 100;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
-        _meleeWeapon = GetComponent<MeleeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 20f;
@@ -112,11 +113,9 @@ public class MonsterBController : MonsterController
     Coroutine _coAttack;
     IEnumerator CoMonsterA(BaseController attacker, int damage)
     {
-        CreatureState = CreatureState.Idle;
-        CreatureState = CreatureState.Attack;
-        yield return new WaitForSeconds(0.3f);
-        _meleeWeapon.Use("MonsterB");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
+        Target.gameObject.GetComponent<PlayerController>().OnDotDamage(attacker, damage);
+        yield return new WaitForSeconds(0.5f);
         _coAttack = null;
     }
     void StartAttack(BaseController attacker, int damage)

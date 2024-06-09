@@ -128,9 +128,6 @@ public class ProjectileController : BaseController
         switch (_prefabName)
         {
             case "Missile":
-                target.OnDotDamage(_owner, 10);
-                StopDestroy();
-                Managers.Object.Despawn(this);
                 break;
             case "Rock_Boss":
                 break;

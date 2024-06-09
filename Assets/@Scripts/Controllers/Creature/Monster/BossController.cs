@@ -10,7 +10,7 @@ public class BossController : MonsterController
     public Transform _missilePos1;
     public Transform _missilePos2;
     public Transform _RockPos;
-   
+
     public override void UpdateAnimation()
     {
         switch (CreatureState)
@@ -34,11 +34,26 @@ public class BossController : MonsterController
     }
     public override void MonsterAI()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player == null)
-            return;
-        AttackMonster();
+        switch (CreatureState)
+        {
+            case Define.CreatureState.Idle:
+                IdleMonster();
+                break;
+            case Define.CreatureState.Attack:
+                AttackMonster();
+                break;
+            case Define.CreatureState.Tanut:
+                TanutMonster();
+                break;
+            case Define.CreatureState.Skill1:
+                ShotMonster();
+                break;
+            case Define.CreatureState.Skill2:
+                BigShotMonster();
+                break;
+        }
+        if (Target != null)
+            TurnMonster(Target.transform.position);
     }
     public override void IdleMonster()
     {
@@ -46,8 +61,7 @@ public class BossController : MonsterController
     }
     public override void AttackMonster()
     {
-        StartRandomSkill(); 
-
+        
     }
     void TanutMonster()
     {
@@ -75,10 +89,10 @@ public class BossController : MonsterController
     public override void SetInfo(int templateID)
     {
         _rigid = GetComponent<Rigidbody>();
-        _rangeWeapon =GetComponent<RangeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         MonsterName = Define.MonsterName.Boss;
+
         ObjectType = Define.ObjectType.BossMonster;
         CreatureState = Define.CreatureState.Idle;
     }
@@ -93,16 +107,6 @@ public class BossController : MonsterController
     IEnumerator CoRandomSkill()
     {
         yield return new WaitForSeconds(3.0f);
-
-        switch(CreatureState)
-        {
-            case CreatureState.Tanut:
-                break;
-            case CreatureState.Skill1:
-                break;
-            case CreatureState.Skill2: 
-                break;   
-        }
     }
 
     void StartRandomSkill()

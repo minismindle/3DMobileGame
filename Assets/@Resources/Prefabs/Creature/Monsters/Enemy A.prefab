@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4462523135328065168}
   - component: {fileID: 3210110503210587527}
   - component: {fileID: -356576071542717135}
+  - component: {fileID: 5881933375027157378}
   - component: {fileID: 3998371344844681580}
-  - component: {fileID: 868166276}
   m_Layer: 7
   m_Name: Enemy A
   m_TagString: Monster
@@ -65,29 +65,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 2.5, z: 2.5}
   m_Center: {x: 0, y: 1.5, z: 0.2}
---- !u!195 &3998371344844681580
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 328409505970683906}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.1
-  m_Speed: 5
-  m_Acceleration: 10
-  avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 3
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &868166276
+--- !u!114 &5881933375027157378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,14 +74,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 328409505970683906}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21fac96475babbe489acd707f9e51b67, type: 3}
+  m_Script: {fileID: 11500000, guid: c54270d05abe0d7449c42a12e1473371, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MakeDead: 0
   _animator: {fileID: 0}
-  _meleeWeapon: {fileID: 0}
-  _rangeWeapon: {fileID: 0}
-  _collider: {fileID: 0}
+  _collider: {fileID: -356576071542717135}
   CreatureData:
     DataId: 0
     DescriptionTextID: 
@@ -121,7 +97,28 @@ MonoBehaviour:
     MoveSpeedRate: 0
     IconLabel: 
     SkillTypeList: 
-  _AttackPos: {fileID: 0}
+--- !u!195 &3998371344844681580
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328409505970683906}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.5
+  m_Speed: 5
+  m_Acceleration: 5
+  avoidancePriority: 50
+  m_AngularSpeed: 360
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 3
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &4830895522237710593
 PrefabInstance:
   m_ObjectHideFlags: 0
