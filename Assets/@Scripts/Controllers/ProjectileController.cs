@@ -136,6 +136,7 @@ public class ProjectileController : BaseController
                 Managers.Object.Despawn(this);
                 break;
             case "Rock_Boss":
+                target.OnDotDamage(_owner, 10);
                 break;
             case "Missile_Boss":
                 target.OnDotDamage(_owner, 10);

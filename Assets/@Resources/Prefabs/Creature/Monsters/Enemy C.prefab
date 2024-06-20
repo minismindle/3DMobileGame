@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2062362018885022397
 Transform:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
     MoveSpeedRate: 0
     IconLabel: 
     SkillTypeList: 
-  _AttackPos: {fileID: 9149831544721602993}
+  _attackPos: {fileID: 9149831544721602993}
 --- !u!114 &1077293925
 MonoBehaviour:
   m_ObjectHideFlags: 0

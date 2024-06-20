@@ -44,6 +44,9 @@ public class BossController : MonsterController
         if (player == null)
             return;
         AttackMonster();
+
+        if (Target != null)
+            TurnMonster(Target.transform.position);
     }
     public override void IdleMonster()
     {
@@ -78,6 +81,7 @@ public class BossController : MonsterController
     private void FixedUpdate()
     {
         MonsterAI();
+
     }
 
     #region RandomSkill
@@ -94,6 +98,7 @@ public class BossController : MonsterController
             {
                 case 0:
                     CoTanutMonster();
+
                     break;
                 case 1:
                     CoShotMonster();

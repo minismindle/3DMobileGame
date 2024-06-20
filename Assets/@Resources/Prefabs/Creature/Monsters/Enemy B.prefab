@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 164819132}
   - component: {fileID: 164819133}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: AttackPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ BoxCollider:
   m_GameObject: {fileID: 164819131}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 3, y: 2, z: 2.5}
   m_Center: {x: 0, y: 1, z: 0}
@@ -65,7 +65,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5052845572594401124
 Transform:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!65 &3987241230197073870
 BoxCollider:
@@ -122,8 +122,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.1
-  m_Speed: 5
-  m_Acceleration: 10
+  m_Speed: 3
+  m_Acceleration: 6
   avoidancePriority: 50
   m_AngularSpeed: 360
   m_StoppingDistance: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
     MoveSpeedRate: 0
     IconLabel: 
     SkillTypeList: 
-  _AttackPos: {fileID: 0}
+  _attackPos: {fileID: 164819131}
 --- !u!114 &1939542927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,6 +307,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
+        type: 3}
+      propertyPath: m_TagString
+      value: Monster
       objectReference: {fileID: 0}
     - target: {fileID: 1870707945040428115, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
         type: 3}
