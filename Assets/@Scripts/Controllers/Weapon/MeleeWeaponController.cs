@@ -57,15 +57,15 @@ public class MeleeWeaponController : WeaponController
         switch(target.gameObject.tag)
         {
             case "Monster":
-                Player(target);
+                PlayerAttackToMonster(target);
                 break;
             case "Player":
-                Monster(target);
+                MonsterAttackToPlayer(target);
                 break;
         }
     }
 
-    void Monster(Collider target)
+    void MonsterAttackToPlayer(Collider target)
     {
         PlayerController player = target.GetComponent<PlayerController>();
         if (player.IsValid() == false)
@@ -74,7 +74,7 @@ public class MeleeWeaponController : WeaponController
             return;
         player.OnDotDamage(_owner, 10);
     }
-    void Player(Collider target)
+    void PlayerAttackToMonster(Collider target)
     {
         if (Managers.Game.Player.CreatureState != CreatureState.Swing)
             return;

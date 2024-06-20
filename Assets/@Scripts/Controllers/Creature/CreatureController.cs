@@ -73,10 +73,12 @@ public class CreatureController : BaseController
     }
 	public virtual void OnDamaged(BaseController attacker, int damage = 0)
 	{
-		if (Hp < 0)
+		if (Hp <= 0)
 			return;
 
 		Hp -= damage;
+        Debug.Log($"{attacker}");
+        Debug.Log($"{Hp}");
         //Managers.Object.ShowDamageFont(CenterPosition,damage,transform,isCritical : false);
 		if (Hp <= 0)
 		{

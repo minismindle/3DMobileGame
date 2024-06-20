@@ -6,7 +6,6 @@ using static Define;
 
 public class MonsterCController : MonsterController
 {
-   
     public override void UpdateAnimation()
     {
         switch (CreatureState)
@@ -58,6 +57,7 @@ public class MonsterCController : MonsterController
     public override void MoveMonster()
     {
         CreatureState = CreatureState.Moving;
+        StopAttack(this, 10);
         _nav.avoidancePriority = 51;
         _nav.SetDestination(Target.transform.position);
     }
@@ -94,6 +94,7 @@ public class MonsterCController : MonsterController
         _nav = GetComponent<NavMeshAgent>();
         _rangeWeapon = GetComponent<RangeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
+        _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 25f;
         AttackRange = 15f;
@@ -103,7 +104,7 @@ public class MonsterCController : MonsterController
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
-        if (CreatureState == Define.CreatureState.Dead)
+        if (CreatureState == CreatureState.Dead)
             return;
 
         base.OnDamaged(attacker, 10);
@@ -115,7 +116,7 @@ public class MonsterCController : MonsterController
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.5f); 
-        _rangeWeapon.Use(this, _AttackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
+        _rangeWeapon.Use(this, _attackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
         yield return new WaitForSeconds(3f);
         _coAttack = null;
     }
@@ -127,7 +128,7 @@ public class MonsterCController : MonsterController
     }
     void StopAttack(BaseController attacker, int damage)
     {
-        if (_coAttack != null)
+        if (_coAttack == null)
             return;
         StopCoroutine(_coAttack);
         _coAttack = null;

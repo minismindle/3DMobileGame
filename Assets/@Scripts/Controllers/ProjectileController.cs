@@ -38,7 +38,7 @@ public class ProjectileController : BaseController
 	{
 		if (base.Init() == false)
 			return false;
-        ObjectType = Define.ObjectType.Projectile;
+        ObjectType = ObjectType.Projectile;
         _rigid = GetComponent<Rigidbody>();
 		_trailRenderer = GetComponent<TrailRenderer>();
         _meshRenderer = GetComponentInChildren<MeshRenderer>();
@@ -69,6 +69,9 @@ public class ProjectileController : BaseController
             case "Missile":
                 _rigid.velocity = _dir * 20;
                 break;
+            case "Missile_Boss":
+                _rigid.velocity = _dir * 20;
+                break;
             case "Rock_Boss":
                 break;
         }
@@ -80,10 +83,10 @@ public class ProjectileController : BaseController
 	{
         switch (_owner.ObjectType)
         {
-            case Define.ObjectType.Player:
+            case ObjectType.Player:
                 PlayerProjectile(collision);
                 break;
-            case Define.ObjectType.Monster: 
+            case ObjectType.Monster: 
                 MonsterProjectile(collision); 
                 break;
         }
@@ -99,7 +102,7 @@ public class ProjectileController : BaseController
             return;
         if (this.IsValid() == false)
             return;
-        if (target.CreatureState == Define.CreatureState.Dead)
+        if (target.CreatureState == CreatureState.Dead)
             return;
 
         switch (_prefabName)
@@ -122,7 +125,7 @@ public class ProjectileController : BaseController
             return;
         if (this.IsValid() == false)
             return;
-        if (target.CreatureState == Define.CreatureState.Dead)
+        if (target.CreatureState == CreatureState.Dead)
             return;
 
         switch (_prefabName)
@@ -135,6 +138,9 @@ public class ProjectileController : BaseController
             case "Rock_Boss":
                 break;
             case "Missile_Boss":
+                target.OnDotDamage(_owner, 10);
+                StopDestroy();  
+                Managers.Object.Despawn(this);  
                 break;
         }
     }
@@ -157,6 +163,10 @@ public class ProjectileController : BaseController
                 yield return new WaitForSeconds(3.0f);
                 break;
             case "Missile":
+                _rigid.angularVelocity = Vector3.zero;
+                yield return new WaitForSeconds(1f);
+                break;
+            case "Missile_Boss":
                 _rigid.angularVelocity = Vector3.zero;
                 yield return new WaitForSeconds(1f);
                 break;
@@ -211,6 +221,8 @@ public class ProjectileController : BaseController
     Coroutine _coProjectile;
     IEnumerator CoRockBoss()
     {
+        angularPower = 2f;
+        scaleValue = 0.1f;
         while (true)
         {
             angularPower += 0.02f;
@@ -234,8 +246,6 @@ public class ProjectileController : BaseController
     void StopProjectile()
     {
         StopCoroutine(_coProjectile);    
-        angularPower = 2f;
-        scaleValue = 0.1f;
     }
     #endregion
 

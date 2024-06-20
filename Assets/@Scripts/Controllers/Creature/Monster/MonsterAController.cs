@@ -93,6 +93,7 @@ public class MonsterAController : MonsterController
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
         _animator = GetComponentInChildren<Animator>();
+        _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 20f;
         AttackRange = 2f;

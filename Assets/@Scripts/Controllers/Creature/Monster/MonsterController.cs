@@ -13,7 +13,7 @@ using static Define;
 
 public class MonsterController : CreatureController
 {
-    public GameObject _AttackPos;
+    public GameObject _attackPos;
     protected Vector3 _destPos;
     public MonsterName MonsterName { get; set; }
     public virtual float ScanRange { get; set; } 

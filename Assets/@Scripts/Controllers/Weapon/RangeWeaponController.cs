@@ -10,7 +10,6 @@ public class RangeWeaponController : WeaponController
     public override bool Init()
     {
         base.Init();
-        SetInfo("SubMachineGun");
         return true;
     }
     public void Use(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)

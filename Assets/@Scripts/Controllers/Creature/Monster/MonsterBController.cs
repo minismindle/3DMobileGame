@@ -94,6 +94,7 @@ public class MonsterBController : MonsterController
         _nav = GetComponent<NavMeshAgent>();
         _meleeWeapon = GetComponent<MeleeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
+        _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 20f;
         AttackRange = 2f;
@@ -110,7 +111,7 @@ public class MonsterBController : MonsterController
     }
     #region Attack
     Coroutine _coAttack;
-    IEnumerator CoMonsterA(BaseController attacker, int damage)
+    IEnumerator CoMonsterB(BaseController attacker, int damage)
     {
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
@@ -123,7 +124,7 @@ public class MonsterBController : MonsterController
     {
         if (_coAttack != null)
             return;
-        _coAttack = StartCoroutine(CoMonsterA(attacker, damage));
+        _coAttack = StartCoroutine(CoMonsterB(attacker, damage));
     }
     void StopAttack(BaseController attacker, int damage)
     {

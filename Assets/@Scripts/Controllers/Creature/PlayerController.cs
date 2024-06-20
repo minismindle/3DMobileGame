@@ -43,6 +43,7 @@ public class PlayerController : CreatureController
         CreatureState = Define.CreatureState.Idle;
         this.PlayerWeaponType = PlayerWeaponType.Melee;
         _meleeWeapon.SetInfo("Hammer");
+        _rangeWeapon.SetInfo("SubMachineGun");
         AttackCoolTime = 0.6f;
         _rigid.velocity = Vector3.zero;
         return true;

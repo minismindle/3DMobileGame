@@ -9,25 +9,30 @@ public class BossController : MonsterController
 {
     public Transform _missilePos1;
     public Transform _missilePos2;
-    public Transform _RockPos;
-   
+    public Transform _rockPos;
+    enum BossSkillType
+    {
+        Tanut,
+        SKill1,
+        Skill2,
+    }
     public override void UpdateAnimation()
     {
         switch (CreatureState)
         {
-            case Define.CreatureState.Idle:
+            case CreatureState.Idle:
                 _animator.CrossFade("Idle", 0.1f);
                 break;
-            case Define.CreatureState.Tanut:
+            case CreatureState.Tanut:
                 _animator.SetTrigger("DoTanut");
                 break;
-            case Define.CreatureState.Skill1:
+            case CreatureState.Skill1:
                 _animator.SetTrigger("DoShot");
                 break;
-            case Define.CreatureState.Skill2:
+            case CreatureState.Skill2:
                 _animator.SetTrigger("DoBigShot");
                 break;
-            case Define.CreatureState.Dead:
+            case CreatureState.Dead:
                 _animator.SetTrigger("DoDie");
                 break;
         }
@@ -42,24 +47,11 @@ public class BossController : MonsterController
     }
     public override void IdleMonster()
     {
-        CreatureState = Define.CreatureState.Idle;
+        CreatureState = CreatureState.Idle;
     }
     public override void AttackMonster()
     {
         StartRandomSkill(); 
-
-    }
-    void TanutMonster()
-    {
-
-    }
-    void ShotMonster()
-    {
-        CreatureState = Define.CreatureState.Skill1;
-    }
-    void BigShotMonster()
-    {
-
     }
     public override void TurnMonster(Vector3 dir)
     {
@@ -78,9 +70,9 @@ public class BossController : MonsterController
         _rangeWeapon =GetComponent<RangeWeaponController>();
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
-        MonsterName = Define.MonsterName.Boss;
-        ObjectType = Define.ObjectType.BossMonster;
-        CreatureState = Define.CreatureState.Idle;
+        MonsterName = MonsterName.Boss;
+        ObjectType = ObjectType.BossMonster;
+        CreatureState = CreatureState.Idle;
     }
 
     private void FixedUpdate()
@@ -90,21 +82,52 @@ public class BossController : MonsterController
 
     #region RandomSkill
     Coroutine _coRandomSkill;
+    float _randomSkill;
     IEnumerator CoRandomSkill()
     {
-        yield return new WaitForSeconds(3.0f);
-
-        switch(CreatureState)
+        while (true)
         {
-            case CreatureState.Tanut:
-                break;
-            case CreatureState.Skill1:
-                break;
-            case CreatureState.Skill2: 
-                break;   
+            yield return new WaitForSeconds(3.0f);
+            //_randomSkill = Random.Range(0,3);
+            _randomSkill = 2;
+            switch (_randomSkill)
+            {
+                case 0:
+                    CoTanutMonster();
+                    break;
+                case 1:
+                    CoShotMonster();
+                    _rangeWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    yield return new WaitForSeconds(0.5f);
+                    _rangeWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    break;
+                case 2:
+                    CoBigShotMonster();
+                    _rangeWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
+                    yield return new WaitForSeconds(5.0f);
+
+                    break;
+            }
         }
     }
+    
+    void CoTanutMonster()
+    {
+        CreatureState = CreatureState.Idle;
+        CreatureState = CreatureState.Tanut;
 
+    }
+    void CoShotMonster()
+    {
+        CreatureState = CreatureState.Idle;
+        CreatureState = CreatureState.Skill1;
+    }
+    void CoBigShotMonster()
+    {
+        CreatureState = CreatureState.Idle;
+        CreatureState = CreatureState.Skill2;
+
+    }
     void StartRandomSkill()
     {
         if (_coRandomSkill != null)
@@ -123,7 +146,7 @@ public class BossController : MonsterController
     IEnumerator CoWaitAnimation(float delay)
     {
         yield return new WaitForSeconds(delay);
-        CreatureState = Define.CreatureState.Idle;
+        CreatureState = CreatureState.Idle;
     }
     void SetAnimationDelay(float delay)
     {
