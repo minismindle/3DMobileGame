@@ -20,7 +20,6 @@ public class PlayerController : CreatureController
 
     PlayerWeaponType PlayerWeaponType;
     RaycastHit slopeHit;
-    float clickTime = 0f;
 
     public Data.LevelData LevelData { get; set; }
 
@@ -33,7 +32,7 @@ public class PlayerController : CreatureController
     public override bool Init()
     {
         base.Init();
-        Hp = 100;
+        Hp = 10000;
         _rigid = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponent<CapsuleCollider>();

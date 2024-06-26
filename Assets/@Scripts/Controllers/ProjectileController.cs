@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build.Pipeline.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using static Define;
 using static UnityEngine.GraphicsBuffer;
@@ -13,9 +14,11 @@ public class ProjectileController : BaseController
 {
     public CreatureController _owner;
     string _prefabName;
+    NavMeshAgent _nav;
 	Vector3 _spawnPos;
     Vector3 _dir;
 	Vector3 _target;
+    Quaternion _projectiletotargetRotation;
     float angularPower = 2f;
     float scaleValue = 0.1f;
 	Rigidbody _rigid;
@@ -40,11 +43,24 @@ public class ProjectileController : BaseController
 			return false;
         ObjectType = ObjectType.Projectile;
         _rigid = GetComponent<Rigidbody>();
+        _nav = GetComponent<NavMeshAgent>();    
 		_trailRenderer = GetComponent<TrailRenderer>();
         _meshRenderer = GetComponentInChildren<MeshRenderer>();
         _particleSystem = GetComponentInChildren<ParticleSystem>();  
         return true;
 	}
+    private void FixedUpdate()
+    {
+        switch(_prefabName)
+        {
+            case "Missile_Boss":
+                _dir = (Managers.Game.Player.transform.position + new Vector3(0,2f,0) - transform.position).normalized;
+                _projectiletotargetRotation = Quaternion.LookRotation(_dir);
+                _rigid.velocity = _dir * 20;
+                _rigid.MoveRotation(Quaternion.RotateTowards(transform.rotation, _projectiletotargetRotation, 20));
+                break;
+        }
+    }
     public void SetSkillData(SkillData skillData)
 	{
 
@@ -70,7 +86,6 @@ public class ProjectileController : BaseController
                 _rigid.velocity = _dir * 20;
                 break;
             case "Missile_Boss":
-                _rigid.velocity = _dir * 20;
                 break;
             case "Rock_Boss":
                 break;
@@ -110,7 +125,6 @@ public class ProjectileController : BaseController
             case "Grenage":
                 break;
             case "Bullet_SubMachineGun":
-                _trailRenderer.Clear();
                 target.OnDotDamage(_owner, 10);
                 StopDestroy();
                 Managers.Object.Despawn(this);
@@ -127,6 +141,7 @@ public class ProjectileController : BaseController
             return;
         if (target.CreatureState == CreatureState.Dead)
             return;
+
 
         switch (_prefabName)
         {
@@ -158,23 +173,23 @@ public class ProjectileController : BaseController
                 yield return new WaitForSeconds(2.0f);
                 _rigid.velocity = Vector3.zero;
                 _rigid.angularVelocity = Vector3.zero;
-                _trailRenderer.Clear();
                 _meshRenderer.gameObject.SetActive(false);
                 AttackNearestMonster(transform.position, 10f, Vector3.up, 0f, LayerMask.GetMask("Monster"),100);
                 yield return new WaitForSeconds(3.0f);
+                _trailRenderer.Clear();
                 break;
             case "Missile":
                 _rigid.angularVelocity = Vector3.zero;
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(2f);
                 break;
             case "Missile_Boss":
                 _rigid.angularVelocity = Vector3.zero;
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(2f);
                 break;
             case "Rock_Boss":
-                StartProjectile();
+                StartRockBoss();
                 yield return new WaitForSeconds(5f);
-                StopProjectile();
+                StopRockBoss();
                 break;
 
         }
@@ -185,7 +200,16 @@ public class ProjectileController : BaseController
         RaycastHit[] raycastHits = Physics.SphereCastAll(origin,radius,direction,maxDistance,layermask);
         foreach (RaycastHit _monster in raycastHits)
         {
-            _monster.transform.GetComponent<MonsterController>().OnDotDamage(_owner, damage);
+            MonsterController target = _monster.transform.GetComponent<MonsterController>();
+
+            if (target.IsValid() == false)
+                return;
+            if (this.IsValid() == false)
+                return;
+            if (target.CreatureState == CreatureState.Dead)
+                return;
+
+            target.OnDotDamage(_owner, damage);
         }
     }
     #region Destroy
@@ -217,7 +241,7 @@ public class ProjectileController : BaseController
 
     #endregion
 
-    #region Projectile
+    #region RockBoss
 
     Coroutine _coProjectile;
     IEnumerator CoRockBoss()
@@ -227,7 +251,7 @@ public class ProjectileController : BaseController
         while (true)
         {
             angularPower += 0.02f;
-            scaleValue += 0.005f;
+            scaleValue += 0.01f;
             scaleValue = Mathf.Min(1,scaleValue);
             angularPower = Mathf.Min(5,angularPower);
             transform.localScale = Vector3.one * scaleValue;
@@ -237,14 +261,14 @@ public class ProjectileController : BaseController
         }
     }
 
-    void StartProjectile()
+    void StartRockBoss()
     {
         if (_coProjectile != null)
             _coProjectile = null;
         _coProjectile = StartCoroutine(CoRockBoss());
     }
 
-    void StopProjectile()
+    void StopRockBoss()
     {
         StopCoroutine(_coProjectile);    
     }

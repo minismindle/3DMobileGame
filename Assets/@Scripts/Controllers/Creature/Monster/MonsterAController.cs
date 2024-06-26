@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using static Define;
@@ -20,6 +21,7 @@ public class MonsterAController : MonsterController
                 _animator.SetTrigger("DoAttack");
                 break;
             case Define.CreatureState.Dead:
+                _animator.SetTrigger("DoDie");
                 break;
         }
     }
@@ -46,8 +48,9 @@ public class MonsterAController : MonsterController
             IdleMonster();
         }
 
-        if (Target != null)
+        if(Target != null)     
             TurnMonster(Target.transform.position);
+
     }
     public override void IdleMonster()
     {
@@ -77,6 +80,9 @@ public class MonsterAController : MonsterController
     }
     void FixedUpdate()
     {
+        if (CreatureState == CreatureState.Dead)
+            return;
+
         MonsterAI();
         FreezeVelocity();
     }
@@ -88,12 +94,11 @@ public class MonsterAController : MonsterController
     }
     public override void SetInfo(int templateID)
     {
-        MakeDead = false;
-        Hp = 100;
+        Hp = 20;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
+        _collider = GetComponent<Collider>();
         _animator = GetComponentInChildren<Animator>();
-        _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ScanRange = 20f;
         AttackRange = 2f;
@@ -106,7 +111,11 @@ public class MonsterAController : MonsterController
         if (CreatureState == Define.CreatureState.Dead)
             return;
 
-        base.OnDamaged(attacker, 10);
+        base.OnDamaged(attacker, damage);
+    }
+    protected override void OnDead()
+    {
+        base.OnDead();
     }
     #region Attack
     Coroutine _coAttack;

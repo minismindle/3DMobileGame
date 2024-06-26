@@ -30,7 +30,7 @@ public class SpawningPool : MonoBehaviour
 		while (true)
 		{
 			TrySpawn();
-			yield return new WaitForSeconds(0.2f);
+			yield return new WaitForSeconds(1f);
 		}
 	}
     void TrySpawn()
@@ -40,11 +40,11 @@ public class SpawningPool : MonoBehaviour
 
 		int monsterCount = Managers.Object.Monsters.Count;
 
-		if (monsterCount >= 300)
+		if (monsterCount >= 0)
 			return;
 
-		Vector3 randPos = Utils.GenerateMonsterSpawnPosition(Managers.Game.Player.transform.position, 10, 20);
-		MonsterController mc = Managers.Object.Spawn<MonsterController>(randPos,transform.rotation);
+		Vector3 randPos = Utils.GenerateMonsterSpawnPosition(Managers.Game.Player.transform.position, 20, 30);
+		MonsterController mc = Managers.Object.Spawn<MonsterController>(randPos,transform.rotation,0,"Boss");
 	}
 	
 }

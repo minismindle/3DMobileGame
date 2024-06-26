@@ -20,6 +20,7 @@ public class MonsterBController : MonsterController
                 _animator.SetTrigger("DoAttack");
                 break;
             case Define.CreatureState.Dead:
+                _animator.SetTrigger("DoDie");
                 break;
         }
     }
@@ -48,6 +49,7 @@ public class MonsterBController : MonsterController
 
         if (Target != null)
             TurnMonster(Target.transform.position);
+
     }
     public override void IdleMonster()
     {
@@ -77,6 +79,9 @@ public class MonsterBController : MonsterController
     }
     void FixedUpdate()
     {
+        if (CreatureState == CreatureState.Dead)
+            return;
+
         MonsterAI();
         FreezeVelocity();
     }
@@ -89,7 +94,7 @@ public class MonsterBController : MonsterController
     public override void SetInfo(int templateID)
     {
         MakeDead = false;
-        Hp = 100;
+        Hp = 20;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
         _meleeWeapon = GetComponent<MeleeWeaponController>();
@@ -107,7 +112,12 @@ public class MonsterBController : MonsterController
         if (CreatureState == Define.CreatureState.Dead)
             return;
 
-        base.OnDamaged(attacker, 10);
+        base.OnDamaged(attacker, damage);
+    }
+    protected override void OnDead()
+    {
+        base.OnDead();
+
     }
     #region Attack
     Coroutine _coAttack;
@@ -117,7 +127,7 @@ public class MonsterBController : MonsterController
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.3f);
         _meleeWeapon.Use("MonsterB");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         _coAttack = null;
     }
     void StartAttack(BaseController attacker, int damage)

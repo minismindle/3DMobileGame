@@ -77,12 +77,12 @@ public class CreatureController : BaseController
 			return;
 
 		Hp -= damage;
-        Debug.Log($"{attacker}");
-        Debug.Log($"{Hp}");
+
         //Managers.Object.ShowDamageFont(CenterPosition,damage,transform,isCritical : false);
 		if (Hp <= 0)
 		{
 			Hp = 0;
+            OnDead();
 		}
     }
 

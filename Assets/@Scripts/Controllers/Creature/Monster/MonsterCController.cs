@@ -20,6 +20,7 @@ public class MonsterCController : MonsterController
                 _animator.SetTrigger("DoAttack");
                 break;
             case Define.CreatureState.Dead:
+                _animator.SetTrigger("DoDie");
                 break;
         }
     }
@@ -48,6 +49,7 @@ public class MonsterCController : MonsterController
 
         if (Target != null)
             TurnMonster(Target.transform.position);
+
     }
     public override void IdleMonster()
     {
@@ -77,6 +79,9 @@ public class MonsterCController : MonsterController
     }
     void FixedUpdate()
     {
+        if (CreatureState == CreatureState.Dead)
+            return;
+
         MonsterAI();
         FreezeVelocity();
     }
@@ -89,7 +94,7 @@ public class MonsterCController : MonsterController
     public override void SetInfo(int templateID)
     {
         MakeDead = false;
-        Hp = 100;
+        Hp = 30;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
         _rangeWeapon = GetComponent<RangeWeaponController>();
@@ -107,7 +112,11 @@ public class MonsterCController : MonsterController
         if (CreatureState == CreatureState.Dead)
             return;
 
-        base.OnDamaged(attacker, 10);
+        base.OnDamaged(attacker, damage);
+    }
+    protected override void OnDead()
+    {
+        base.OnDead();
     }
     #region Attack
     Coroutine _coAttack;
@@ -115,8 +124,8 @@ public class MonsterCController : MonsterController
     {
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
-        yield return new WaitForSeconds(0.5f); 
-        _rangeWeapon.Use(this, _attackPos.transform.position, transform.forward,this.transform.rotation, "Missile");
+        yield return new WaitForSeconds(0.5f);
+        _rangeWeapon.Use(this, _attackPos.transform.position, transform.forward,transform.rotation.normalized, "Missile");
         yield return new WaitForSeconds(3f);
         _coAttack = null;
     }

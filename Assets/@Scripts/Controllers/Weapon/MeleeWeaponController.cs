@@ -72,6 +72,9 @@ public class MeleeWeaponController : WeaponController
             return;
         if (this.IsValid() == false)
             return;
+        if (player.CreatureState == CreatureState.Dead)
+            return;
+
         player.OnDotDamage(_owner, 10);
     }
     void PlayerAttackToMonster(Collider target)
@@ -82,6 +85,8 @@ public class MeleeWeaponController : WeaponController
         if (monster.IsValid() == false)
             return;
         if (this.IsValid() == false)
+            return;
+        if (monster.CreatureState == CreatureState.Dead)
             return;
         monster.OnDotDamage(_owner, 10);
     }

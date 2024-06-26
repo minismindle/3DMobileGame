@@ -31,7 +31,7 @@ public class GameScene : BaseScene
 
         var player = Managers.Object.Spawn<PlayerController>(Vector3.zero,transform.rotation);
 
-
+        
 
         var joystick = Managers.Resource.Instantiate("UI_Joystick.prefab");
         joystick.name = "@UI_Joystick";

@@ -26,6 +26,12 @@ public class MonsterController : CreatureController
     {
         
     }
+    protected override void OnDead()
+    {
+        if (CreatureState == Define.CreatureState.Dead)
+            return;
+        OnDeadState();
+    }
     public virtual void  MonsterAI()
     {
        
@@ -42,7 +48,10 @@ public class MonsterController : CreatureController
     {
         
     }
+    public virtual void WaitMonster()
+    {
 
+    }
     public virtual void TurnMonster(Vector3 dir)
     {
         transform.LookAt(dir);
@@ -55,7 +64,6 @@ public class MonsterController : CreatureController
     public override bool Init()
     {
         base.Init();
-        SetInfo(0);
         return true;
     }
     public void InvokeMonsterData()
@@ -87,6 +95,24 @@ public class MonsterController : CreatureController
             Material material = meshrenderer.material;
             material.color = color;
         }
+    }
+    #endregion
+
+    #region Dead
+    Coroutine _coDead;
+    IEnumerator CoDead()
+    {
+        ChangeColor(Color.black);
+        CreatureState = Define.CreatureState.Dead;
+        yield return new WaitForSeconds(3.0f);
+        _coDead = null;
+        Managers.Object.Despawn(this);
+    }
+    public void OnDeadState()
+    {
+        if (_coDead != null)
+            return;
+        _coDead = StartCoroutine(CoDead()); 
     }
     #endregion
 
