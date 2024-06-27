@@ -68,6 +68,7 @@ public class MeleeWeaponController : WeaponController
     void MonsterAttackToPlayer(Collider target)
     {
         PlayerController player = target.GetComponent<PlayerController>();
+
         if (player.IsValid() == false)
             return;
         if (this.IsValid() == false)
@@ -79,9 +80,8 @@ public class MeleeWeaponController : WeaponController
     }
     void PlayerAttackToMonster(Collider target)
     {
-        if (Managers.Game.Player.CreatureState != CreatureState.Swing)
-            return;
         MonsterController monster = target.GetComponent<MonsterController>();
+
         if (monster.IsValid() == false)
             return;
         if (this.IsValid() == false)

@@ -28,17 +28,17 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
   - m_GUID: 464cc7c4f7ea10b47a36d7848aa9ca9a
-    m_Address: EnemyA
+    m_Address: MonsterA
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
   - m_GUID: 4198e2587d1fcca4cb87c16c3cfed34d
-    m_Address: EnemyB
+    m_Address: MonsterB
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
   - m_GUID: 06d503bba93001142b96e3510906db62
-    m_Address: EnemyC
+    m_Address: MonsterC
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
