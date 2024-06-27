@@ -18,7 +18,7 @@ public class ProjectileController : BaseController
 	Vector3 _spawnPos;
     Vector3 _dir;
 	Vector3 _target;
-    Quaternion _projectiletotargetRotation;
+    Quaternion _rotation; // 탄환에서 타깃까지의 회전각
     float angularPower = 2f;
     float scaleValue = 0.1f;
 	Rigidbody _rigid;
@@ -55,9 +55,9 @@ public class ProjectileController : BaseController
         {
             case "Missile_Boss":
                 _dir = (Managers.Game.Player.transform.position + new Vector3(0,2f,0) - transform.position).normalized;
-                _projectiletotargetRotation = Quaternion.LookRotation(_dir);
+                _rotation = Quaternion.LookRotation(_dir);
                 _rigid.velocity = _dir * 20;
-                _rigid.MoveRotation(Quaternion.RotateTowards(transform.rotation, _projectiletotargetRotation, 20));
+                _rigid.MoveRotation(Quaternion.RotateTowards(transform.rotation, _rotation, 20));
                 break;
         }
     }
@@ -174,7 +174,7 @@ public class ProjectileController : BaseController
                 _rigid.velocity = Vector3.zero;
                 _rigid.angularVelocity = Vector3.zero;
                 _meshRenderer.gameObject.SetActive(false);
-                AttackNearestMonster(transform.position, 10f, Vector3.up, 0f, LayerMask.GetMask("Monster"),100);
+                AttackNearestMonster(transform.position, 10f, Vector3.down, 0f, LayerMask.GetMask("Monster"),100);
                 yield return new WaitForSeconds(3.0f);
                 _trailRenderer.Clear();
                 break;
@@ -201,6 +201,8 @@ public class ProjectileController : BaseController
         foreach (RaycastHit _monster in raycastHits)
         {
             MonsterController target = _monster.transform.GetComponent<MonsterController>();
+
+            Debug.Log($"{target.name}");
 
             if (target.IsValid() == false)
                 return;

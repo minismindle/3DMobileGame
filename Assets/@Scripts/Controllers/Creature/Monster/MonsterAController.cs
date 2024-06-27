@@ -34,14 +34,17 @@ public class MonsterAController : MonsterController
 
         float dist = (player.transform.position - this.transform.position).magnitude;
 
-        if (dist <= AttackRange)
-        {
-            AttackMonster();
-        }
-        else if(dist <= ScanRange)
+        if (dist <= ScanRange)
         {
             Target = player;
-            MoveMonster();
+            if (dist <= AttackRange)
+            {
+                AttackMonster();
+            }
+            else
+            {
+                MoveMonster();
+            }
         }
         else if(dist > ScanRange)
         {
@@ -60,7 +63,7 @@ public class MonsterAController : MonsterController
     public override void MoveMonster()
     {
         CreatureState = CreatureState.Moving;
-        StopAttack(this, 10);
+        StopAttack();
         _nav.avoidancePriority = 51;
         _nav.SetDestination(Target.transform.position);
     }
@@ -115,6 +118,8 @@ public class MonsterAController : MonsterController
     }
     protected override void OnDead()
     {
+        StopAttack();
+        _nav.SetDestination(transform.position);
         base.OnDead();
     }
     #region Attack
@@ -134,7 +139,7 @@ public class MonsterAController : MonsterController
             return;
         _coAttack = StartCoroutine(CoMonsterA(attacker, damage));
     }
-    void StopAttack(BaseController attacker, int damage)
+    void StopAttack()
     {
         if (_coAttack == null)
             return;

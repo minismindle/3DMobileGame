@@ -203,7 +203,7 @@ public class PlayerController : CreatureController
 
         CreatureState = CreatureState.Jump;
 
-        _rigid.AddForce(Vector3.up * 30f, ForceMode.Impulse);
+        _rigid.AddForce((Vector3.up + MoveDir) * 30f, ForceMode.Impulse);
     }
     public void DodgePlayer()
     {

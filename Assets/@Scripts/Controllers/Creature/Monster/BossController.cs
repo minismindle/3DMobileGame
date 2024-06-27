@@ -52,18 +52,19 @@ public class BossController : MonsterController
     public override void IdleMonster()
     {
         CreatureState = CreatureState.Idle;
-        _nav.avoidancePriority = 51;
     }
     public override void AttackMonster()
     {
-        _nav.avoidancePriority = 50;
         StartRandomSkill(); 
     }
     public override void TurnMonster(Vector3 dir)
     {
         base.TurnMonster(dir);
     }
-
+    public override void FreezeVelocity()
+    {
+        base.FreezeVelocity();
+    }
     public override bool Init()
     {
         base.Init();
@@ -80,6 +81,7 @@ public class BossController : MonsterController
         _meleeWeapon = GetComponent<MeleeWeaponController>();   
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
+        AttackRange = 40f;
         MonsterName = MonsterName.Boss;
         ObjectType = ObjectType.Monster;
         CreatureState = CreatureState.Idle;
@@ -94,6 +96,7 @@ public class BossController : MonsterController
     protected override void OnDead()
     {
         StopRandomSkill();
+        _nav.SetDestination(transform.position);
         base.OnDead();
     }
     private void FixedUpdate()
@@ -102,6 +105,7 @@ public class BossController : MonsterController
             return;
 
         MonsterAI();
+        FreezeVelocity();
     }
 
     #region RandomSkill
@@ -112,25 +116,24 @@ public class BossController : MonsterController
         while (true)
         {
             yield return new WaitForSeconds(3.0f);
+            CreatureState = CreatureState.Idle;
             SetRandomSKill();
             switch (_randomSkill)
             {
                 case (int)BossSkillType.Tanut:
-                    _nav.avoidancePriority = 51;
+                    CreatureState = CreatureState.Tanut;
                     _nav.SetDestination(Target.transform.position);
-                    CoTanutMonster();
                     yield return new WaitForSeconds(2f);
-                    _nav.avoidancePriority = 50;
                     _nav.SetDestination(transform.position);
                     break;
                 case (int)BossSkillType.SKill1:
-                    CoShotMonster();
+                    CreatureState = CreatureState.Skill1;
                     _rangeWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     yield return new WaitForSeconds(0.5f);
                     _rangeWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     break;
                 case (int)BossSkillType.Skill2:
-                    CoBigShotMonster();
+                    CreatureState = CreatureState.Skill2;
                     _rangeWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
                     yield return new WaitForSeconds(3.0f);
                     break;
@@ -139,23 +142,16 @@ public class BossController : MonsterController
     }
     void SetRandomSKill()
     {
-        //전에 사용한 스킬은 쓸수없도록 만들지 고민중
-        _randomSkill = Random.Range((int)BossSkillType.Tanut, (int)BossSkillType.Skill2 + 1);
-    }
-    void CoTanutMonster()
-    {
-        CreatureState = CreatureState.Idle;
-        CreatureState = CreatureState.Tanut;
-    }
-    void CoShotMonster()
-    {
-        CreatureState = CreatureState.Idle;
-        CreatureState = CreatureState.Skill1;
-    }
-    void CoBigShotMonster()
-    {
-        CreatureState = CreatureState.Idle;
-        CreatureState = CreatureState.Skill2;
+        float dist = (Target.transform.position - this.transform.position).magnitude;
+
+        if (dist > AttackRange)
+        {
+            _randomSkill = (int)BossSkillType.Tanut;
+        }
+        else if(dist <= AttackRange)
+        {
+            _randomSkill = Random.Range((int)BossSkillType.SKill1, (int)BossSkillType.Skill2 + 1);
+        }
     }
     void StartRandomSkill()
     {
