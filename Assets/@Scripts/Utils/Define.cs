@@ -251,6 +251,7 @@ public class Define
         None,
         Melee,
         Range,
+        Grenade,
     }
     
     public enum EquipmentType

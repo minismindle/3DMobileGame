@@ -16,7 +16,6 @@ public class PlayerController : CreatureController
 
     public Transform _shootPos;
     public Transform _ThrowPos;
-    public GrenadeController _grenade;
 
     PlayerWeaponType PlayerWeaponType;
     RaycastHit slopeHit;
@@ -40,7 +39,7 @@ public class PlayerController : CreatureController
         Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
         ObjectType = Define.ObjectType.Player;
         CreatureState = Define.CreatureState.Idle;
-        this.PlayerWeaponType = PlayerWeaponType.Melee;
+        PlayerWeaponType = PlayerWeaponType.None;
         _meleeWeapon.SetInfo("Hammer");
         _rangeWeapon.SetInfo("SubMachineGun");
         AttackCoolTime = 0.6f;
@@ -140,7 +139,7 @@ public class PlayerController : CreatureController
     }
     public void ClickAttackButton()
     {
-        switch (this.PlayerWeaponType)
+        switch (PlayerWeaponType)
         {
             case PlayerWeaponType.None:
                 break;
@@ -150,19 +149,8 @@ public class PlayerController : CreatureController
             case PlayerWeaponType.Range:
                 ShotPlayer();
                 break;
-        }
-    }
-    public void ClickSwapButton()
-    {
-        switch (this.PlayerWeaponType)
-        {
-            case PlayerWeaponType.None:
-                break;
-            case PlayerWeaponType.Melee:
-                SwapToRangeWeapon();
-                break;
-            case PlayerWeaponType.Range:
-                SwapToMeleeWeapon();
+            case PlayerWeaponType.Grenade:
+                ThrowPlayer();
                 break;
         }
     }
@@ -235,8 +223,7 @@ public class PlayerController : CreatureController
 
         CreatureState = CreatureState.Shot;
 
-        _rangeWeapon.Use(this, _shootPos.position, transform.forward, this.transform.rotation,"Bullet_SubMachineGun");
-
+        _rangeWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation,"Bullet_SubMachineGun");
 
         SetAnimationDelay(AttackCoolTime);
     }
@@ -253,21 +240,39 @@ public class PlayerController : CreatureController
     {
         if (CreatureState != CreatureState.Idle)
             return;
+        if (PlayerWeaponType == PlayerWeaponType.Melee)
+            return;
         SwapPlayer();
-        this.PlayerWeaponType = PlayerWeaponType.Melee;
+        PlayerWeaponType = PlayerWeaponType.Melee;
         _meleeWeapon.gameObject.SetActive(true);
         _rangeWeapon.gameObject.SetActive(false);
+        _grenade.gameObject.SetActive(false);
         AttackCoolTime = _meleeWeapon.CoolTime;
     }
     public void SwapToRangeWeapon()
     {
         if (CreatureState != CreatureState.Idle)
             return;
+        if (PlayerWeaponType == PlayerWeaponType.Range)
+            return;
         SwapPlayer();
-        this.PlayerWeaponType = PlayerWeaponType.Range;
+        PlayerWeaponType = PlayerWeaponType.Range;
         _meleeWeapon.gameObject.SetActive(false);
         _rangeWeapon.gameObject.SetActive(true);
+        _grenade.gameObject.SetActive(false);
         AttackCoolTime = _rangeWeapon.CoolTime;
+    }
+    public void SwapToGrenade()
+    {
+        if (CreatureState != CreatureState.Idle)
+            return;
+        if (PlayerWeaponType == PlayerWeaponType.Grenade)
+            return;
+        SwapPlayer();
+        PlayerWeaponType = PlayerWeaponType.Grenade;
+        _meleeWeapon.gameObject.SetActive(false);
+        _rangeWeapon.gameObject.SetActive(false);
+        _grenade.gameObject.SetActive(true);
     }
     public void ThrowPlayer()
     {
@@ -276,27 +281,9 @@ public class PlayerController : CreatureController
 
         CreatureState = CreatureState.Throw;
 
-        NoneWeapon();
-
         _grenade.Use(this, _ThrowPos.position, transform.forward);
 
-
         SetAnimationDelay(0.6f);
-    }
-    void NoneWeapon()
-    {
-        _meleeWeapon.gameObject.SetActive(false);
-        _rangeWeapon.gameObject.SetActive(false);
-    }
-    void UseMeleeWeapon()
-    {
-        _meleeWeapon.gameObject.SetActive(true);
-        _rangeWeapon.gameObject.SetActive(false);
-    }
-    void UseRangeWeapon()
-    {
-        _meleeWeapon.gameObject.SetActive(false);
-        _rangeWeapon.gameObject.SetActive(true);
     }
     public void ReloadPlayer()
     {
@@ -351,18 +338,7 @@ public class PlayerController : CreatureController
     IEnumerator CoWaitAnimation(float delay)
     {
         yield return new WaitForSeconds(delay);
-        ThrowAnimation();
         CreatureState = CreatureState.Idle;
-    }
-    void ThrowAnimation()
-    {
-        if (CreatureState != CreatureState.Throw)
-            return;
-        if (PlayerWeaponType == PlayerWeaponType.Melee)
-            UseMeleeWeapon();
-        else if (PlayerWeaponType == PlayerWeaponType.Range)
-            UseRangeWeapon();
-
     }
     void SetAnimationDelay(float delay)
     {

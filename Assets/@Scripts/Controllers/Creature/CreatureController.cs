@@ -16,6 +16,7 @@ public class CreatureController : BaseController
     protected NavMeshAgent _nav;
     public MeleeWeaponController _meleeWeapon;
     public RangeWeaponController _rangeWeapon;
+    public GrenadeController _grenade;
     protected MeshRenderer[] _meshrenderers;
     public Collider _collider;
     

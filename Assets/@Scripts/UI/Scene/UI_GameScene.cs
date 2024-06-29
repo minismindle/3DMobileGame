@@ -22,13 +22,17 @@ public class UI_GameScene : UI_Base
         KillValueText,
         CharacterLevelValueText,
     }
+    enum Images
+    {
+        MeleeWeaponSlotImage,
+        RangeWeaponSlotImage,
+        GrenadeSlotImage,
+    }
     enum Buttons
     {
         AttackButton,
         JumpButton,
-        SwapButton,
         ReloadButton,
-        ThrowButton,
     }
     private void Awake()
     {
@@ -42,6 +46,7 @@ public class UI_GameScene : UI_Base
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         BindButton(typeof(Buttons));
+        BindImage(typeof(Images));
         BindEvents();
         return true;
     }
@@ -49,10 +54,22 @@ public class UI_GameScene : UI_Base
     {
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnClickAttackButton);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
-        GetButton((int)Buttons.SwapButton).gameObject.BindEvent(OnClickSwapButton);
         GetButton((int)Buttons.ReloadButton).gameObject.BindEvent(OnClickReloadButton);
-        GetButton((int)Buttons.ThrowButton).gameObject.BindEvent(OnClickThrowButton);
-        
+        GetImage((int)Images.MeleeWeaponSlotImage).gameObject.BindEvent(OnClickMeleeWeaponSlotImage);
+        GetImage((int)Images.RangeWeaponSlotImage).gameObject.BindEvent(OnClickRangeWeaponSlotImage);
+        GetImage((int)Images.GrenadeSlotImage).gameObject.BindEvent(OnClickGrenadeSlotImage);
+    }
+    public void OnClickMeleeWeaponSlotImage()
+    {
+        Managers.Game.Player.SwapToMeleeWeapon();
+    }
+    public void OnClickRangeWeaponSlotImage()
+    {
+        Managers.Game.Player.SwapToRangeWeapon();
+    }
+    public void OnClickGrenadeSlotImage()
+    {
+        Managers.Game.Player.SwapToGrenade();
     }
     public void OnClickJumpButton()
     {
@@ -61,14 +78,6 @@ public class UI_GameScene : UI_Base
     public void OnClickAttackButton()
     {
         Managers.Game.Player.ClickAttackButton();
-    }
-    public void OnClickSwapButton()
-    {
-        Managers.Game.Player.ClickSwapButton();
-    }
-    public void OnClickThrowButton()
-    {
-        Managers.Game.Player.ThrowPlayer();
     }
     public void OnClickReloadButton()
     {

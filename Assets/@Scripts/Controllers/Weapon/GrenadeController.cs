@@ -30,10 +30,10 @@ public class GrenadeController : WeaponController
         _coAttack = StartCoroutine(ThrowGrenade(owner, startPos, dir));
     }
     #endregion
-    public GrenadeController SetInfo(string WeaponName)
+    public GrenadeController SetInfo(string weaponName)
     {
         WeaponType = Define.WeaponType.Range;
-        ProjectileName = "Grenade";
+        ProjectileName = weaponName;
         CoolTime = 0.6f;
         return this;
     }
