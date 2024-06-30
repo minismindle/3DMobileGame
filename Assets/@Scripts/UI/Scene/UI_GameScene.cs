@@ -32,7 +32,7 @@ public class UI_GameScene : UI_Base
     {
         AttackButton,
         JumpButton,
-        ReloadButton,
+        InvenButton,
     }
     private void Awake()
     {
@@ -54,10 +54,14 @@ public class UI_GameScene : UI_Base
     {
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnClickAttackButton);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
-        GetButton((int)Buttons.ReloadButton).gameObject.BindEvent(OnClickReloadButton);
+        GetButton((int)Buttons.InvenButton).gameObject.BindEvent(OnClickEquipButton);
         GetImage((int)Images.MeleeWeaponSlotImage).gameObject.BindEvent(OnClickMeleeWeaponSlotImage);
         GetImage((int)Images.RangeWeaponSlotImage).gameObject.BindEvent(OnClickRangeWeaponSlotImage);
         GetImage((int)Images.GrenadeSlotImage).gameObject.BindEvent(OnClickGrenadeSlotImage);
+    }
+    public void OnClickEquipButton()
+    {
+        Managers.UI.ShowPopup<UI_Inventory>();
     }
     public void OnClickMeleeWeaponSlotImage()
     {

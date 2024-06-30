@@ -6,15 +6,7 @@ public class UI_TitleScene : UI_Base
 {
     enum Buttons
     {
-        StartButton,
-    }
-    enum Images
-    {
-        TitleImage,
-    }
-    enum Texts
-    {
-        StartButtonText,
+        GameStartButton,
     }
     private void Awake()
     {
@@ -26,15 +18,12 @@ public class UI_TitleScene : UI_Base
         if (base.Init() == false)
             return false;
         BindButton(typeof(Buttons));
-        BindImage(typeof(Images));
-        BindText(typeof(Texts));
         SetInfo();
         return true;
     }
     public void SetInfo()
     {
-        GetButton((int)Buttons.StartButton).gameObject.BindEvent(OnClickStartButton);
-        GetText((int)Texts.StartButtonText).text = "START";
+        GetButton((int)Buttons.GameStartButton).gameObject.BindEvent(OnClickStartButton);
     }
     public void OnClickStartButton()
     {
