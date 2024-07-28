@@ -27,7 +27,7 @@ public class UI_EventHandler : MonoBehaviour, IPointerClickHandler, IPointerDown
         if (OnClickHandler != null)
             OnClickHandler.Invoke();
     }
-
+    
     public void OnPointerDown(PointerEventData eventData)
     {
         _pressed = true;

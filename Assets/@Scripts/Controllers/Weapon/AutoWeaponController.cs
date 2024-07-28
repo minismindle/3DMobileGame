@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.UI.GridLayoutGroup;
 
-public class RangeWeaponController : WeaponController
+public class AutoWeaponController : WeaponController
 {
     GameObject _weapon;
 
@@ -43,7 +43,7 @@ public class RangeWeaponController : WeaponController
         _weapon.SetActive(true);
         CoolTime = 0.1f;
     }
-    void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation,string prefabName)
+    void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
         ProjectileController pc = Managers.Object.Spawn<ProjectileController>(startPos, rotation, 0, prefabName);
         pc.SetInfo(owner, prefabName, startPos, dir);

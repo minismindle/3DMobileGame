@@ -100,7 +100,7 @@ public class MonsterCController : MonsterController
         Hp = 30;
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
-        _rangeWeapon = GetComponent<RangeWeaponController>();
+        _manualWeapon = GetComponent<ManualWeaponController>();
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
@@ -130,7 +130,7 @@ public class MonsterCController : MonsterController
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.5f);
-        _rangeWeapon.Use(this, _attackPos.transform.position, transform.forward,transform.rotation.normalized, "Missile");
+        _manualWeapon.Use(this, _attackPos.transform.position, transform.forward,transform.rotation.normalized, "Missile");
         yield return new WaitForSeconds(3f);
         _coAttack = null;
     }

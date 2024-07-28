@@ -8,7 +8,6 @@ using static UnityEngine.GraphicsBuffer;
 public class MeleeWeaponController : WeaponController
 {
     GameObject _weapon;
-
     public void Use(string weaponName)
     {
         Attack(weaponName);
@@ -49,7 +48,6 @@ public class MeleeWeaponController : WeaponController
         _weapon = this.transform.Find(WeaponName).gameObject;
         _collider = _weapon.GetComponent<BoxCollider>();
         _trailRenderer = _weapon.GetComponentInChildren<TrailRenderer>();
-        _owner = Managers.Game.Player;
         CoolTime = 0.6f;
     }
     private void OnTriggerEnter(Collider target)
@@ -69,11 +67,15 @@ public class MeleeWeaponController : WeaponController
     {
         PlayerController player = target.GetComponent<PlayerController>();
 
+        if (_owner.ObjectType != ObjectType.Monster)
+            return;
         if (player.IsValid() == false)
             return;
         if (this.IsValid() == false)
             return;
         if (player.CreatureState == CreatureState.Dead)
+            return;
+        if (_owner.CreatureState == CreatureState.Dead)
             return;
 
         player.OnDotDamage(_owner, 10);
@@ -82,12 +84,17 @@ public class MeleeWeaponController : WeaponController
     {
         MonsterController monster = target.GetComponent<MonsterController>();
 
+        if (_owner.ObjectType != ObjectType.Player)
+            return;
         if (monster.IsValid() == false)
             return;
         if (this.IsValid() == false)
             return;
         if (monster.CreatureState == CreatureState.Dead)
             return;
+        if (_owner.CreatureState == CreatureState.Dead)
+            return;
+
         monster.OnDotDamage(_owner, 10);
     }
 

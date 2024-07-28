@@ -15,7 +15,8 @@ public class CreatureController : BaseController
     protected Material _material;
     protected NavMeshAgent _nav;
     public MeleeWeaponController _meleeWeapon;
-    public RangeWeaponController _rangeWeapon;
+    public ManualWeaponController _manualWeapon;
+    public AutoWeaponController _autoWeapon;
     public GrenadeController _grenade;
     protected MeshRenderer[] _meshrenderers;
     public Collider _collider;
@@ -48,10 +49,10 @@ public class CreatureController : BaseController
     public virtual float speed { get; set; }
     public virtual int maxHp { get; set;}
     public virtual int maxExp { get; set;}
+    public virtual int maxAmmo { get; set;}
     public int Hp { get; set; }
     public virtual int Gold {  get; set; }  
     public virtual int Ammo { get; set; }
-    public virtual int Bomb {  get; set; }
     public virtual int Potion { get;set; }
     public virtual float AttackCoolTime {  get; set; }
 

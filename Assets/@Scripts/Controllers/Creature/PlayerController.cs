@@ -17,6 +17,8 @@ public class PlayerController : CreatureController
     public Transform _shootPos;
     public Transform _ThrowPos;
 
+    public WeaponController[] _hotBar = new WeaponController[4];
+
     PlayerWeaponType PlayerWeaponType;
     RaycastHit slopeHit;
 
@@ -41,9 +43,14 @@ public class PlayerController : CreatureController
         CreatureState = Define.CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
         _meleeWeapon.SetInfo("Hammer");
-        _rangeWeapon.SetInfo("SubMachineGun");
+        _meleeWeapon._owner = this;
+        _manualWeapon.SetInfo("HandGun");
+        _autoWeapon.SetInfo("SubMachineGun");
         AttackCoolTime = 0.6f;
         _rigid.velocity = Vector3.zero;
+        maxHp = 1000;
+        Hp = 1000;
+        maxAmmo = 100;
         return true;
     }
 
@@ -146,11 +153,25 @@ public class PlayerController : CreatureController
             case PlayerWeaponType.Melee:
                 SwingPlayer();
                 break;
-            case PlayerWeaponType.Range:
+            case PlayerWeaponType.Manual:
                 ShotPlayer();
                 break;
+            case PlayerWeaponType.Auto:
+                ShotPlayer();
+                break;  
             case PlayerWeaponType.Grenade:
                 ThrowPlayer();
+                break;
+        }
+    }
+    public void StopAttack()
+    {
+        switch(PlayerWeaponType)
+        {
+            case PlayerWeaponType.None:
+                break;
+            case PlayerWeaponType.Auto:
+                StopAutoAttack(0.1f);
                 break;
         }
     }
@@ -221,11 +242,16 @@ public class PlayerController : CreatureController
         if (CreatureState == CreatureState.Shot)
             return;
 
-        CreatureState = CreatureState.Shot;
-
-        _rangeWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation,"Bullet_SubMachineGun");
-
-        SetAnimationDelay(AttackCoolTime);
+        if (PlayerWeaponType == PlayerWeaponType.Manual)
+        {
+            CreatureState = CreatureState.Shot;
+            _manualWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_HandGun");
+            SetAnimationDelay(0.1f);
+        }
+        else if (PlayerWeaponType == PlayerWeaponType.Auto)
+        {
+            StartAutoAttack(0.1f);
+        }
     }
     public void SwapPlayer()
     {
@@ -245,22 +271,38 @@ public class PlayerController : CreatureController
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Melee;
         _meleeWeapon.gameObject.SetActive(true);
-        _rangeWeapon.gameObject.SetActive(false);
+        _manualWeapon.gameObject.SetActive(false);
+        _autoWeapon.gameObject.SetActive(false);
         _grenade.gameObject.SetActive(false);
         AttackCoolTime = _meleeWeapon.CoolTime;
     }
-    public void SwapToRangeWeapon()
+    public void SwapToManualWeapon()
     {
         if (CreatureState != CreatureState.Idle)
             return;
-        if (PlayerWeaponType == PlayerWeaponType.Range)
+        if (PlayerWeaponType == PlayerWeaponType.Manual)
             return;
         SwapPlayer();
-        PlayerWeaponType = PlayerWeaponType.Range;
+        PlayerWeaponType = PlayerWeaponType.Manual;
         _meleeWeapon.gameObject.SetActive(false);
-        _rangeWeapon.gameObject.SetActive(true);
+        _manualWeapon.gameObject.SetActive(true);
+        _autoWeapon.gameObject.SetActive(false);
         _grenade.gameObject.SetActive(false);
-        AttackCoolTime = _rangeWeapon.CoolTime;
+        AttackCoolTime = _manualWeapon.CoolTime;
+    }
+    public void SwapToAutoWeapon()
+    {
+        if (CreatureState != CreatureState.Idle)
+            return;
+        if (PlayerWeaponType == PlayerWeaponType.Auto)
+            return;
+        SwapPlayer();
+        PlayerWeaponType = PlayerWeaponType.Auto;
+        _meleeWeapon.gameObject.SetActive(false);
+        _manualWeapon.gameObject.SetActive(false);
+        _autoWeapon.gameObject.SetActive(true);
+        _grenade.gameObject.SetActive(false);
+        AttackCoolTime = _autoWeapon.CoolTime;
     }
     public void SwapToGrenade()
     {
@@ -271,7 +313,8 @@ public class PlayerController : CreatureController
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Grenade;
         _meleeWeapon.gameObject.SetActive(false);
-        _rangeWeapon.gameObject.SetActive(false);
+        _manualWeapon.gameObject.SetActive(false);
+        _autoWeapon.gameObject.SetActive(false);
         _grenade.gameObject.SetActive(true);
     }
     public void ThrowPlayer()
@@ -327,6 +370,17 @@ public class PlayerController : CreatureController
             case "Coin":
                 CoinController _coin = other.gameObject.GetComponent<CoinController>();
                 Gold += _coin.GetCoin();
+                Managers.Object.Despawn(_coin);
+                break;
+            case "Heart":
+                HeartController _heart = other.gameObject.GetComponent<HeartController>(); 
+                Hp += 100;
+                Managers.Object.Despawn(_heart);
+                break;
+            case "Ammo":
+                AmmoController _ammo = other.gameObject.GetComponent<AmmoController>();
+                Ammo += 100;
+                Managers.Object.Despawn(_ammo);
                 break;
             default:
                 break;
@@ -345,6 +399,34 @@ public class PlayerController : CreatureController
         if (_coWaitAnimation != null)
             _coWaitAnimation = null;
         _coWaitAnimation = StartCoroutine(CoWaitAnimation(delay));
+    }
+    #endregion
+
+    #region AutoAttack
+    Coroutine _coAutoAttack;
+
+    IEnumerator CoAutoAttack(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        while (true)
+        {
+            CreatureState = CreatureState.Shot;
+            _autoWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_SubMachineGun");
+            yield return new WaitForSeconds(delay);
+        }
+    }
+    void StartAutoAttack(float delay)
+    {
+        if(_coAutoAttack != null)   
+            _coAutoAttack = null;
+        _coAutoAttack = StartCoroutine(CoAutoAttack(delay));
+    }
+    void StopAutoAttack(float delay)
+    {
+        if (_coAutoAttack != null)
+            StopCoroutine(_coAutoAttack);
+        _coAutoAttack = null;
+        CreatureState = CreatureState.Idle; 
     }
     #endregion
 

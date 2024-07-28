@@ -13,6 +13,9 @@ TagManager:
   - NPC
   - MeleeWeapon
   - RangeWeapon
+  - Weapon
+  - Ammo
+  - Heart
   layers:
   - Default
   - TransparentFX

@@ -104,7 +104,9 @@ MonoBehaviour:
   MakeDead: 0
   _animator: {fileID: 0}
   _meleeWeapon: {fileID: 0}
-  _rangeWeapon: {fileID: 0}
+  _manualWeapon: {fileID: 0}
+  _autoWeapon: {fileID: 0}
+  _grenade: {fileID: 0}
   _collider: {fileID: 0}
   CreatureData:
     DataId: 0

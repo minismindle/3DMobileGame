@@ -8,7 +8,6 @@ public class CoinController : ItemController
     public Define.CoinType CoinType;
     
     Rigidbody _rigidbody;
-    Material _material;
 
     private int _gold;
     public override bool Init()
@@ -20,12 +19,6 @@ public class CoinController : ItemController
     void SetInfo()
     {
         ObjectType = Define.ObjectType.Coin;
-        _rigidbody = GetComponent<Rigidbody>();
-        _material = GetComponentInChildren<MeshRenderer>().material;
-    }
-    void CoinGacha()
-    {
-        _material.name = "CoinSilver";
     }
     public int GetCoin()
     {

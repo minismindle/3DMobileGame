@@ -250,7 +250,8 @@ public class Define
     {
         None,
         Melee,
-        Range,
+        Auto,
+        Manual,
         Grenade,
     }
     

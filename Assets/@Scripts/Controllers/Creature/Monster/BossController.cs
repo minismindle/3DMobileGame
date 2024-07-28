@@ -77,7 +77,7 @@ public class BossController : MonsterController
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();   
         _collider = GetComponent<Collider>();
-        _rangeWeapon =GetComponent<RangeWeaponController>();
+        _manualWeapon = GetComponent<ManualWeaponController>();
         _meleeWeapon = GetComponent<MeleeWeaponController>();   
         _animator = GetComponentInChildren<Animator>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
@@ -128,13 +128,13 @@ public class BossController : MonsterController
                     break;
                 case (int)BossSkillType.SKill1:
                     CreatureState = CreatureState.Skill1;
-                    _rangeWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    _manualWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     yield return new WaitForSeconds(0.5f);
-                    _rangeWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    _manualWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     break;
                 case (int)BossSkillType.Skill2:
                     CreatureState = CreatureState.Skill2;
-                    _rangeWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
+                    _manualWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
                     yield return new WaitForSeconds(3.0f);
                     break;
             }

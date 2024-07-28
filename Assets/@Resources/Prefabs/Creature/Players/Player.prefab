@@ -113,7 +113,8 @@ MonoBehaviour:
   MakeDead: 0
   _animator: {fileID: 0}
   _meleeWeapon: {fileID: 4606302115142741946}
-  _rangeWeapon: {fileID: 6416965612866032312}
+  _manualWeapon: {fileID: 6416965612866032312}
+  _autoWeapon: {fileID: 486409943748757144}
   _grenade: {fileID: 7097824917564739121}
   _collider: {fileID: 0}
   CreatureData:
@@ -181,6 +182,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponType: 3
+  WeaponName: 0
+  _collider: {fileID: 0}
+  _trailRenderer: {fileID: 0}
+  _owner: {fileID: 0}
+--- !u!1 &2604086800195019154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5285895763274160171}
+  - component: {fileID: 486409943748757144}
+  m_Layer: 6
+  m_Name: AutoWeapon
+  m_TagString: Weapon
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5285895763274160171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2604086800195019154}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.16, y: 3.64, z: -2.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2911152815282412676}
+  m_Father: {fileID: 5331944996278211209}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &486409943748757144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2604086800195019154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582073490601f1b42966efedd5349c6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WeaponType: 0
   WeaponName: 0
   _collider: {fileID: 0}
   _trailRenderer: {fileID: 0}
@@ -294,7 +345,7 @@ GameObject:
   - component: {fileID: 465175192489804634}
   - component: {fileID: 6416965612866032312}
   m_Layer: 6
-  m_Name: RangeWeapon
+  m_Name: ManualWeapon
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +364,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2119968500084590013}
-  - {fileID: 6557625092722716214}
   m_Father: {fileID: 5331944996278211209}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -599,12 +649,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2540021190022036193}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &3836219440990436604
+--- !u!1001 &5069889936988769870
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 465175192489804634}
+    m_TransformParent: {fileID: 5285895763274160171}
     m_Modifications:
     - target: {fileID: 2386527760223128641, guid: 55d971a0c49e912459a9b5719327456c,
         type: 3}
@@ -639,7 +689,7 @@ PrefabInstance:
     - target: {fileID: 7943681267684496074, guid: 55d971a0c49e912459a9b5719327456c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7943681267684496074, guid: 55d971a0c49e912459a9b5719327456c,
         type: 3}
@@ -693,11 +743,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55d971a0c49e912459a9b5719327456c, type: 3}
---- !u!4 &6557625092722716214 stripped
+--- !u!4 &2911152815282412676 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7943681267684496074, guid: 55d971a0c49e912459a9b5719327456c,
     type: 3}
-  m_PrefabInstance: {fileID: 3836219440990436604}
+  m_PrefabInstance: {fileID: 5069889936988769870}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7369525508448171069
 PrefabInstance:

@@ -80,7 +80,10 @@ public class ProjectileController : BaseController
                 _rigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
                 break;
             case "Bullet_SubMachineGun":
-                _rigid.velocity = _dir * 20;
+                _rigid.velocity = _dir * 30;
+                break;
+            case "Bullet_HandGun":
+                _rigid.velocity = _dir * 25;
                 break;
             case "Missile":
                 _rigid.velocity = _dir * 20;
@@ -129,6 +132,11 @@ public class ProjectileController : BaseController
                 StopDestroy();
                 Managers.Object.Despawn(this);
                 break;
+            case "Bullet_HandGun":
+                target.OnDotDamage(_owner, 10);
+                StopDestroy();
+                Managers.Object.Despawn(this);
+                break;
         }
     }
     void MonsterProjectile(Collider collision)
@@ -165,6 +173,11 @@ public class ProjectileController : BaseController
         switch(_prefabName)
         {
             case "Bullet_SubMachineGun":
+                _trailRenderer.enabled = true;
+                yield return new WaitForSeconds(1f);
+                _trailRenderer.Clear();
+                break;
+            case "Bullet_HandGun":
                 _trailRenderer.enabled = true;
                 yield return new WaitForSeconds(1f);
                 _trailRenderer.Clear();

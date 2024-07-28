@@ -24,9 +24,10 @@ public class UI_GameScene : UI_Base
     }
     enum Images
     {
-        MeleeWeaponSlotImage,
-        RangeWeaponSlotImage,
-        GrenadeSlotImage,
+        MeleeWeaponImage,
+        ManualWeaponImage,
+        AutoWeaponImage,
+        GrenadeImage,
     }
     enum Buttons
     {
@@ -52,12 +53,14 @@ public class UI_GameScene : UI_Base
     }
     public void BindEvents()
     {
-        GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnClickAttackButton);
+        GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerDownAttackButton, null,Define.UIEvent.PointerDown);
+        GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerUpAttackButton,null,Define.UIEvent.PointerUp);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
         GetButton((int)Buttons.InvenButton).gameObject.BindEvent(OnClickEquipButton);
-        GetImage((int)Images.MeleeWeaponSlotImage).gameObject.BindEvent(OnClickMeleeWeaponSlotImage);
-        GetImage((int)Images.RangeWeaponSlotImage).gameObject.BindEvent(OnClickRangeWeaponSlotImage);
-        GetImage((int)Images.GrenadeSlotImage).gameObject.BindEvent(OnClickGrenadeSlotImage);
+        GetImage((int)Images.MeleeWeaponImage).gameObject.BindEvent(OnClickMeleeWeaponSlotImage);
+        GetImage((int)Images.ManualWeaponImage).gameObject.BindEvent(OnClickManualWeaponSlotImage);
+        GetImage((int)Images.AutoWeaponImage).gameObject.BindEvent(OnClickAutoWeaponSlotImage);
+        GetImage((int)Images.GrenadeImage).gameObject.BindEvent(OnClickGrenadeSlotImage);
     }
     public void OnClickEquipButton()
     {
@@ -67,9 +70,13 @@ public class UI_GameScene : UI_Base
     {
         Managers.Game.Player.SwapToMeleeWeapon();
     }
-    public void OnClickRangeWeaponSlotImage()
+    public void OnClickManualWeaponSlotImage()
     {
-        Managers.Game.Player.SwapToRangeWeapon();
+        Managers.Game.Player.SwapToManualWeapon();
+    }
+    public void OnClickAutoWeaponSlotImage()
+    {
+        Managers.Game.Player.SwapToAutoWeapon();
     }
     public void OnClickGrenadeSlotImage()
     {
@@ -79,9 +86,13 @@ public class UI_GameScene : UI_Base
     {
         Managers.Game.Player.ClickJumpButton();
     }
-    public void OnClickAttackButton()
+    public void OnPointerDownAttackButton()
     {
         Managers.Game.Player.ClickAttackButton();
+    }
+    public void OnPointerUpAttackButton()
+    {
+        Managers.Game.Player.StopAttack();
     }
     public void OnClickReloadButton()
     {

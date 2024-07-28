@@ -102,6 +102,7 @@ public class MonsterBController : MonsterController
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
         _meleeWeapon = GetComponent<MeleeWeaponController>();
+        _meleeWeapon._owner = this; 
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
