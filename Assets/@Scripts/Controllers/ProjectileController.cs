@@ -19,8 +19,9 @@ public class ProjectileController : BaseController
     Vector3 _dir;
 	Vector3 _target;
     Quaternion _rotation; // 탄환에서 타깃까지의 회전각
-    float angularPower = 2f;
-    float scaleValue = 0.1f;
+    float angularPower;
+    float scaleValue;
+    float speed;
 	Rigidbody _rigid;
     [SerializeField]
 	TrailRenderer _trailRenderer;
@@ -61,10 +62,6 @@ public class ProjectileController : BaseController
                 break;
         }
     }
-    public void SetSkillData(SkillData skillData)
-	{
-
-	}
 	public void SetInfo( CreatureController owner, string prefabName,Vector3 startPos,Vector3 dir)
 	{
         _meshRenderer.gameObject.SetActive(true);
@@ -150,7 +147,6 @@ public class ProjectileController : BaseController
         if (target.CreatureState == CreatureState.Dead)
             return;
 
-
         switch (_prefabName)
         {
             case "Missile":
@@ -214,8 +210,6 @@ public class ProjectileController : BaseController
         foreach (RaycastHit _monster in raycastHits)
         {
             MonsterController target = _monster.transform.GetComponent<MonsterController>();
-
-            Debug.Log($"{target.name}");
 
             if (target.IsValid() == false)
                 return;

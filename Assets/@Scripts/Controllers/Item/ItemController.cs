@@ -1,3 +1,4 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,5 +8,6 @@ public class ItemController : BaseController
 {
     public virtual Define.ItemType ItemType { get; set; } = Define.ItemType.None;
 
+    public ItemData itemData;
 
 }

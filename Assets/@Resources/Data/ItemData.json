@@ -1,0 +1,51 @@
+{
+  "items": [
+    {
+      "DataId": 20000,
+      "Name": "Ammo",
+      "Image": "IconAmmo.sprite",
+      "ItemType": 4,
+      "WeaponType": 0,
+      "Consumable": true
+    },
+    {
+      "DataId": 20001,
+      "Name": "Heart",
+      "Image": "IconHeart.sprite",
+      "ItemType": 3,
+      "WeaponType": 0,
+      "Consumable": true
+    },
+    {
+      "DataId": 20002,
+      "Name": "Hammer",
+      "Image": "IconHammer.sprite",
+      "ItemType": 1,
+      "WeaponType": 1,
+      "Consumable": false
+    },
+    {
+      "DataId": 20003,
+      "Name": "HandGun",
+      "Image": "IconHandGun.sprite",
+      "ItemType": 1,
+      "WeaponType": 2,
+      "Consumable": false
+    },
+    {
+      "DataId": 20004,
+      "Name": "SubMachineGun",
+      "Image": "IconSubMachineGun.sprite",
+      "ItemType": 1,
+      "WeaponType": 3,
+      "Consumable": false
+    },
+    {
+      "DataId": 20005,
+      "Name": "Grenade",
+      "Image": "IconGrenade.sprite",
+      "ItemType": 2,
+      "Consumable": true
+    }
+  ]
+}

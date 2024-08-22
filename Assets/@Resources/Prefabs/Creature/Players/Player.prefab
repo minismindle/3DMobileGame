@@ -117,23 +117,7 @@ MonoBehaviour:
   _autoWeapon: {fileID: 486409943748757144}
   _grenade: {fileID: 7097824917564739121}
   _collider: {fileID: 0}
-  CreatureData:
-    DataId: 0
-    DescriptionTextID: 
-    PrefabLabel: 
-    MaxHp: 0
-    MaxHpBonus: 0
-    Atk: 0
-    AtkBonus: 0
-    Def: 0
-    MoveSpeed: 0
-    TotalExp: 0
-    HpRate: 0
-    AtkRate: 0
-    DefRate: 0
-    MoveSpeedRate: 0
-    IconLabel: 
-    SkillTypeList: 
+  Inventory: {fileID: 0}
   _shootPos: {fileID: 8322081353680322953}
   _ThrowPos: {fileID: 6922278776099436627}
 --- !u!1 &1995290298611412448
@@ -181,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb1ae5f36eafdc43b722385043b3f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponType: 3
+  WeaponType: 4
   WeaponName: 0
   _collider: {fileID: 0}
   _trailRenderer: {fileID: 0}
@@ -231,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582073490601f1b42966efedd5349c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponType: 0
+  WeaponType: 2
   WeaponName: 0
   _collider: {fileID: 0}
   _trailRenderer: {fileID: 0}
@@ -283,7 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponType: 1
-  WeaponName: 1
+  WeaponName: 0
   _collider: {fileID: 0}
   _trailRenderer: {fileID: 0}
   _owner: {fileID: 0}
@@ -379,7 +363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0229a8ee3627a084797c510c9dd021ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponType: 2
+  WeaponType: 3
   WeaponName: 0
   _collider: {fileID: 0}
   _trailRenderer: {fileID: 0}

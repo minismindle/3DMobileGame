@@ -10,18 +10,81 @@ public class GameManager
 	public PlayerController Player { get { return Managers.Object?.Player; } }
 	#region ¿Á»≠
 
-	public int Gold { get; set; }
+	int _gold = 0;
 
-	int _gem = 0;
-
-	public event Action<int> OnGemCountChanged;
-	public int Gem 
-	{ 
-		get { return _gem; }
+	public event Action<int> OnGoldCountChanged;
+	public int Gold
+    { 
+		get { return _gold; }
 		set 
-		{ 
-			_gem = value;
-			OnGemCountChanged?.Invoke(value);
+		{
+            _gold = value;
+			OnGoldCountChanged?.Invoke(value);
+		}
+	}
+
+	int _manualAmmo = 0;
+
+    public event Action<int> OnManualAmmoCountChanged;
+    public int ManualAmmo
+	{
+		get { return _manualAmmo; }
+		set
+		{
+            _manualAmmo = value;
+			OnManualAmmoCountChanged?.Invoke(value);	
+		}
+	}
+
+	int _autoAmmo = 0;
+	public event  Action<int> OnAutoAmmoCountChanged;	
+	public int AutoAmmo
+	{
+		get { return _autoAmmo; }
+		set
+		{
+			_autoAmmo = value;
+			OnAutoAmmoCountChanged?.Invoke(value);	
+		}
+	}
+
+	int _totalAmmo = 0;
+
+	public event Action<int> OnTotalAmmoCountChanged;
+
+	public int TotalAmmo
+	{
+		get { return _totalAmmo; }
+		set
+		{
+            _totalAmmo = value;
+            OnTotalAmmoCountChanged?.Invoke(value);
+		}
+	}
+
+	int _potion = 0;
+
+	public event Action<int> OnPotionCountChanged;
+	public int Potion
+	{
+		get { return _potion; }
+		set
+		{
+			_potion = value;
+			OnPotionCountChanged?.Invoke(value);
+		}
+	}
+
+	int _grenade = 0;
+
+	public event Action<int> OnGrenadeCountChanged;
+	public int Grenade
+	{
+		get { return _grenade; }
+		set
+		{
+			_grenade = value;
+			OnGrenadeCountChanged?.Invoke(value);	
 		}
 	}
     #endregion

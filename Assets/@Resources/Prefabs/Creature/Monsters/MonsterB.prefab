@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 164819132}
   - component: {fileID: 164819133}
   m_Layer: 0
-  m_Name: AttackPos
+  m_Name: MonsterB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,23 +153,6 @@ MonoBehaviour:
   _autoWeapon: {fileID: 0}
   _grenade: {fileID: 0}
   _collider: {fileID: 0}
-  CreatureData:
-    DataId: 0
-    DescriptionTextID: 
-    PrefabLabel: 
-    MaxHp: 0
-    MaxHpBonus: 0
-    Atk: 0
-    AtkBonus: 0
-    Def: 0
-    MoveSpeed: 0
-    TotalExp: 0
-    HpRate: 0
-    AtkRate: 0
-    DefRate: 0
-    MoveSpeedRate: 0
-    IconLabel: 
-    SkillTypeList: 
   _attackPos: {fileID: 164819131}
 --- !u!114 &1939542927
 MonoBehaviour:

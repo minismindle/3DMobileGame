@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Data
+  m_EditorClassIdentifier: 
+  m_GroupName: Data
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3fdc243baf5ea7c4aba7ff65c2054704
+  m_SerializeEntries:
+  - m_GUID: 9fa656934f15f5e40a1afb5769d1a334
+    m_Address: ItemData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 3cbaedb2fb90e9d4bab76d92633f3258
+    m_Address: PlayerData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 32c80d20b3c980f41b9dda76de384006
+    m_Address: MonsterData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 54426e456c664e34a90671f51d008f02
+    m_Address: ShopData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 374755679045411439b8934200075427
+    m_Address: ProjectileData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 8085f36bf0a64964e96b2a4293c475f5
+    m_Address: WaveData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6f15cdc93c391e043b2da4c9fc0c4bc1, type: 2}
+    - {fileID: 11400000, guid: 84aa1ad43d87a3945a8ef864dd6cec6e, type: 2}

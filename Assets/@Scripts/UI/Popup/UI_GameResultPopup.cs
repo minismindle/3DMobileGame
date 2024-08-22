@@ -17,12 +17,7 @@ public class UI_GameResultPopup : UI_Base
 
     enum Texts
     {
-        GameResultPopupTitleText,
-        ResultStageValueText,
-        ResultSurvivalTimeText,
-        ResultSurvivalTimeValueText,
-        ResultGoldValueText,
-        ResultKillValueText,
+
         ConfirmButtonText,
     }
 
@@ -53,17 +48,12 @@ public class UI_GameResultPopup : UI_Base
 
     public void SetInfo(int stage,string time,bool survive)
     {
-        GetText((int)Texts.GameResultPopupTitleText).text = "Game Result"; // arrive or dead
-        GetText((int)Texts.ResultStageValueText).text = $"{stage} STAGE"; // stage
-        GetText((int)Texts.ResultSurvivalTimeValueText).text = time;// 시간
-        GetText((int)Texts.ResultKillValueText).text = $"{Managers.Game.KillCount}"; // 킬수 
-        GetText((int)Texts.ConfirmButtonText).text = "OK";
 
     }
 
     void OnClickConfirmButton()
     {
         Managers.Clear();
-        Managers.Scene.LoadScene(Define.Scene.LobbyScene);
+        //Managers.Scene.LoadScene(Define.Scene.GameScene);
 	}
 }

@@ -16,6 +16,8 @@ TagManager:
   - Weapon
   - Ammo
   - Heart
+  - Shop
+  - Quest
   layers:
   - Default
   - TransparentFX

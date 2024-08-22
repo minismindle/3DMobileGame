@@ -5,12 +5,12 @@ using UnityEngine;
 public class SpawningPool : MonoBehaviour
 {
 	Coroutine _coUpdateSpawningPool;
-	public Data.StageData StageData { get; set; }
 	public virtual int stageLevel { get; set; }
 	public virtual int prevLevel { get; set; }
 	public virtual int nextLevel { get; set; }
 	public virtual int updateSec { get; set; }
 	public virtual float spawnInterval { get; set; }
+
 	public int maxMonsterCount = 100;
 	public bool Stopped { get; set; } = false;
 	public bool IsUpdated { get; set; } = false;
@@ -40,7 +40,7 @@ public class SpawningPool : MonoBehaviour
 
 		int monsterCount = Managers.Object.Monsters.Count;
 
-		if (monsterCount >= 0)
+		if (monsterCount >= 5)
 			return;
 
 		Vector3 randPos = Utils.GenerateMonsterSpawnPosition(Managers.Game.Player.transform.position, 20, 20);

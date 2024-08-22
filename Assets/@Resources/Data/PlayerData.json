@@ -1,0 +1,13 @@
+{
+  "Player": [
+    {
+      "DataId": 1,
+      "PrefabName": "Player",
+      "MaxHP": 1000,
+      "MaxAmmo": 1000000,
+      "MaxGrenade": 1000000,
+      "MaxPotion": 1000000,
+      "Speed": 10
+    }
+  ]
+}

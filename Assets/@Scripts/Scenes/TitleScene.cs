@@ -12,11 +12,9 @@ public class TitleScene : BaseScene
     {
         Managers.UI.ShowSceneUI<UI_TitleScene>();
         Managers.Sound.Play("",Define.Sound.Bgm);
-        SceneType = Define.Scene.LobbyScene;
-
-        var eventsystem = Managers.Resource.Instantiate("event");
+        SceneType = Define.Scene.TitleScene;
+        var eventsystem = Managers.Resource.Instantiate("EventSystem.prefab");
         eventsystem.name = "@EventSystem";
-
     }
     bool _init = false;
     protected override void Init()
@@ -25,8 +23,6 @@ public class TitleScene : BaseScene
         {
             Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
             {
-                Debug.Log($"{key} {count}/{totalCount}");
-
                 if (count == totalCount)
                 {
                     SetInfo();

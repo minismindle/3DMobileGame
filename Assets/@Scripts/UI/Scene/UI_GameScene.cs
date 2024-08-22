@@ -7,6 +7,7 @@ using System;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 using UnityEngine.Events;
+using Data;
 
 public class UI_GameScene : UI_Base
 {
@@ -19,8 +20,11 @@ public class UI_GameScene : UI_Base
     {
         WaveText,
         TimeLimitValueText,
-        KillValueText,
-        CharacterLevelValueText,
+        GoldText,
+        MaxAmmoText,
+        TotalAmmoText,
+        GrenadeCountText,
+        PotionCountText,
     }
     enum Images
     {
@@ -28,12 +32,15 @@ public class UI_GameScene : UI_Base
         ManualWeaponImage,
         AutoWeaponImage,
         GrenadeImage,
+        PotionImage
     }
     enum Buttons
     {
         AttackButton,
         JumpButton,
         InvenButton,
+        ReloadButton,
+        DiveButton
     }
     private void Awake()
     {
@@ -56,6 +63,7 @@ public class UI_GameScene : UI_Base
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerDownAttackButton, null,Define.UIEvent.PointerDown);
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerUpAttackButton,null,Define.UIEvent.PointerUp);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
+        GetButton((int)Buttons.ReloadButton).gameObject.BindEvent(OnClickReloadButton);
         GetButton((int)Buttons.InvenButton).gameObject.BindEvent(OnClickEquipButton);
         GetImage((int)Images.MeleeWeaponImage).gameObject.BindEvent(OnClickMeleeWeaponSlotImage);
         GetImage((int)Images.ManualWeaponImage).gameObject.BindEvent(OnClickManualWeaponSlotImage);
@@ -98,33 +106,56 @@ public class UI_GameScene : UI_Base
     {
         Managers.Game.Player.ReloadPlayer();
     }
+    public void SetMeleeWeaponSlot(string imageName)
+    {
+        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void SetAutoWeaponSlot(string imageName) 
+    {
+        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void SetManualWeaponSlot(string imageName)
+    {
+        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void SetGrenadeSlot(string imageName) 
+    {
+        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void SetPotionSlot(string imageName) 
+    {
+        GetImage((int)Images.PotionImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void SetGold(int gold)
+    {
+        GetText((int)Texts.GoldText).gameObject.GetComponent<TextMeshProUGUI>().text = gold.ToString();
+    }
+    public void SetGrenadeCount(int count)
+    {
+        GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+    }
+    public void SetPotionCount(int count)
+    {
+        GetText((int)Texts.PotionCountText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+    }
+    public void SetTotalAmmoCount(int count)
+    {
+        GetText((int)Texts.TotalAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+    }
     public void SetGemCountRatio(float ratio)
     {
         GetObject((int)GameObjects.ExpSliderObject).GetComponent<Slider>().value = ratio;
     }
-
-    public void SetKillCount(int killCount)
-    {
-        GetText((int)Texts.KillValueText).text = $"{killCount}";
-    }
-
     public void SetHpBar(float ratio)
     {
         GetObject((int)GameObjects.HpSliderObject).GetComponent<Slider>().value = ratio;
     }
-
     public void SetStageInfo(int stage)
     {
         GetText((int)Texts.WaveText).text = $"Wave {stage}"; 
     }
-
     public void SetTimeInfo(string time)
     {
         GetText((int)Texts.TimeLimitValueText).text = time;
-    }
-
-    public void SetCharaterLevelInfo(int charaterLevel)
-    {
-        GetText((int)Texts.CharacterLevelValueText).text = $"{charaterLevel}";
     }
 }

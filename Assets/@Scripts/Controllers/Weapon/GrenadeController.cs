@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class GrenadeController : WeaponController
 {
-    GameObject _weapon;
-
     public override bool Init()
     {
         base.Init();
-        SetInfo("Grenade");
         return true;    
     }
     public void Use(CreatureController owner,  Vector3 startPos, Vector3 dir)
@@ -21,6 +18,7 @@ public class GrenadeController : WeaponController
     IEnumerator ThrowGrenade(CreatureController owner,  Vector3 startPos, Vector3 dir)
     {
         GenerateProjectile(owner, startPos, dir);
+        Managers.Game.Grenade -= 1;
         yield return new WaitForSeconds(CoolTime);
     }
     void Throwing(CreatureController owner, Vector3 startPos, Vector3 dir)
@@ -32,7 +30,7 @@ public class GrenadeController : WeaponController
     #endregion
     public GrenadeController SetInfo(string weaponName)
     {
-        WeaponType = Define.WeaponType.Range;
+        WeaponType = Define.WeaponType.Grenade;
         ProjectileName = weaponName;
         CoolTime = 0.6f;
         return this;

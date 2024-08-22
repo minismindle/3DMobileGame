@@ -102,7 +102,6 @@ public class MonsterBController : MonsterController
         _rigid = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
         _meleeWeapon = GetComponent<MeleeWeaponController>();
-        _meleeWeapon._owner = this; 
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
@@ -111,6 +110,7 @@ public class MonsterBController : MonsterController
         MonsterName = MonsterName.MonsterB;
         ObjectType = ObjectType.Monster;
         CreatureState = CreatureState.Idle;
+        _meleeWeapon.SetInfo("MonsterB", this,null);
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -132,7 +132,7 @@ public class MonsterBController : MonsterController
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.3f);
-        _meleeWeapon.Use("MonsterB");
+        _meleeWeapon.Use();
         yield return new WaitForSeconds(1f);
         _coAttack = null;
     }

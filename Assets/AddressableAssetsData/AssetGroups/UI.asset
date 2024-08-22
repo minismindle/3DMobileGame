@@ -42,8 +42,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
-  - m_GUID: 548a94f970312594bb2d7200fcda890d
+  - m_GUID: 60690d43349eec644b947a8f16683f02
     m_Address: UI_Inventory.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 548a94f970312594bb2d7200fcda890d
+    m_Address: UI_Shop.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 55d1dc134c110954fa9e1585e808fba5
+    m_Address: UI_InventorySlot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: db1c0d23a8d9ce64b89a31e42bc8a2c9
+    m_Address: UI_ShopSlot
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

@@ -18,10 +18,12 @@ public class CreatureController : BaseController
     public ManualWeaponController _manualWeapon;
     public AutoWeaponController _autoWeapon;
     public GrenadeController _grenade;
+    protected PotionController _potion;
     protected MeshRenderer[] _meshrenderers;
     public Collider _collider;
     
     Define.CreatureState _creatureState = Define.CreatureState.Idle;
+    public Define.Scene sceneType = Define.Scene.None;
     public Vector3 CenterPosition
     {
         get
@@ -39,23 +41,20 @@ public class CreatureController : BaseController
         }
     }
     public virtual void UpdateAnimation(){}
-
-    public Data.CreatureData CreatureData;
-    public virtual int templateID { get;set; } 
-    public virtual string type { get; set; }    
-    public virtual string prefab { get; set; }
-    public virtual int level { get; set; }
-    public virtual int attack { get; set; } 
-    public virtual float speed { get; set; }
-    public virtual int maxHp { get; set;}
-    public virtual int maxExp { get; set;}
-    public virtual int maxAmmo { get; set;}
+    //public Data.CreatureData CreatureData;
+    public virtual int DataID { get;set; } 
+    public virtual string PrefabName { get; set; }
+    public virtual int Level { get; set; }
+    public virtual int Attack { get; set; } 
+    public virtual float Speed { get; set; }
+    public virtual int MaxHp { get; set;}
+    public virtual int MaxAmmo { get; set;}
     public int Hp { get; set; }
     public virtual int Gold {  get; set; }  
     public virtual int Ammo { get; set; }
     public virtual int Potion { get;set; }
+    public virtual int Grenade {  get; set; }   
     public virtual float AttackCoolTime {  get; set; }
-
     public override bool Init()
 	{
 		base.Init();
@@ -80,7 +79,6 @@ public class CreatureController : BaseController
 
 		Hp -= damage;
 
-        //Managers.Object.ShowDamageFont(CenterPosition,damage,transform,isCritical : false);
 		if (Hp <= 0)
 		{
 			Hp = 0;

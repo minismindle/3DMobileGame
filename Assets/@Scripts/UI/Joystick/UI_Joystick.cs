@@ -21,31 +21,25 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
 		_joystickRadius = _background.gameObject.GetComponent<RectTransform>().sizeDelta.x / 2;
 		_initPosition = _handler.transform.position;
     }
-
-    // Update is called once per frame
     void Update()
     {
         
     }
-
-	public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
+	public void OnPointerClick(PointerEventData eventData)
 	{
 
 	}
-
-	public void OnPointerDown(UnityEngine.EventSystems.PointerEventData eventData)
+	public void OnPointerDown(PointerEventData eventData)
 	{
         _touchPosition = eventData.position;
     }
-
-	public void OnPointerUp(UnityEngine.EventSystems.PointerEventData eventData)
+	public void OnPointerUp(PointerEventData eventData)
     {
         _handler.transform.position = _initPosition;
 		_moveDir = Vector2.zero;
 		Managers.Game.MoveDir = _moveDir;
 	}
-
-	public void OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
+	public void OnDrag(PointerEventData eventData)
 	{
         Vector2 touchDir = (eventData.position - _touchPosition);
 		float moveDist = Mathf.Min(touchDir.magnitude, _joystickRadius);

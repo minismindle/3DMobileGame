@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
@@ -14,43 +15,33 @@ public class PlayerController : CreatureController
     Vector3 _moveDir = Vector3.zero;
     Vector3 _shootDir = Vector3.zero;
 
+    public UI_Inventory Inventory;
+
     public Transform _shootPos;
     public Transform _ThrowPos;
 
-    public WeaponController[] _hotBar = new WeaponController[4];
-
     PlayerWeaponType PlayerWeaponType;
     RaycastHit slopeHit;
-
-    public Data.LevelData LevelData { get; set; }
+    //public Data.LevelData LevelData { get; set; }
 
     public Vector3 MoveDir
     {
         get { return _moveDir; }
         set { _moveDir = value.normalized; }
     }
-
     public override bool Init()
     {
         base.Init();
-        Hp = 10000;
         _rigid = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponent<CapsuleCollider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
-        ObjectType = Define.ObjectType.Player;
-        CreatureState = Define.CreatureState.Idle;
+        ObjectType = ObjectType.Player;
+        CreatureState = CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
-        _meleeWeapon.SetInfo("Hammer");
-        _meleeWeapon._owner = this;
-        _manualWeapon.SetInfo("HandGun");
-        _autoWeapon.SetInfo("SubMachineGun");
-        AttackCoolTime = 0.6f;
         _rigid.velocity = Vector3.zero;
-        maxHp = 1000;
-        Hp = 1000;
-        maxAmmo = 100;
+        Hp = MaxHp;
         return true;
     }
 
@@ -107,15 +98,12 @@ public class PlayerController : CreatureController
     #endregion
     public override void SetInfo(int templateID)
     {
-        Managers.UI.GetSceneUI<UI_GameScene>().SetCharaterLevelInfo(level);
     }
     public override void SetInfoInit(int templateID)
     {
-        CreatureData = Managers.Data.CreatureDic[templateID];
+        //CreatureData = Managers.Data.CreatureDic[templateID];
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
-
-        Managers.UI.GetSceneUI<UI_GameScene>().SetCharaterLevelInfo(level);
     }
     void FixedUpdate()
     {
@@ -142,7 +130,7 @@ public class PlayerController : CreatureController
         if (CreatureState == CreatureState.Idle)
             JumpPlayer();
         else if (CreatureState == CreatureState.Moving)
-            DodgePlayer();
+            DivePlayer();
     }
     public void ClickAttackButton()
     {
@@ -171,7 +159,7 @@ public class PlayerController : CreatureController
             case PlayerWeaponType.None:
                 break;
             case PlayerWeaponType.Auto:
-                StopAutoAttack(0.1f);
+                StopAutoAttack();
                 break;
         }
     }
@@ -205,8 +193,72 @@ public class PlayerController : CreatureController
             return;
         transform.LookAt(transform.position + _moveDir);
     }
+    public void EquipWeapon(ItemData itemData)
+    {
+        switch (itemData.WeaponType) 
+        {
+            case WeaponType.Melee:
+                _meleeWeapon.SetInfo(itemData.Name, this,itemData);
+                Managers.UI.GetSceneUI<UI_GameScene>().SetMeleeWeaponSlot(itemData.Image);
+                Inventory.SetMeleeWeaponSlot(itemData.Image);
+                break;
+            case WeaponType.Manual:
+                _manualWeapon.SetInfo(itemData.Name,this,itemData);
+                Managers.UI.GetSceneUI<UI_GameScene>().SetManualWeaponSlot(itemData.Image);
+                Inventory.SetManualWeaponSlot(itemData.Image);
+                break;
+            case WeaponType.Auto:
+                _autoWeapon.SetInfo(itemData.Name,this,itemData );
+                Managers.UI.GetSceneUI<UI_GameScene>().SetAutoWeaponSlot(itemData.Image);
+                Inventory.SetAutoWeaponSlot(itemData.Image);
+                break;
+        }
+    }
+    public void ReturnMeleeWeaponToInventory()
+    {
+        if (!_meleeWeapon._equip)
+            return;
+        _meleeWeapon.gameObject.SetActive(false);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetMeleeWeaponSlot("");
+        Inventory.SetMeleeWeaponSlot("");
+        Inventory.InsertItem(_meleeWeapon.itemData,1);
+        _meleeWeapon.Clear();
+    }
+    public void ReturnManualWeaponToInventory()
+    {
+        if(!_manualWeapon._equip) 
+            return;
+        _manualWeapon.gameObject.SetActive(false);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetManualWeaponSlot("");
+        Inventory.SetManualWeaponSlot("");
+        Inventory.InsertItem(_manualWeapon.itemData, 1);
+        _manualWeapon.Clear();
+    }
+    public void ReturnAutoWeaponToInventory()
+    {
+        if (!_autoWeapon._equip)
+            return;
+        _autoWeapon.gameObject.SetActive(false);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetAutoWeaponSlot("");
+        Inventory.SetAutoWeaponSlot("");
+        Inventory.InsertItem(_autoWeapon.itemData, 1);
+        _autoWeapon.Clear();
+    }
+    public void EquipGrenade(string GrenadeName, string imageName)
+    {
+        _grenade.SetInfo(GrenadeName);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetGrenadeSlot(imageName);
+        Inventory.SetGrenadeSlot(imageName, Grenade);
+    }
+    public void EquipPotion(string PotionName, string imageName)
+    {
+        Managers.UI.GetSceneUI<UI_GameScene>().SetPotionSlot(imageName);
+        Inventory.SetPotionSlot(imageName,Potion);
+    }
     public void JumpPlayer()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
 
@@ -214,8 +266,10 @@ public class PlayerController : CreatureController
 
         _rigid.AddForce((Vector3.up + MoveDir) * 30f, ForceMode.Impulse);
     }
-    public void DodgePlayer()
+    public void DivePlayer()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Moving)
             return;
 
@@ -227,11 +281,13 @@ public class PlayerController : CreatureController
     }
     public void SwingPlayer()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
         CreatureState = CreatureState.Swing;
 
-        _meleeWeapon.Use("Hammer");
+        _meleeWeapon.Use();
 
         SetAnimationDelay(AttackCoolTime);
     }
@@ -241,9 +297,15 @@ public class PlayerController : CreatureController
             return;
         if (CreatureState == CreatureState.Shot)
             return;
-
+        if (CreatureState == CreatureState.Reload)
+            return;
         if (PlayerWeaponType == PlayerWeaponType.Manual)
         {
+            if (_manualWeapon.ammo == 0)
+            {
+                ReloadPlayer(); 
+                return;
+            }
             CreatureState = CreatureState.Shot;
             _manualWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_HandGun");
             SetAnimationDelay(0.1f);
@@ -257,16 +319,20 @@ public class PlayerController : CreatureController
     {
         if (CreatureState != CreatureState.Idle)
             return;
-
+        
         CreatureState = CreatureState.Swap;
 
         SetAnimationDelay(0.4f);
     }
     public void SwapToMeleeWeapon()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Melee)
+            return;
+        if (_meleeWeapon._weapon == null)
             return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Melee;
@@ -278,9 +344,13 @@ public class PlayerController : CreatureController
     }
     public void SwapToManualWeapon()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Manual)
+            return;
+        if (_manualWeapon._weapon == null)
             return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Manual;
@@ -292,9 +362,13 @@ public class PlayerController : CreatureController
     }
     public void SwapToAutoWeapon()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Auto)
+            return;
+        if(_autoWeapon._weapon == null) 
             return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Auto;
@@ -306,6 +380,8 @@ public class PlayerController : CreatureController
     }
     public void SwapToGrenade()
     {
+        if (sceneType != Scene.GameScene)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Grenade)
@@ -319,6 +395,8 @@ public class PlayerController : CreatureController
     }
     public void ThrowPlayer()
     {
+        if (Grenade == 0)
+            return;
         if (CreatureState != CreatureState.Idle)
             return;
 
@@ -330,12 +408,36 @@ public class PlayerController : CreatureController
     }
     public void ReloadPlayer()
     {
-        if (CreatureState != CreatureState.Idle)
+        if (CreatureState != CreatureState.Idle && CreatureState != CreatureState.Shot)
+            return;
+        if (PlayerWeaponType != PlayerWeaponType.Manual && PlayerWeaponType != PlayerWeaponType.Auto)
             return;
 
         CreatureState = CreatureState.Reload;
 
-        SetAnimationDelay(2.7f);
+        SetAnimationDelay(2.5f);
+
+        int ammoCount;
+
+        if (PlayerWeaponType == PlayerWeaponType.Manual)
+        {
+            ammoCount = Mathf.Min(_manualWeapon.maxAmmo - _manualWeapon.ammo, Ammo);
+            _manualWeapon.ammo += ammoCount;
+            Managers.Game.TotalAmmo -= ammoCount;    
+        }
+        else if(PlayerWeaponType == PlayerWeaponType.Auto) 
+        {
+            ammoCount = Mathf.Min(_autoWeapon.maxAmmo - _autoWeapon.ammo,Ammo);
+            _autoWeapon.ammo += ammoCount;
+            Managers.Game.TotalAmmo -= ammoCount;
+        }
+    }
+    public void UsePotion()
+    {
+        if (Potion == 0)
+            return;
+
+        Managers.Game.Potion -= 1;
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -372,21 +474,17 @@ public class PlayerController : CreatureController
                 Gold += _coin.GetCoin();
                 Managers.Object.Despawn(_coin);
                 break;
-            case "Heart":
-                HeartController _heart = other.gameObject.GetComponent<HeartController>(); 
-                Hp += 100;
-                Managers.Object.Despawn(_heart);
+            case "Shop":
+                Managers.UI.ShowPopup<UI_Shop>();
                 break;
-            case "Ammo":
-                AmmoController _ammo = other.gameObject.GetComponent<AmmoController>();
-                Ammo += 100;
-                Managers.Object.Despawn(_ammo);
+            case "Quest":
+                Managers.Scene.CurrentScene.gameObject.GetComponent<GameScene>().OnStage();
                 break;
             default:
                 break;
         }
     }
-
+    
     #region WaitAnimation
     Coroutine _coWaitAnimation;
     IEnumerator CoWaitAnimation(float delay)
@@ -410,6 +508,12 @@ public class PlayerController : CreatureController
         yield return new WaitForSeconds(delay);
         while (true)
         {
+            if (_autoWeapon.ammo == 0)
+            {
+                ReloadPlayer();
+                StopAutoAttack();
+                break;
+            }
             CreatureState = CreatureState.Shot;
             _autoWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_SubMachineGun");
             yield return new WaitForSeconds(delay);
@@ -421,12 +525,13 @@ public class PlayerController : CreatureController
             _coAutoAttack = null;
         _coAutoAttack = StartCoroutine(CoAutoAttack(delay));
     }
-    void StopAutoAttack(float delay)
+    void StopAutoAttack()
     {
         if (_coAutoAttack != null)
             StopCoroutine(_coAutoAttack);
         _coAutoAttack = null;
-        CreatureState = CreatureState.Idle; 
+        if(CreatureState == CreatureState.Shot)    
+            CreatureState = CreatureState.Idle;
     }
     #endregion
 

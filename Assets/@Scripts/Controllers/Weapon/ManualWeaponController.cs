@@ -1,3 +1,4 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,42 +6,43 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 public class ManualWeaponController : WeaponController
 {
-    GameObject _weapon;
-
+    public int maxAmmo;
+    public int ammo;
     public override bool Init()
     {
         base.Init();
+        maxAmmo = 40;
+        ammo = 0;
         return true;
     }
     public void Use(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
         Attack(owner, startPos, dir, rotation, prefabName);
     }
-
     #region Attack
     public Coroutine _coAttack;
-    IEnumerator ShotSubMachineGun(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
+    IEnumerator CoHandGun(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
-        yield return new WaitForSeconds(0.1f);
         GenerateProjectile(owner, startPos, dir, rotation, prefabName);
-        yield return new WaitForSeconds(CoolTime);
+        ammo -= 1;
+        yield return null;
     }
     void Attack(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
         if (_coAttack != null)
             _coAttack = null;
-        _coAttack = StartCoroutine(ShotSubMachineGun(owner, startPos, dir, rotation, prefabName));
+        _coAttack = StartCoroutine(CoHandGun(owner, startPos, dir, rotation, prefabName));
     }
     #endregion
-
-
-    public void SetInfo(string WeaponName)
+    public void SetInfo(string WeaponName,CreatureController owner,ItemData itemData)
     {
-        WeaponType = Define.WeaponType.Range;
+        WeaponType = Define.WeaponType.Manual;
         ObjectType = Define.ObjectType.Weapon;
-        _weapon = this.transform.Find("HandGun").gameObject;
-        _owner = Managers.Game.Player;
+        this.itemData = itemData;   
+        _weapon = this.transform.Find(WeaponName).gameObject;
+        _owner = owner;
         _weapon.SetActive(true);
+        _equip = true;
         CoolTime = 0.1f;
     }
     void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation,string prefabName)

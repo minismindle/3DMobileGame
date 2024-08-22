@@ -17,28 +17,33 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 8c11bce0e3c501e40a98552290a67ade
   m_SerializeEntries:
-  - m_GUID: 55d971a0c49e912459a9b5719327456c
-    m_Address: SubMachineGun
+  - m_GUID: 4e5b816343df5574c8a051077a2156b9
+    m_Address: IconGrenade.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
-  - m_GUID: def9561722ca3f740adfbe9966d21cda
-    m_Address: HandGun
+  - m_GUID: 3260f72e5b6eec24587b9132cb1ae0a0
+    m_Address: IconHandGun.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
-  - m_GUID: 0e113227866241e4c9359331abc0718b
-    m_Address: Hammer
+  - m_GUID: 3cadcd247345c2649b0e8fbd9ee6e8db
+    m_Address: IconHeart.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
-  - m_GUID: 1adf4771a2a84ef4eaaadba340ae7c77
-    m_Address: Ammo
+  - m_GUID: 744566287c3cef64f9b897280e5d9b1a
+    m_Address: IconSubMachineGun.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
-  - m_GUID: 437ad4dccfddbb64b9b2bb88be07abe4
-    m_Address: Heart
+  - m_GUID: f88cc66088c6e4042ae13a50dfbb3662
+    m_Address: IconAmmo.sprite
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 1c436558df0caa04eb65bf6f8d065918
+    m_Address: IconHammer.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

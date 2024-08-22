@@ -43,7 +43,6 @@ public class Managers : MonoBehaviour
 					go = new GameObject() { name = "@Managers" };
 					go.AddComponent<Managers>();
 				}
-
 				DontDestroyOnLoad(go);
 				s_instance = go.GetComponent<Managers>();
 				s_instance._sound.Init();

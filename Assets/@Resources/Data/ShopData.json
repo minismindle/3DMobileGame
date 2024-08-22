@@ -1,0 +1,34 @@
+{
+  "shopitems": [
+    {
+      "DataId": 20000,
+      "Price": 1000,
+      "Count": 1000
+    },
+    {
+      "DataId": 20001,
+      "Price": 1000,
+      "Count": 10
+    },
+    {
+      "DataId": 20002,
+      "Price": 1000,
+      "Count": 1
+    },
+    {
+      "DataId": 20003,
+      "Price": 2000,
+      "Count": 1
+    },
+    {
+      "DataId": 20004,
+      "Price": 3000,
+      "Count": 1
+    },
+    {
+      "DataId": 20005,
+      "Price": 4000,
+      "Count": 1
+    }
+  ]
+}

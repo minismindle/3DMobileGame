@@ -1,5 +1,7 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using static Define;
 using static UnityEngine.GraphicsBuffer;
@@ -7,10 +9,10 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MeleeWeaponController : WeaponController
 {
-    GameObject _weapon;
-    public void Use(string weaponName)
+    
+    public void Use()
     {
-        Attack(weaponName);
+        Attack(itemData.Name);
     }
     #region Attack
     Coroutine _coAttack;
@@ -41,13 +43,16 @@ public class MeleeWeaponController : WeaponController
         base.Init();
         return true;
     }
-    public void SetInfo(string WeaponName) 
+    public void SetInfo(string WeaponName, CreatureController Owner,ItemData itemData) 
     {
         WeaponType = WeaponType.Melee;
         ObjectType = ObjectType.Weapon;
+        this.itemData = itemData;   
         _weapon = this.transform.Find(WeaponName).gameObject;
         _collider = _weapon.GetComponent<BoxCollider>();
         _trailRenderer = _weapon.GetComponentInChildren<TrailRenderer>();
+        _owner = Owner;
+        _equip = true;
         CoolTime = 0.6f;
     }
     private void OnTriggerEnter(Collider target)

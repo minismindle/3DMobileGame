@@ -7,34 +7,44 @@ using UnityEngine;
 
 public class GameScene : BaseScene
 {
+    [SerializeField]
+    NPCController shopNPC;
+    [SerializeField]
+    NPCController questNPC;
     void Start()
     {
-        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
-        {
-            Debug.Log($"{key} {count}/{totalCount}");
-
-            if (count == totalCount)
-            {
-                Start_init();
-            }
-        });
+        Start_init();
     }
-    void Start_init()
+    public void Start_init()
     {
         this.Init();
+
+        Managers.Data.Init();
 
         SceneType = Define.Scene.GameScene;
 
         Managers.UI.ShowSceneUI<UI_GameScene>();
 
-        _spawningPool = gameObject.GetOrAddComponent<SpawningPool>();
+        var player = Managers.Object.Spawn<PlayerController>(Vector3.zero, transform.rotation);
 
-        var player = Managers.Object.Spawn<PlayerController>(Vector3.zero,transform.rotation);
-
-        var eventsystem = Managers.Resource.Instantiate("EventSystem.prefab");
-        eventsystem.name = "@EventSystem";
+        Managers.Game.Player.sceneType = SceneType;
 
         Camera.main.GetComponent<CameraController>()._player = player.gameObject;
+
+        Managers.Game.OnGoldCountChanged -= HandleOnGoldCountChanged;
+        Managers.Game.OnTotalAmmoCountChanged -= HandleOnAmmoCountChanged;
+        Managers.Game.OnPotionCountChanged -= HandleOnPotionCountChanged;
+        Managers.Game.OnGrenadeCountChanged -= HandleOnGrenadeCountChanged;
+
+        Managers.Game.OnGoldCountChanged += HandleOnGoldCountChanged;
+        Managers.Game.OnTotalAmmoCountChanged += HandleOnAmmoCountChanged;
+        Managers.Game.OnPotionCountChanged += HandleOnPotionCountChanged;
+        Managers.Game.OnGrenadeCountChanged += HandleOnGrenadeCountChanged;
+
+        Managers.Game.Gold = 10000000;
+
+        Managers.UI.ShowPopup<UI_Inventory>();
+        Managers.UI.CloseAllPopup();
     }
 
     SpawningPool _spawningPool;
@@ -85,8 +95,10 @@ public class GameScene : BaseScene
     }
     protected override void Init()
     {
-        Managers.Game.Gem = 0;
+        Managers.Game.Gold = 0;
         Managers.Game.KillCount = 0;
+        Managers.Game.Potion = 0;
+        Managers.Game.TotalAmmo = 0;
     }
     public override void Clear()
     {
@@ -102,16 +114,40 @@ public class GameScene : BaseScene
             return;
         Managers.UI.GetSceneUI<UI_GameScene>().SetTimeInfo(SetTimeText(_timer.Time));
     }
-    public void HandleOnKillCountChanged(int killCount)
+    public void HandleOnGoldCountChanged(int gold)
 	{
-		Managers.UI.GetSceneUI<UI_GameScene>().SetKillCount(killCount);
-	}
-
+        Managers.Game.Player.Gold = gold;
+        Managers.UI.GetSceneUI<UI_GameScene>().SetGold(gold);
+    }
+    public void HandleOnAmmoCountChanged(int ammoCount)
+    {
+        Managers.Game.Player.Ammo = ammoCount;
+        Managers.UI.GetSceneUI<UI_GameScene>().SetTotalAmmoCount(ammoCount);
+    }
+    public void HandleOnPotionCountChanged(int potionCount) 
+    { 
+        Managers.Game.Player.Potion = potionCount; 
+        Managers.UI.GetSceneUI<UI_GameScene>().SetPotionCount(potionCount);    
+    }
+    public void HandleOnGrenadeCountChanged(int grenadeCount)
+    {
+        Managers.Game.Player.Grenade = grenadeCount;    
+        Managers.UI.GetSceneUI<UI_GameScene>().SetGrenadeCount(grenadeCount);   
+    }
+    public void OnStage()
+    {
+        shopNPC.gameObject.SetActive(false);
+        questNPC.gameObject.SetActive(false);
+        _spawningPool = gameObject.GetOrAddComponent<SpawningPool>();
+    }
     private void OnDestroy()
     {
         if (Managers.Game != null)
         {
-
+            Managers.Game.OnGoldCountChanged -= HandleOnGoldCountChanged;
+            Managers.Game.OnTotalAmmoCountChanged -= HandleOnAmmoCountChanged;
+            Managers.Game.OnPotionCountChanged -= HandleOnPotionCountChanged;
+            Managers.Game.OnGrenadeCountChanged -= HandleOnGrenadeCountChanged;
         }
     }
 }

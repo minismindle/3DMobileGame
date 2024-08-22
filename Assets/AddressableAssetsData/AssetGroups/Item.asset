@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Item
+  m_EditorClassIdentifier: 
+  m_GroupName: Item
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0d6871fcd2fb8174693533434d0867bd
+  m_SerializeEntries:
+  - m_GUID: 1adf4771a2a84ef4eaaadba340ae7c77
+    m_Address: Ammo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 0e113227866241e4c9359331abc0718b
+    m_Address: Hammer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: def9561722ca3f740adfbe9966d21cda
+    m_Address: HandGun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 437ad4dccfddbb64b9b2bb88be07abe4
+    m_Address: Heart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  - m_GUID: 55d971a0c49e912459a9b5719327456c
+    m_Address: SubMachineGun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e123b63f05fe6544295c029c25572e9e, type: 2}
+    - {fileID: 11400000, guid: 8953284d26c93f446b4e9f8da762a76b, type: 2}

@@ -13,9 +13,10 @@ public class ResourceManager
 	public T Load<T>(string key) where T : Object
 	{
 		if (_resources.TryGetValue(key, out Object resource))
+		{
 			return resource as T;
-
-		return null;
+		}
+        return null;
 	}
 
 	public GameObject Instantiate(string key, Transform parent = null, bool pooling = false)

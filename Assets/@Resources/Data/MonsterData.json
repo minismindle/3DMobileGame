@@ -1,0 +1,33 @@
+{
+  "monsters": [
+    {
+      "DataId": 10000,
+      "PrefabName": "MonsterA",
+      "MaxHP": 30,
+      "ScanRange": 20,
+      "AttackRange": 2,
+      "Attack": 10
+    },
+    {
+      "DataId": 11000,
+      "PrefabName": "MonsterB",
+      "MaxHP": 30,
+      "ScanRange": 20,
+      "AttackRange": 2,
+      "Attack": 10
+    },
+    {
+      "DataId": 12000,
+      "PrefabName": "MonsterC",
+      "MaxHP": 30,
+      "ScanRange": 25,
+      "AttackRange": 15
+    },
+    {
+      "DataId": 13000,
+      "PrefabName": "Boss",
+      "MaxHP": 1000,
+      "AttackRange": 40
+    }
+  ]
+}

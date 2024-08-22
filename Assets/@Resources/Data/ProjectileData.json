@@ -1,0 +1,40 @@
+{
+  "projectiles": [
+    {
+      "DataId": 23000,
+      "PrefabName": "Bullet_SubMachineGun",
+      "Speed": 30,
+      "Damage": 10
+    },
+    {
+      "DataId": 23001,
+      "PrefabName": "Bullet_HandGun",
+      "Speed": 25,
+      "Damage": 10
+    },
+    {
+      "DataId": 23002,
+      "PrefabName": "Grenade",
+      "Speed": 30,
+      "Damage": 100
+    },
+    {
+      "DataId": 23003,
+      "PrefabName": "Missile",
+      "Speed": 20,
+      "Damage": 20
+    },
+    {
+      "DataId": 23004,
+      "PrefabName": "Missile_Boss",
+      "Speed": 20,
+      "Damage": 20
+    },
+    {
+      "DataId": 23005,
+      "PrefabName": "Rock_Boss",
+      "Speed": 20,
+      "Damage": 50
+    }
+  ]
+}
