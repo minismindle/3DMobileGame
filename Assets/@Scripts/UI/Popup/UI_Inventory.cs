@@ -28,7 +28,11 @@ public class UI_Inventory : UI_Base
         ManualWeaponImage,
         AutoWeaponImage,
         GrenadeImage,
-        PotionImage
+        ConsumableImage
+    }
+    enum Texts
+    {
+        GoldText,
     }
     private void Awake()
     {
@@ -41,6 +45,7 @@ public class UI_Inventory : UI_Base
         BindObject(typeof(GameObjects));
         BindButton(typeof(Buttons));
         BindImage(typeof(Images));  
+        BindText(typeof(Texts)); 
         slots = GetObject((int)GameObjects.Slots).gameObject.GetComponentsInChildren<UI_InventorySlot>();
         Managers.Game.Player.Inventory = this.gameObject.GetComponent<UI_Inventory>();
         BindEvents();
@@ -52,45 +57,78 @@ public class UI_Inventory : UI_Base
         GetImage((int)Images.MeleeWeaponImage).gameObject.BindEvent(OnClickMeleeWeaponImage);
         GetImage((int)Images.ManualWeaponImage).gameObject.BindEvent(OnClickManualWeaponImage);
         GetImage((int)Images.AutoWeaponImage).gameObject.BindEvent(OnClickAutoWeaponImage);
+        GetImage((int)Images.GrenadeImage).gameObject.BindEvent(OnClickGrenadeImage);
+        GetImage((int)Images.ConsumableImage).gameObject.BindEvent(OnClickConsumableImage);
     }
     public void InsertItem(ItemData itemData,int count)
     {
         switch(itemData.ItemType)
         {
             case ItemType.Ammo:
-                Managers.Game.TotalAmmo += count;
+                InsertAmmo(itemData, count);
                 break;
-            case ItemType.Potion:
-                Managers.Game.Potion += count;  
+            case ItemType.Consumable:
+                InsertConsumable(itemData,count);
                 break;
             case ItemType.Grenade:
-                Managers.Game.Grenade += count;
+                InsertGrenade(itemData, count); 
+                break;
+            case ItemType.Weapon:
+                GetEmptySlot(itemData, count);  
                 break;
         }
+        SortingSlot();
+        BubbleSort();
+    }
+    void InsertAmmo(ItemData itemData, int count)
+    {
+        Managers.Game.Player.Ammo.Count += count;
         GetEmptySlot(itemData, count);
+    }
+    void InsertConsumable(ItemData itemData, int count)
+    {
+        if (Managers.Game.Player.Consumable.Equip)
+        {
+            Managers.Game.Player.Consumable.Count += count;
+        }
+        else if (!Managers.Game.Player.Consumable.Equip)
+        {
+            GetEmptySlot(itemData, count);
+        }
+    }
+    void InsertGrenade(ItemData itemData,int count)
+    {
+        if (Managers.Game.Player.Grenade.Equip)
+        {
+            Managers.Game.Player.Grenade.Count += count;
+        }
+        else if (!Managers.Game.Player.Grenade.Equip)
+        {
+            GetEmptySlot(itemData, count);
+        }
     }
     public void GetEmptySlot(ItemData itemData, int count) 
     {
-        if (itemData.Consumable) //한칸에 여러개를 넣을 수 있을 때 ex) 물약,탄...
+        if (itemData.Consumable) //한칸에 여러개를 넣을 수 있을 때 
         {
             foreach (UI_InventorySlot slot in slots)
             {
-                if (slot._empty)
+                if (slot.Empty)
                 {
                     slot.SetSlot(itemData, count);
                     return;
                 }
-                else if(!slot._empty)
+                else if(!slot.Empty)
                 {
-                    if (itemData.DataId != slot.itemData.DataId)
+                    if (itemData.Name != slot.ItemData.Name)
                         continue;
-                    if(slot._count == MaxSlotCount)
+                    if(slot.Count == MaxSlotCount)
                     {
                         continue;
                     }
-                    else if(slot._count < MaxSlotCount)
+                    else if(slot.Count < MaxSlotCount)
                     {
-                        int _sumCount = slot._count + count;
+                        int _sumCount = slot.Count + count;
                         if (_sumCount > MaxSlotCount)
                         {
                             slot.SetCountText(MaxSlotCount);
@@ -105,11 +143,11 @@ public class UI_Inventory : UI_Base
                 }
             }
         }
-        else if (!itemData.Consumable) //한칸에 한개의 아이템만 넣을 수 있을 때 ex) 장비
+        else if (!itemData.Consumable) //한칸에 한개의 아이템만 넣을 수 있을 때
         {
             foreach(UI_InventorySlot slot in slots)
             {
-                if(slot._empty)
+                if(slot.Empty)
                 {
                     slot.SetSlot(itemData,count);
                     return;
@@ -122,13 +160,13 @@ public class UI_Inventory : UI_Base
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            if (slots[i]._empty)
+            if (slots[i].Empty)
             {
                 for (int j = i+1; j < slots.Length; j++) 
                 {
-                    if (slots[j]._empty)
+                    if (slots[j].Empty)
                         return;
-                    slots[j-1].SetSlot(slots[j].itemData, slots[j]._count);
+                    slots[j-1].SetSlot(slots[j].ItemData, slots[j].Count);
                     slots[j].ClearSlot();   
                 }
                 return;
@@ -136,30 +174,64 @@ public class UI_Inventory : UI_Base
         }
         return;
     }
-    public void UseItem(ItemType itemType,int useCount)
+    public void BubbleSort()
     {
-        int slotIdx = FindSlotIdx(itemType);
-        
-        if (slotIdx == -1)
+        for (int i = 0; i < slots.Length - 1; i++)
+        {
+            if (slots[i].Empty)
+                continue;
+            for (int j = 0; j < slots.Length - 1; j++) 
+            {
+                if(slots[j+1].Empty)
+                    continue;
+                if (slots[j].ItemData.ItemType > slots[j + 1].ItemData.ItemType)
+                {
+                    ItemData itemData = slots[j + 1].ItemData;
+                    int count = slots[j + 1].Count;
+                   
+                    slots[j + 1].SetSlot(slots[j].ItemData, slots[j].Count);
+                    slots[j].SetSlot(itemData, count); 
+                }
+            }
+        }
+        return;
+    }
+    public void UseItem(string itemName, int count)
+    {
+        int idx = FindSlotIdx(itemName);
+
+        if (idx == -1) 
             return;
 
-        switch (itemType) 
+        slots[idx].Count -= count;
+
+        if(slots[idx].Count == 0 )
         {
-            case ItemType.Ammo:
-                break;
-            case ItemType.Grenade:
-                break;
-            case ItemType.Potion:
-                break;
+            slots[idx].ClearSlot();
         }
     }
-    int FindSlotIdx(ItemType itemType)
+    public void ReturnItem(ItemData itemData, int count)
+    {
+        if (count == 0) return;
+
+        int idx = FindSlotIdx(itemData.Name);
+
+        if (idx == -1)
+        {
+            Managers.Game.Player.Ammo.Count -= count;
+            InsertItem(itemData, count);    
+            return;
+        }
+
+        slots[idx].Count += count;
+    }
+    int FindSlotIdx(string itemName )
     {
         for (int i = 0; i < slots.Length; i++) 
         {
-            if (slots[i]._empty)
+            if (slots[i].Empty)
                 continue;
-            if (slots[i].itemData.ItemType == itemType)
+            if (slots[i].ItemData.Name == itemName)
             {
                 return i;
             }
@@ -182,13 +254,37 @@ public class UI_Inventory : UI_Base
     {
         GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
     }
-    public void SetGrenadeSlot(string imageName, int count)
+    public void SetGrenadeSlot(string imageName)
     {
         GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
     }
-    public void SetPotionSlot(string imageName, int count)
+    public void SetConsumableSlot(string imageName)
     {
-        GetImage((int)Images.PotionImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void SetGold(int gold)
+    {
+        GetText((int)Texts.GoldText).gameObject.GetComponent<TextMeshProUGUI>().text = gold.ToString();
+    }
+    public void ClearMeleeWeaponSlot()
+    {
+        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = null;
+    }
+    public void ClearAutoWeaponSlot()
+    {
+        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = null;
+    }
+    public void ClearManualWeaponSlot()
+    {
+        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = null;
+    }
+    public void ClearGrenadeSlot()
+    {
+        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = null;
+    }
+    public void ClearConsumableSlot()
+    {
+        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = null;
     }
     public void OnClickMeleeWeaponImage()
     {
@@ -201,5 +297,13 @@ public class UI_Inventory : UI_Base
     public void OnClickAutoWeaponImage()
     {
         Managers.Game.Player.ReturnAutoWeaponToInventory();
+    }
+    public void OnClickGrenadeImage()
+    {
+        Managers.Game.Player.ReturnGrenadeToInventory();    
+    }
+    public void OnClickConsumableImage() 
+    { 
+        Managers.Game.Player.ReturnConsumableToInventory();
     }
 }

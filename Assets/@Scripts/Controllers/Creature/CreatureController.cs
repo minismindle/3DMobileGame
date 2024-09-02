@@ -1,4 +1,5 @@
 using Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,29 +9,37 @@ public class CreatureController : BaseController
 {
     protected float _speed = 10.0f;
 
-    public bool MakeDead = false;
     [SerializeField]
-    protected Animator _animator;
-    protected Rigidbody _rigid;
-    protected Material _material;
-    protected NavMeshAgent _nav;
-    public MeleeWeaponController _meleeWeapon;
-    public ManualWeaponController _manualWeapon;
-    public AutoWeaponController _autoWeapon;
-    public GrenadeController _grenade;
-    protected PotionController _potion;
-    protected MeshRenderer[] _meshrenderers;
-    public Collider _collider;
+    protected Animator                  _animator;
+    protected Collider                  _collider;
+    protected Rigidbody                 _rigid;
+    protected Material                  _material;
+    protected NavMeshAgent              _nav;
+    protected MeshRenderer[]            _meshrenderers;
     
+
+    private int _hp = 0;
+    private int _maxHp = 0;
+
+
     Define.CreatureState _creatureState = Define.CreatureState.Idle;
     public Define.Scene sceneType = Define.Scene.None;
-    public Vector3 CenterPosition
-    {
-        get
-        {
-            return new Vector3(transform.position.x,transform.position.y - 0.3f);
-        }
-    }
+    [SerializeField]
+    MeleeWeaponController _meleeWeapon;
+    [SerializeField]
+    ManualWeaponController _manualWeapon;
+    [SerializeField]
+    AutoWeaponController _autoWeapon;
+    [SerializeField]
+    GrenadeController _grenade;
+    [SerializeField]
+    ConsumableController _consumable;  
+
+    public virtual MeleeWeaponController MeleeWeapon { get { return _meleeWeapon; } set { _meleeWeapon = value; } }
+    public virtual ManualWeaponController ManualWeapon { get { return _manualWeapon; } set { _manualWeapon = value; } }
+    public virtual AutoWeaponController AutoWeapon { get { return _autoWeapon; } set { _autoWeapon = value; } }
+    public virtual GrenadeController Grenade { get { return _grenade; } set { _grenade = value; } }
+    public virtual ConsumableController Consumable { get { return _consumable; } set { _consumable = value; } }
     public virtual Define.CreatureState CreatureState
     {
         get { return _creatureState; }
@@ -41,47 +50,38 @@ public class CreatureController : BaseController
         }
     }
     public virtual void UpdateAnimation(){}
-    //public Data.CreatureData CreatureData;
     public virtual int DataID { get;set; } 
-    public virtual string PrefabName { get; set; }
-    public virtual int Level { get; set; }
-    public virtual int Attack { get; set; } 
     public virtual float Speed { get; set; }
-    public virtual int MaxHp { get; set;}
-    public virtual int MaxAmmo { get; set;}
-    public int Hp { get; set; }
     public virtual int Gold {  get; set; }  
-    public virtual int Ammo { get; set; }
+    public virtual int TotalAmmo { get; set; }
     public virtual int Potion { get;set; }
-    public virtual int Grenade {  get; set; }   
+    public virtual int FragGrenade {  get; set; }   
     public virtual float AttackCoolTime {  get; set; }
+    public virtual int HP 
+    {
+        get { return _hp;  }
+        set { _hp = value;} 
+    }
+    public virtual int MaxHP
+    {
+        get { return _maxHp; }
+        set { _maxHp = value;  }
+    }
     public override bool Init()
 	{
 		base.Init();
 
         return true;
 	}
-    public bool IsMonster()
-    {
-        switch(ObjectType) 
-        {
-            case Define.ObjectType.Monster:
-            case Define.ObjectType.BossMonster:
-                return true;
-            default:
-                return false;
-        }
-    }
 	public virtual void OnDamaged(BaseController attacker, int damage = 0)
 	{
-		if (Hp <= 0)
+		if (HP <= 0)
 			return;
 
-		Hp -= damage;
-
-		if (Hp <= 0)
+        HP -= damage;
+		if (HP <= 0)
 		{
-			Hp = 0;
+            HP = 0; 
             OnDead();
 		}
     }

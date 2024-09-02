@@ -33,7 +33,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
   - m_GUID: 87aff79491b96674d808cfbc987c17e9
-    m_Address: Grenade
+    m_Address: FragGrenade
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

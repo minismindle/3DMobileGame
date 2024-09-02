@@ -16,16 +16,15 @@ public class DataManager
     public Dictionary<int, ShopData> ShopDataDic { get; private set; } = new Dictionary<int, ShopData>();
     public Dictionary<int, MonsterData> MonsterDataDic { get; private set; } = new Dictionary<int, MonsterData>();
     public Dictionary<int, PlayerData> PlayerDataDic { get; private set; } = new Dictionary<int, PlayerData>();
-    public Dictionary<int, WaveData> WaveDataDic { get; private set; } = new Dictionary<int, WaveData>();
     public Dictionary<int, ProjectileData> ProjectileDataDic { get; private set; } = new Dictionary<int, ProjectileData>();
+    public Dictionary<int, StageData> StageDataDic { get; private set; } = new Dictionary<int, StageData>();
     public void Init()
     {
-        ItemDataDic = LoadJson<Data.ItemDataLoader,int,Data.ItemData>("ItemData").MakeDict();
-        ShopDataDic = LoadJson<Data.ShopDataLoader, int,Data.ShopData>("ShopData").MakeDict();
-        MonsterDataDic = LoadJson<Data.MonsterDataLoader, int,Data.MonsterData>("MonsterData").MakeDict();
-        PlayerDataDic = LoadJson<Data.PlayerDataLoader, int,Data.PlayerData>("PlayerData").MakeDict();
-        WaveDataDic = LoadJson<Data.WaveDataLoader, int,Data.WaveData>("WaveData").MakeDict();
-        ProjectileDataDic = LoadJson<Data.ProjectileDataLoader, int,Data.ProjectileData>("ProjectileData").MakeDict();
+        ItemDataDic = LoadJson<ItemDataLoader,int,ItemData>("ItemData").MakeDict();
+        ShopDataDic = LoadJson<ShopDataLoader, int,ShopData>("ShopData").MakeDict();
+        MonsterDataDic = LoadJson<MonsterDataLoader, int, MonsterData>("MonsterData").MakeDict();
+        PlayerDataDic = LoadJson<PlayerDataLoader, int,PlayerData>("PlayerData").MakeDict();
+        StageDataDic = LoadJson<StageDataLoader, int, StageData>("StageData").MakeDict();
     }
     Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {

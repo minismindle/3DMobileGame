@@ -99,30 +99,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21fac96475babbe489acd707f9e51b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MakeDead: 0
   _animator: {fileID: 0}
+  sceneType: 0
   _meleeWeapon: {fileID: 0}
   _manualWeapon: {fileID: 0}
   _autoWeapon: {fileID: 0}
   _grenade: {fileID: 0}
-  _collider: {fileID: 0}
-  CreatureData:
-    DataId: 0
-    DescriptionTextID: 
-    PrefabLabel: 
-    MaxHp: 0
-    MaxHpBonus: 0
-    Atk: 0
-    AtkBonus: 0
-    Def: 0
-    MoveSpeed: 0
-    TotalExp: 0
-    HpRate: 0
-    AtkRate: 0
-    DefRate: 0
-    MoveSpeedRate: 0
-    IconLabel: 
-    SkillTypeList: 
+  _consumable: {fileID: 0}
   _attackPos: {fileID: 0}
 --- !u!1001 &4830895522237710593
 PrefabInstance:

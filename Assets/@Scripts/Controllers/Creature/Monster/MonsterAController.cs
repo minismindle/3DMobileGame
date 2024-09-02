@@ -94,20 +94,16 @@ public class MonsterAController : MonsterController
         base.Init();
         SetInfo(0);
         return true;
-    }
+    }   
     public override void SetInfo(int templateID)
     {
-        Hp = 20;
-        _rigid = GetComponent<Rigidbody>();
-        _nav = GetComponent<NavMeshAgent>();
-        _collider = GetComponent<Collider>();
-        _animator = GetComponentInChildren<Animator>();
-        _meshrenderers = GetComponentsInChildren<MeshRenderer>();
-        ScanRange = 20f;
+        base.SetInfo(templateID);
+        HP = 20;
+        ScanRange = 40f;
         AttackRange = 2f;
         MonsterName = MonsterName.MonsterA;
-        ObjectType = ObjectType.Monster;
-        CreatureState = CreatureState.Idle;
+        _nav.enabled = true;
+        _rigid.isKinematic = false;
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -120,6 +116,8 @@ public class MonsterAController : MonsterController
     {
         StopAttack();
         _nav.SetDestination(transform.position);
+        _nav.enabled = false;
+        _rigid.isKinematic = true;
         base.OnDead();
     }
     #region Attack

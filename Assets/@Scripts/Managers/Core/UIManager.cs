@@ -57,7 +57,6 @@ public class UIManager
 
 		UI_Base ui = _uiStack.Pop();
 		Managers.Resource.Destroy(ui.gameObject);
-		Managers.Game.Player.CreatureState = Define.CreatureState.Idle;
 		RefreshTimeScale();
 	}
 	public void CloseAllPopup()

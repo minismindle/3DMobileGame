@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 8c11bce0e3c501e40a98552290a67ade
   m_SerializeEntries:
   - m_GUID: 4e5b816343df5574c8a051077a2156b9
-    m_Address: IconGrenade.sprite
+    m_Address: IconFragGrenade.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -28,7 +28,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
   - m_GUID: 3cadcd247345c2649b0e8fbd9ee6e8db
-    m_Address: IconHeart.sprite
+    m_Address: IconPotion.sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -47,6 +47,10 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
+  - m_GUID: 733f73fe8345daf469a0820fe8757477
+    m_Address: StageData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:

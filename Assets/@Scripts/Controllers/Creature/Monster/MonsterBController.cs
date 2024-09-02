@@ -97,20 +97,13 @@ public class MonsterBController : MonsterController
     }
     public override void SetInfo(int templateID)
     {
-        MakeDead = false;
-        Hp = 20;
-        _rigid = GetComponent<Rigidbody>();
-        _nav = GetComponent<NavMeshAgent>();
-        _meleeWeapon = GetComponent<MeleeWeaponController>();
-        _animator = GetComponentInChildren<Animator>();
-        _collider = GetComponentInChildren<Collider>();
-        _meshrenderers = GetComponentsInChildren<MeshRenderer>();
-        ScanRange = 20f;
+        base.SetInfo(templateID);   
+        HP = 20;
+        ScanRange = 40f;
         AttackRange = 2f;
         MonsterName = MonsterName.MonsterB;
-        ObjectType = ObjectType.Monster;
-        CreatureState = CreatureState.Idle;
-        _meleeWeapon.SetInfo("MonsterB", this,null);
+        _nav.enabled = true;
+        _rigid.isKinematic = false;
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -123,6 +116,8 @@ public class MonsterBController : MonsterController
     {
         StopAttack();
         _nav.SetDestination(transform.position);
+        _nav.enabled = false;
+        _rigid.isKinematic = true;
         base.OnDead();
     }
     #region Attack
@@ -132,7 +127,7 @@ public class MonsterBController : MonsterController
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.3f);
-        _meleeWeapon.Use();
+        Target.gameObject.GetComponent<PlayerController>().OnDotDamage(attacker, damage);
         yield return new WaitForSeconds(1f);
         _coAttack = null;
     }

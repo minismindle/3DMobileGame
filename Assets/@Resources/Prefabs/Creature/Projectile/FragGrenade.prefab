@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8814946911025239443}
   - component: {fileID: 4906375541156600371}
   m_Layer: 14
-  m_Name: Grenade
+  m_Name: FragGrenade
   m_TagString: PlayerProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

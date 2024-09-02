@@ -73,14 +73,10 @@ public class BossController : MonsterController
     }
     public override void SetInfo(int templateID)
     {
-        Hp = 30;
-        _rigid = GetComponent<Rigidbody>();
-        _nav = GetComponent<NavMeshAgent>();   
-        _collider = GetComponent<Collider>();
-        _manualWeapon = GetComponent<ManualWeaponController>();
-        _meleeWeapon = GetComponent<MeleeWeaponController>();   
-        _animator = GetComponentInChildren<Animator>();
-        _meshrenderers = GetComponentsInChildren<MeshRenderer>();
+        base.SetInfo(templateID);
+        HP = 100;
+        ManualWeapon = GetComponent<ManualWeaponController>();
+        MeleeWeapon = GetComponent<MeleeWeaponController>();   
         AttackRange = 40f;
         MonsterName = MonsterName.Boss;
         ObjectType = ObjectType.Monster;
@@ -128,13 +124,13 @@ public class BossController : MonsterController
                     break;
                 case (int)BossSkillType.SKill1:
                     CreatureState = CreatureState.Skill1;
-                    _manualWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    ManualWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     yield return new WaitForSeconds(0.5f);
-                    _manualWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    ManualWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     break;
                 case (int)BossSkillType.Skill2:
                     CreatureState = CreatureState.Skill2;
-                    _manualWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
+                    ManualWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
                     yield return new WaitForSeconds(3.0f);
                     break;
             }

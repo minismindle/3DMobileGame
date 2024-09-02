@@ -93,6 +93,13 @@ public class ObjectManager
 		foreach (var monster in monsters)
 			Despawn<MonsterController>(monster);
 	}
+	public void DespawnAllProjectiles() 
+	{ 
+		var projectiles = Projectiles.ToList();
+		
+		foreach(var projectile in projectiles) 
+			Despawn<ProjectileController>(projectile);
+	}
 	public void Clear()
 	{
 		Monsters.Clear();

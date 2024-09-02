@@ -10,6 +10,7 @@ public class Timer : MonoBehaviour
     public int Time
     {
         get { return _elapsedtime; }
+        set { _elapsedtime = value; }   
     }
 
     Coroutine _timer;
@@ -19,6 +20,16 @@ public class Timer : MonoBehaviour
         if (_timer != null)
             StopCoroutine(UpdateTimer());
         _timer = StartCoroutine(UpdateTimer());
+    }
+    public void StopTimer()
+    {
+        if( _timer != null )    
+            StopCoroutine(UpdateTimer());   
+        _timer = null;
+    }
+    public void ClearTimer()
+    {
+        Time = 0;
     }
     IEnumerator UpdateTimer()
     {

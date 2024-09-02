@@ -8,23 +8,32 @@ using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 using UnityEngine.Events;
 using Data;
+using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
 public class UI_GameScene : UI_Base
 {
+    public virtual int GrenadeCount {  get; set; }  
+    public virtual int ConsumableCount {  get; set; }   
+
     enum GameObjects
     {
+        GuageFront,
         ExpSliderObject,
         HpSliderObject,
+        BossStageGroup,
+        TimeGroup,
     }
     enum Texts
     {
+        HPText,
+        MaxHPText,
         WaveText,
-        TimeLimitValueText,
+        TimeText,
         GoldText,
         MaxAmmoText,
         TotalAmmoText,
         GrenadeCountText,
-        PotionCountText,
+        ConsumableCountText,
     }
     enum Images
     {
@@ -32,7 +41,7 @@ public class UI_GameScene : UI_Base
         ManualWeaponImage,
         AutoWeaponImage,
         GrenadeImage,
-        PotionImage
+        ConsumableImage,
     }
     enum Buttons
     {
@@ -69,6 +78,7 @@ public class UI_GameScene : UI_Base
         GetImage((int)Images.ManualWeaponImage).gameObject.BindEvent(OnClickManualWeaponSlotImage);
         GetImage((int)Images.AutoWeaponImage).gameObject.BindEvent(OnClickAutoWeaponSlotImage);
         GetImage((int)Images.GrenadeImage).gameObject.BindEvent(OnClickGrenadeSlotImage);
+        GetImage((int)Images.ConsumableImage).gameObject.BindEvent(OnClickConsumableImage);
     }
     public void OnClickEquipButton()
     {
@@ -90,6 +100,10 @@ public class UI_GameScene : UI_Base
     {
         Managers.Game.Player.SwapToGrenade();
     }
+    public void OnClickConsumableImage() 
+    {
+        Managers.Game.Player.Consumable.Use();
+    }
     public void OnClickJumpButton()
     {
         Managers.Game.Player.ClickJumpButton();
@@ -110,21 +124,41 @@ public class UI_GameScene : UI_Base
     {
         GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
     }
+    public void ClearMeleeWeaponSlot()
+    {
+        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = null;
+    }
     public void SetAutoWeaponSlot(string imageName) 
     {
         GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void ClearAutoWeaponSlot()
+    {
+        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = null;
     }
     public void SetManualWeaponSlot(string imageName)
     {
         GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
     }
+    public void ClearManualWeaponSlot()
+    {
+        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = null;
+    }
     public void SetGrenadeSlot(string imageName) 
     {
         GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
     }
-    public void SetPotionSlot(string imageName) 
+    public void ClearGrenadeSlot()
     {
-        GetImage((int)Images.PotionImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = null;
+    }
+    public void SetConsumableSlot(string imageName) 
+    {
+        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+    }
+    public void ClearConsumableSlot()
+    {
+        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = null;
     }
     public void SetGold(int gold)
     {
@@ -132,15 +166,41 @@ public class UI_GameScene : UI_Base
     }
     public void SetGrenadeCount(int count)
     {
-        GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+        GrenadeCount = count;
+
+        if(GrenadeCount > 0)
+            GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = GrenadeCount.ToString();
+        else
+            GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
     }
-    public void SetPotionCount(int count)
+    public void SetConsumableCount(int count)
     {
-        GetText((int)Texts.PotionCountText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+        ConsumableCount = count;
+
+        if(ConsumableCount > 0)
+            GetText((int)Texts.ConsumableCountText).gameObject.GetComponent<TextMeshProUGUI>().text = ConsumableCount.ToString();
+        else
+            GetText((int)Texts.ConsumableCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
+    }
+    public void SetAmmoCount(int count)
+    {
+        GetText((int)Texts.MaxAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString(); 
+    }
+    public void SetNoneWeaponAmmoCount()
+    {
+        GetText((int)Texts.MaxAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = "-";
     }
     public void SetTotalAmmoCount(int count)
     {
         GetText((int)Texts.TotalAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
+    }
+    public void SetPlayerMaxHP(int maxHP)
+    {
+        GetText((int)Texts.MaxHPText).gameObject.GetComponent<TextMeshProUGUI>().text = maxHP.ToString();   
+    }
+    public void SetPlayerHP(int HP)
+    {
+        GetText((int)Texts.HPText).gameObject.GetComponent<TextMeshProUGUI>().text = HP.ToString();   
     }
     public void SetGemCountRatio(float ratio)
     {
@@ -154,8 +214,36 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.WaveText).text = $"Wave {stage}"; 
     }
-    public void SetTimeInfo(string time)
+    public void SetTimeInfo(float time)
     {
-        GetText((int)Texts.TimeLimitValueText).text = time;
+        GetText((int)Texts.TimeText).text = SetTimeText((int)time);
+    }
+    public void SetBossHpBar(float ratio)
+    {
+        GetObject((int)GameObjects.GuageFront).gameObject.GetComponent<RectTransform>();
+    }
+    string SetTimeText(int time)
+    {
+        string timeText = "";
+        if (time < 10)
+        {
+            timeText = $"00:0{time}";
+        }
+        else if (time < 60)
+        {
+            timeText = $"00:{time}";
+        }
+        else if (time < 600)
+        {
+            if (time % 60 < 10)
+                timeText = $"0{time / 60}:0{time % 60}";
+            else
+                timeText = $"0{time / 60}:{time % 60}";
+        }
+        else if (time == 10)
+        {
+            timeText = "10:00";
+        }
+        return timeText;
     }
 }

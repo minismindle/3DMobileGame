@@ -1,50 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public class SpawningPool : MonoBehaviour
 {
 	Coroutine _coUpdateSpawningPool;
-	public virtual int stageLevel { get; set; }
-	public virtual int prevLevel { get; set; }
-	public virtual int nextLevel { get; set; }
-	public virtual int updateSec { get; set; }
-	public virtual float spawnInterval { get; set; }
 
-	public int maxMonsterCount = 100;
-	public bool Stopped { get; set; } = false;
-	public bool IsUpdated { get; set; } = false;
+	public virtual float SpawnTime {get;set;}
+	public virtual int KeepMonsterCount { get;set;}	
 	void Start()
     {
-		if (_coUpdateSpawningPool != null)
-			StopCoroutine(CoUpdateSpawningPool());
-		_coUpdateSpawningPool = StartCoroutine(CoUpdateSpawningPool());
-	}
-	public void SetInfo(int stageLevel)
+        Vector3 spawnPos = Utils.GenerateMonsterSpawnPosition(transform.position, 10, 20);
+		Managers.Object.Spawn<MonsterController>(spawnPos, transform.rotation, 0, "MonsterA");
+		Managers.Object.Spawn<MonsterController>(spawnPos, transform.rotation, 0, "MonsterB");
+		Managers.Object.Spawn<MonsterController>(spawnPos, transform.rotation, 0, "MonsterC");
+		Managers.Object.Spawn<MonsterController>(spawnPos, transform.rotation, 0, "Boss");
+    }
+	public void SetInfo()
 	{
-
-		
 	}
+	public void StartSpawn()
+	{
+        if (_coUpdateSpawningPool != null)
+            StopCoroutine(CoUpdateSpawningPool());
+        _coUpdateSpawningPool = StartCoroutine(CoUpdateSpawningPool());
+    }
+	public void StopSpawn()
+	{
+        if (_coUpdateSpawningPool != null)
+            StopCoroutine(CoUpdateSpawningPool());
+        _coUpdateSpawningPool = null;
+    }
 	IEnumerator CoUpdateSpawningPool()
 	{
 		while (true)
 		{
-			TrySpawn();
-			yield return new WaitForSeconds(1f);
+			//TrySpawn();
+			yield return new WaitForSeconds(SpawnTime);
 		}
 	}
     void TrySpawn()
 	{
-		if (Stopped)
-			return;
-
 		int monsterCount = Managers.Object.Monsters.Count;
 
-		if (monsterCount >= 5)
+		if (monsterCount >= 3)
 			return;
-
-		Vector3 randPos = Utils.GenerateMonsterSpawnPosition(Managers.Game.Player.transform.position, 20, 20);
-		MonsterController mc = Managers.Object.Spawn<MonsterController>(randPos,transform.rotation,0,"MonsterA");
+		Vector3 spawnPos = Utils.GenerateMonsterSpawnPosition(transform.position, 10, 20);
+		MonsterController mc = Managers.Object.Spawn<MonsterController>(spawnPos,transform.rotation,0,"MonsterA");
 	}
 	
 }

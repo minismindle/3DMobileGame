@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 using UnityEngine.Playables;
+using Data;
 
 public class GameManager
 {
@@ -22,71 +23,6 @@ public class GameManager
 			OnGoldCountChanged?.Invoke(value);
 		}
 	}
-
-	int _manualAmmo = 0;
-
-    public event Action<int> OnManualAmmoCountChanged;
-    public int ManualAmmo
-	{
-		get { return _manualAmmo; }
-		set
-		{
-            _manualAmmo = value;
-			OnManualAmmoCountChanged?.Invoke(value);	
-		}
-	}
-
-	int _autoAmmo = 0;
-	public event  Action<int> OnAutoAmmoCountChanged;	
-	public int AutoAmmo
-	{
-		get { return _autoAmmo; }
-		set
-		{
-			_autoAmmo = value;
-			OnAutoAmmoCountChanged?.Invoke(value);	
-		}
-	}
-
-	int _totalAmmo = 0;
-
-	public event Action<int> OnTotalAmmoCountChanged;
-
-	public int TotalAmmo
-	{
-		get { return _totalAmmo; }
-		set
-		{
-            _totalAmmo = value;
-            OnTotalAmmoCountChanged?.Invoke(value);
-		}
-	}
-
-	int _potion = 0;
-
-	public event Action<int> OnPotionCountChanged;
-	public int Potion
-	{
-		get { return _potion; }
-		set
-		{
-			_potion = value;
-			OnPotionCountChanged?.Invoke(value);
-		}
-	}
-
-	int _grenade = 0;
-
-	public event Action<int> OnGrenadeCountChanged;
-	public int Grenade
-	{
-		get { return _grenade; }
-		set
-		{
-			_grenade = value;
-			OnGrenadeCountChanged?.Invoke(value);	
-		}
-	}
     #endregion
 
     #region 전투
@@ -98,10 +34,11 @@ public class GameManager
 		get { return _killCount; }
 		set
 		{
-			_killCount = value; OnKillCountChanged?.Invoke(value);
+			_killCount = value; 
+			OnKillCountChanged?.Invoke(value);
 		}
 	}
-	#endregion
+    #endregion
 
 	#region 이동
 	Vector3 _moveDir;

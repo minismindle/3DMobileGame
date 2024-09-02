@@ -96,19 +96,14 @@ public class MonsterCController : MonsterController
     }
     public override void SetInfo(int templateID)
     {
-        MakeDead = false;
-        Hp = 30;
-        _rigid = GetComponent<Rigidbody>();
-        _nav = GetComponent<NavMeshAgent>();
-        _manualWeapon = GetComponent<ManualWeaponController>();
-        _animator = GetComponentInChildren<Animator>();
-        _collider = GetComponentInChildren<Collider>();
-        _meshrenderers = GetComponentsInChildren<MeshRenderer>();
+        base.SetInfo(templateID);
+        ManualWeapon = GetComponent<ManualWeaponController>();
+        HP = 30;
         ScanRange = 25f;
         AttackRange = 15f;
         MonsterName = MonsterName.MonsterC;
-        ObjectType = ObjectType.Monster;
-        CreatureState = CreatureState.Idle;
+        _nav.enabled = true;
+        _rigid.isKinematic = false;
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -121,6 +116,8 @@ public class MonsterCController : MonsterController
     {
         StopAttack();
         _nav.SetDestination(transform.position);
+        _nav.enabled = false;
+        _rigid.isKinematic = true;
         base.OnDead();
     }
     #region Attack
@@ -130,7 +127,7 @@ public class MonsterCController : MonsterController
         CreatureState = CreatureState.Idle;
         CreatureState = CreatureState.Attack;
         yield return new WaitForSeconds(0.5f);
-        _manualWeapon.Use(this, _attackPos.transform.position, transform.forward,transform.rotation.normalized, "Missile");
+        ManualWeapon.Use(this, _attackPos.transform.position, transform.forward,transform.rotation.normalized, "Missile");
         yield return new WaitForSeconds(3f);
         _coAttack = null;
     }

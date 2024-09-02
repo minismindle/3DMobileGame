@@ -13,7 +13,7 @@ public class Define
         None,
         Weapon,
         Grenade,
-        Potion,
+        Consumable,
         Ammo,
     }
     public enum CoinType
@@ -180,6 +180,10 @@ public class Define
     #region Tag
     public static string MonsterProjectile = "MonsterProjectile";
     public static string PlayerProjectile = "PlayerProjectile";
+    #endregion
+
+    #region Ammo
+    public static int AmmoItemDataID = 20000;
     #endregion
 
     #region Projectile

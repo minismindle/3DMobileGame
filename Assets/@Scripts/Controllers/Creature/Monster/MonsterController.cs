@@ -20,7 +20,7 @@ public class MonsterController : CreatureController
     public virtual float AttackRange { get; set; } 
     public GameObject Target { get; set; }
 
-    protected Define.MonsterName _monsterName;
+    protected MonsterName _monsterName;
     public event Action<MonsterController> MonsterInfoUpdate;
     public override void UpdateAnimation()
     {
@@ -32,26 +32,11 @@ public class MonsterController : CreatureController
             return;
         OnDeadState();
     }
-    public virtual void  MonsterAI()
-    {
-       
-    }
-    public virtual void IdleMonster()
-    {
-
-    }
-    public virtual void MoveMonster()
-    {
-        
-    }
-    public virtual void AttackMonster()
-    {
-        
-    }
-    public virtual void WaitMonster()
-    {
-
-    }
+    public virtual void  MonsterAI(){}
+    public virtual void IdleMonster(){}
+    public virtual void MoveMonster(){}
+    public virtual void AttackMonster(){ }
+    public virtual void WaitMonster(){}
     public virtual void TurnMonster(Vector3 dir)
     {
         transform.LookAt(dir);
@@ -65,6 +50,17 @@ public class MonsterController : CreatureController
     {
         base.Init();
         return true;
+    }
+    public override void SetInfo(int templateID)
+    {
+        base.SetInfo(templateID);
+        _rigid = GetComponent<Rigidbody>();
+        _nav = GetComponent<NavMeshAgent>();
+        _animator = GetComponentInChildren<Animator>();
+        _collider = GetComponentInChildren<Collider>();
+        _meshrenderers = GetComponentsInChildren<MeshRenderer>();
+        ObjectType = ObjectType.Monster;
+        CreatureState = CreatureState.Idle;
     }
     public void InvokeMonsterData()
     {
@@ -107,6 +103,7 @@ public class MonsterController : CreatureController
         yield return new WaitForSeconds(3.0f);
         _coDead = null;
         Managers.Object.Despawn(this);
+        Managers.Game.KillCount++;
     }
     public void OnDeadState()
     {

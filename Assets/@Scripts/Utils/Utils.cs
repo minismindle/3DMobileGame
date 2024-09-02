@@ -69,7 +69,7 @@ public class Utils
 
 		return parsedColor;
 	}
-	public static Vector2 GenerateMonsterSpawnPosition(Vector2 characterPosition, float minDistance = 10.0f, float maxDistance = 20.0f)
+	public static Vector2 GenerateMonsterSpawnPosition(Vector2 characterPosition, float minDistance = 10f, float maxDistance = 20f)
 	{
 		float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
 		float distance = Random.Range(minDistance, maxDistance);

@@ -72,7 +72,7 @@ public class ProjectileController : BaseController
 
         switch(_prefabName)
         {
-            case "Grenade":
+            case "FragGrenade":
                 _rigid.AddForce((dir + Vector3.up) * 20,ForceMode.Impulse);
                 _rigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
                 break;
@@ -122,7 +122,7 @@ public class ProjectileController : BaseController
 
         switch (_prefabName)
         {
-            case "Grenage":
+            case "FragGrenade":
                 break;
             case "Bullet_SubMachineGun":
                 target.OnDotDamage(_owner, 10);
@@ -178,7 +178,7 @@ public class ProjectileController : BaseController
                 yield return new WaitForSeconds(1f);
                 _trailRenderer.Clear();
                 break;
-            case "Grenade":
+            case "FragGrenade":
                 yield return new WaitForSeconds(2.0f);
                 _rigid.velocity = Vector3.zero;
                 _rigid.angularVelocity = Vector3.zero;

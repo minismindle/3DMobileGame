@@ -10,8 +10,8 @@
     },
     {
       "DataId": 20001,
-      "Name": "Heart",
-      "Image": "IconHeart.sprite",
+      "Name": "Potion",
+      "Image": "IconPotion.sprite",
       "ItemType": 3,
       "WeaponType": 0,
       "Consumable": true
@@ -42,8 +42,8 @@
     },
     {
       "DataId": 20005,
-      "Name": "Grenade",
-      "Image": "IconGrenade.sprite",
+      "Name": "FragGrenade",
+      "Image": "IconFragGrenade.sprite",
       "ItemType": 2,
       "Consumable": true
     }

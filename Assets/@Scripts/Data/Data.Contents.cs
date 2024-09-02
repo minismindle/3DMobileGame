@@ -107,26 +107,6 @@ namespace Data
     }
     #endregion
 
-    #region WaveData
-    [Serializable]
-    public class WaveData
-    {
-        public int WaveLevel;
-        public int SpawnInterval;
-    }
-    [Serializable]
-    public class WaveDataLoader : ILoader<int, WaveData>
-    {
-        public List<WaveData> waves = new List<WaveData>();
-        public Dictionary<int, WaveData> MakeDict()
-        {
-            Dictionary<int, WaveData> dict = new Dictionary<int, WaveData>();
-            foreach (WaveData wavedata in waves)
-                dict.Add(wavedata.WaveLevel, wavedata);
-            return dict;
-        }
-    }
-    #endregion
     #region ProjectileData
     [Serializable]
     public class ProjectileData
@@ -146,6 +126,31 @@ namespace Data
             foreach (ProjectileData projectiledata in projectiles)
                 dict.Add(projectiledata.DataId, projectiledata);
             return dict;
+        }
+    }
+    #endregion
+
+    #region StageData
+    [Serializable]
+    public class StageData
+    {
+        public int StageLevel;
+        public int ClearCount;
+        public int MaxCount;
+        public float SpawnInterval;
+        public MonsterName MonsterName;
+    }
+    [Serializable]
+
+    public class StageDataLoader : ILoader<int,StageData>
+    {
+        public List<StageData> stages = new List<StageData>();
+        public Dictionary<int, StageData> MakeDict()
+        {
+            Dictionary<int,StageData> dict = new Dictionary<int,StageData>();
+            foreach (StageData stagedata in stages)
+                dict.Add(stagedata.StageLevel, stagedata);
+            return dict;    
         }
     }
     #endregion

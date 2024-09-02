@@ -7,13 +7,14 @@ using UnityEngine.UI;
 
 public class UI_ShopSlot : UI_Base
 {
-    [SerializeField]
-    public ItemData itemdata;
+    ItemData _itemdata;
 
-    public int _count;
-    public int _price;
+    int _count;
+    int _price;
     bool _isGet;
-
+    public virtual ItemData ItemData {  get { return _itemdata; } set { _itemdata = value; } }
+    public virtual int Count { get { return _count; } set { _count = value; } } 
+    public virtual int Price { get { return _price; } set { _price = value; } }
     enum Images
     {
         ItemImage,
@@ -41,7 +42,7 @@ public class UI_ShopSlot : UI_Base
     }
     public void BindEvents()
     {
-        GetImage((int)Images.ItemImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemdata.Image);
+        GetImage((int)Images.ItemImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(_itemdata.Image);
         GetText((int)Texts.PriceText).gameObject.GetComponent<TextMeshProUGUI>().text = _price.ToString();
         this.gameObject.BindEvent(BuyItem);
     }
@@ -51,9 +52,9 @@ public class UI_ShopSlot : UI_Base
             return;
         if (Managers.Game.Gold < _price)
             return;
-        Managers.Game.Player.Inventory.InsertItem(itemdata,_count);
+        Managers.Game.Player.Inventory.InsertItem(_itemdata, _count);
         Managers.Game.Gold -= _price;
-        if(!itemdata.Consumable)
+        if(!_itemdata.Consumable)
             _isGet = true;
     }
 }

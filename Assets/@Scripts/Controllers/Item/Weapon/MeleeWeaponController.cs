@@ -12,7 +12,7 @@ public class MeleeWeaponController : WeaponController
     
     public void Use()
     {
-        Attack(itemData.Name);
+        StartAttack(ItemData.Name);
     }
     #region Attack
     Coroutine _coAttack;
@@ -25,13 +25,7 @@ public class MeleeWeaponController : WeaponController
         _collider.enabled = false;
         _trailRenderer.enabled = false;
     }
-    IEnumerator MonsterB()
-    {
-        _collider.enabled = true;
-        yield return new WaitForSeconds(0.3f);
-        _collider.enabled = false;
-    }
-    void Attack(string weaponName)
+    void StartAttack(string weaponName)
     {
         if (_coAttack != null)
             _coAttack = null;
@@ -43,15 +37,15 @@ public class MeleeWeaponController : WeaponController
         base.Init();
         return true;
     }
-    public void SetInfo(string WeaponName, CreatureController Owner,ItemData itemData) 
+    public override void SetInfo( CreatureController owner,ItemData itemData) 
     {
         WeaponType = WeaponType.Melee;
         ObjectType = ObjectType.Weapon;
-        this.itemData = itemData;   
-        _weapon = this.transform.Find(WeaponName).gameObject;
+        ItemData = itemData;   
+        _weapon = transform.Find(itemData.Name).gameObject;
         _collider = _weapon.GetComponent<BoxCollider>();
         _trailRenderer = _weapon.GetComponentInChildren<TrailRenderer>();
-        _owner = Owner;
+        _owner = owner;
         _equip = true;
         CoolTime = 0.6f;
     }
@@ -103,4 +97,9 @@ public class MeleeWeaponController : WeaponController
         monster.OnDotDamage(_owner, 10);
     }
 
+    public override void Clear()
+    {
+        base.Clear();
+        
+    }
 }

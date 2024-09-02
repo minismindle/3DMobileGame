@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 2242435776823302894}
   - component: {fileID: 5292775176063706001}
   m_Layer: 5
-  m_Name: PotionImage
+  m_Name: ItemImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 4039184656080473904}
   - component: {fileID: 5087612384734675737}
   m_Layer: 5
-  m_Name: PotionImage
+  m_Name: ConsumableImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1091,7 +1091,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 99999999999999
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -2358,7 +2358,7 @@ GameObject:
   - component: {fileID: 1475012141721039439}
   - component: {fileID: 2146687632150126942}
   m_Layer: 5
-  m_Name: PotionText
+  m_Name: ConsumableText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

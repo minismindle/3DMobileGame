@@ -33,9 +33,11 @@ public class UI_Shop : UI_Base
         slots = GetObject((int)GameObjects.Slots).gameObject.GetComponentsInChildren<UI_ShopSlot>();
         foreach (ShopData shopData in Managers.Data.ShopDataDic.Values)
         {
-            Managers.Data.ItemDataDic.TryGetValue(shopData.DataId, out slots[idx].itemdata);
-            slots[idx]._count = shopData.Count;
-            slots[idx]._price = shopData.Price;
+            ItemData itemData = new ItemData();
+            Managers.Data.ItemDataDic.TryGetValue(shopData.DataId, out itemData);
+            slots[idx].ItemData = itemData;
+            slots[idx].Count = shopData.Count;
+            slots[idx].Price = shopData.Price;
             idx++;
         }
         #endregion

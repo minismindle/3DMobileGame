@@ -42,11 +42,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
-  - m_GUID: 8085f36bf0a64964e96b2a4293c475f5
-    m_Address: WaveData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:

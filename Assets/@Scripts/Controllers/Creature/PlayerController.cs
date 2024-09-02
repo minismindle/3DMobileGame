@@ -1,4 +1,5 @@
 using Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 using static Define;
 
 public class PlayerController : CreatureController
@@ -17,12 +19,21 @@ public class PlayerController : CreatureController
 
     public UI_Inventory Inventory;
 
-    public Transform _shootPos;
-    public Transform _ThrowPos;
+    [SerializeField]
+    Transform _shootPos;
+    [SerializeField]
+    Transform _throwPos;
+    [SerializeField]
+    AmmoController _ammo;
 
+    public virtual AmmoController Ammo {  get { return _ammo; } set { _ammo = value; } }
+    public override int HP 
+    { get {return base.HP; } set { base.HP = value; Managers.UI.GetSceneUI<UI_GameScene>().SetPlayerHP(HP); } }
+    public override int MaxHP 
+    { get { return base.MaxHP; } set { base.MaxHP = value; Managers.UI.GetSceneUI<UI_GameScene>().SetPlayerMaxHP(MaxHP); } }
     PlayerWeaponType PlayerWeaponType;
     RaycastHit slopeHit;
-    //public Data.LevelData LevelData { get; set; }
+
 
     public Vector3 MoveDir
     {
@@ -36,21 +47,33 @@ public class PlayerController : CreatureController
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponent<CapsuleCollider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
+        _rigid.velocity = Vector3.zero;
         Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
-        _rigid.velocity = Vector3.zero;
-        Hp = MaxHp;
+        MaxHP = 1000;
+        HP = MaxHP;
         return true;
     }
 
+    public void Resurrection()
+    {
+        MeleeWeapon.gameObject.SetActive(false);
+        ManualWeapon.gameObject.SetActive(false);
+        AutoWeapon.gameObject.SetActive(false);
+        Grenade.gameObject.SetActive(false);
+        Managers.Game.KillCount = 0;
+        ChangeColor(Color.white);
+        HP = MaxHP;
+    }
     void OnDestroy()
     {
         if (Managers.Game != null)
+        {
             Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
+        }
     }
-
     void HandleOnMoveDirChanged(Vector3 dir)
     {
         _moveDir = dir;
@@ -92,16 +115,17 @@ public class PlayerController : CreatureController
             case Define.CreatureState.Throw:
                 _animator.SetTrigger("DoThrow");
                 break;
+            case Define.CreatureState.Dead:
+                _animator.SetTrigger("DoDie");
+                break;
         }
     }
-
     #endregion
     public override void SetInfo(int templateID)
     {
     }
     public override void SetInfoInit(int templateID)
     {
-        //CreatureData = Managers.Data.CreatureDic[templateID];
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
     }
@@ -193,72 +217,115 @@ public class PlayerController : CreatureController
             return;
         transform.LookAt(transform.position + _moveDir);
     }
-    public void EquipWeapon(ItemData itemData)
+    public void EquipItem(ItemData itemData,int count)
     {
-        switch (itemData.WeaponType) 
+        switch (itemData.ItemType)
+        {
+            case ItemType.Weapon:
+                EquipWeapon(itemData);
+                break;
+            case ItemType.Grenade:
+                EquipGrenade(itemData,count);
+                break;
+            case ItemType.Consumable:
+                EquipConsumable(itemData,count);  
+                break;
+        }
+    }
+    void EquipWeapon(ItemData itemData)
+    {
+        switch (itemData.WeaponType)
         {
             case WeaponType.Melee:
-                _meleeWeapon.SetInfo(itemData.Name, this,itemData);
+                MeleeWeapon.SetInfo(this, itemData);
                 Managers.UI.GetSceneUI<UI_GameScene>().SetMeleeWeaponSlot(itemData.Image);
                 Inventory.SetMeleeWeaponSlot(itemData.Image);
                 break;
             case WeaponType.Manual:
-                _manualWeapon.SetInfo(itemData.Name,this,itemData);
+                ManualWeapon.SetInfo(this, itemData);
                 Managers.UI.GetSceneUI<UI_GameScene>().SetManualWeaponSlot(itemData.Image);
                 Inventory.SetManualWeaponSlot(itemData.Image);
                 break;
             case WeaponType.Auto:
-                _autoWeapon.SetInfo(itemData.Name,this,itemData );
+                AutoWeapon.SetInfo( this, itemData);
                 Managers.UI.GetSceneUI<UI_GameScene>().SetAutoWeaponSlot(itemData.Image);
                 Inventory.SetAutoWeaponSlot(itemData.Image);
                 break;
         }
     }
+    public void EquipGrenade(ItemData itemData,int count)
+    {
+        Grenade.SetInfo(this,itemData,count);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetGrenadeSlot(itemData.Image);
+        Inventory.SetGrenadeSlot(itemData.Image);
+    }
+    public void EquipConsumable(ItemData itemData,int count)
+    {
+        Consumable.SetInfo(this,itemData,count); 
+        Managers.UI.GetSceneUI<UI_GameScene>().SetConsumableSlot(itemData.Image);
+        Inventory.SetConsumableSlot(itemData.Image);
+    }
     public void ReturnMeleeWeaponToInventory()
     {
-        if (!_meleeWeapon._equip)
+        if (!MeleeWeapon.Equip)
             return;
-        _meleeWeapon.gameObject.SetActive(false);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetMeleeWeaponSlot("");
-        Inventory.SetMeleeWeaponSlot("");
-        Inventory.InsertItem(_meleeWeapon.itemData,1);
-        _meleeWeapon.Clear();
+        Inventory.ClearMeleeWeaponSlot();
+        Inventory.InsertItem(MeleeWeapon.ItemData,1);
+        MeleeWeapon.Clear();
+        Managers.UI.GetSceneUI<UI_GameScene>().ClearMeleeWeaponSlot();
+        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
+        PlayerWeaponType = PlayerWeaponType.None;
     }
     public void ReturnManualWeaponToInventory()
     {
-        if(!_manualWeapon._equip) 
+        if(!ManualWeapon.Equip) 
             return;
-        _manualWeapon.gameObject.SetActive(false);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetManualWeaponSlot("");
-        Inventory.SetManualWeaponSlot("");
-        Inventory.InsertItem(_manualWeapon.itemData, 1);
-        _manualWeapon.Clear();
+        Ammo.Count += ManualWeapon.Ammo;
+        Inventory.ReturnItem(Ammo.ItemData, ManualWeapon.Ammo);
+        Inventory.ClearManualWeaponSlot();
+        Inventory.InsertItem(ManualWeapon.ItemData, 1);
+        ManualWeapon.Clear();
+        Managers.UI.GetSceneUI<UI_GameScene>().ClearManualWeaponSlot();
+        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
+        PlayerWeaponType = PlayerWeaponType.None;
     }
     public void ReturnAutoWeaponToInventory()
     {
-        if (!_autoWeapon._equip)
+        if (!AutoWeapon.Equip)
             return;
-        _autoWeapon.gameObject.SetActive(false);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetAutoWeaponSlot("");
-        Inventory.SetAutoWeaponSlot("");
-        Inventory.InsertItem(_autoWeapon.itemData, 1);
-        _autoWeapon.Clear();
+        Ammo.Count += AutoWeapon.Ammo;
+        Inventory.ReturnItem(Ammo.ItemData, AutoWeapon.Ammo);
+        Inventory.ClearAutoWeaponSlot();    
+        Inventory.InsertItem(AutoWeapon.ItemData, 1);
+        AutoWeapon.Clear();
+        Managers.UI.GetSceneUI<UI_GameScene>().ClearAutoWeaponSlot();
+        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
+        PlayerWeaponType = PlayerWeaponType.None;
     }
-    public void EquipGrenade(string GrenadeName, string imageName)
+    public void ReturnGrenadeToInventory()
     {
-        _grenade.SetInfo(GrenadeName);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetGrenadeSlot(imageName);
-        Inventory.SetGrenadeSlot(imageName, Grenade);
+        if(!Grenade.Equip) 
+            return;
+        ItemData itemData = Grenade.ItemData;
+        int count = Grenade.Count;
+        Grenade.Clear();
+        Inventory.ClearGrenadeSlot();
+        Inventory.InsertItem(itemData, count);
+        Managers.UI.GetSceneUI<UI_GameScene>().ClearGrenadeSlot();
     }
-    public void EquipPotion(string PotionName, string imageName)
+    public void ReturnConsumableToInventory()
     {
-        Managers.UI.GetSceneUI<UI_GameScene>().SetPotionSlot(imageName);
-        Inventory.SetPotionSlot(imageName,Potion);
+        if(!Consumable.Equip) 
+            return;
+        ItemData itemData = Consumable.ItemData;
+        int count = Consumable.Count;
+        Consumable.Clear();
+        Inventory.ClearConsumableSlot();    
+        Inventory.InsertItem(itemData, count);
+        Managers.UI.GetSceneUI<UI_GameScene>().ClearConsumableSlot();
     }
     public void JumpPlayer()
     {
-        if (sceneType != Scene.GameScene)
-            return;
         if (CreatureState != CreatureState.Idle)
             return;
 
@@ -268,8 +335,7 @@ public class PlayerController : CreatureController
     }
     public void DivePlayer()
     {
-        if (sceneType != Scene.GameScene)
-            return;
+
         if (CreatureState != CreatureState.Moving)
             return;
 
@@ -281,13 +347,12 @@ public class PlayerController : CreatureController
     }
     public void SwingPlayer()
     {
-        if (sceneType != Scene.GameScene)
-            return;
+
         if (CreatureState != CreatureState.Idle)
             return;
         CreatureState = CreatureState.Swing;
 
-        _meleeWeapon.Use();
+        MeleeWeapon.Use();
 
         SetAnimationDelay(AttackCoolTime);
     }
@@ -301,13 +366,13 @@ public class PlayerController : CreatureController
             return;
         if (PlayerWeaponType == PlayerWeaponType.Manual)
         {
-            if (_manualWeapon.ammo == 0)
+            if (ManualWeapon.Ammo == 0)
             {
                 ReloadPlayer(); 
                 return;
             }
             CreatureState = CreatureState.Shot;
-            _manualWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_HandGun");
+            ManualWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_HandGun");
             SetAnimationDelay(0.1f);
         }
         else if (PlayerWeaponType == PlayerWeaponType.Auto)
@@ -326,21 +391,20 @@ public class PlayerController : CreatureController
     }
     public void SwapToMeleeWeapon()
     {
-        if (sceneType != Scene.GameScene)
-            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Melee)
             return;
-        if (_meleeWeapon._weapon == null)
+        if (MeleeWeapon.Weapon == null)
             return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Melee;
-        _meleeWeapon.gameObject.SetActive(true);
-        _manualWeapon.gameObject.SetActive(false);
-        _autoWeapon.gameObject.SetActive(false);
-        _grenade.gameObject.SetActive(false);
-        AttackCoolTime = _meleeWeapon.CoolTime;
+        MeleeWeapon.gameObject.SetActive(true);
+        ManualWeapon.gameObject.SetActive(false);
+        AutoWeapon.gameObject.SetActive(false);
+        Grenade.gameObject.SetActive(false);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
+        AttackCoolTime = MeleeWeapon.CoolTime;
     }
     public void SwapToManualWeapon()
     {
@@ -350,59 +414,60 @@ public class PlayerController : CreatureController
             return;
         if (PlayerWeaponType == PlayerWeaponType.Manual)
             return;
-        if (_manualWeapon._weapon == null)
+        if (ManualWeapon.Weapon == null)
             return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Manual;
-        _meleeWeapon.gameObject.SetActive(false);
-        _manualWeapon.gameObject.SetActive(true);
-        _autoWeapon.gameObject.SetActive(false);
-        _grenade.gameObject.SetActive(false);
-        AttackCoolTime = _manualWeapon.CoolTime;
+        MeleeWeapon.gameObject.SetActive(false);
+        ManualWeapon.gameObject.SetActive(true);
+        AutoWeapon.gameObject.SetActive(false);
+        Grenade.gameObject.SetActive(false);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(ManualWeapon.Ammo);
+        AttackCoolTime = ManualWeapon.CoolTime;
     }
     public void SwapToAutoWeapon()
     {
-        if (sceneType != Scene.GameScene)
-            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Auto)
             return;
-        if(_autoWeapon._weapon == null) 
+        if(AutoWeapon.Weapon == null) 
             return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Auto;
-        _meleeWeapon.gameObject.SetActive(false);
-        _manualWeapon.gameObject.SetActive(false);
-        _autoWeapon.gameObject.SetActive(true);
-        _grenade.gameObject.SetActive(false);
-        AttackCoolTime = _autoWeapon.CoolTime;
+        MeleeWeapon.gameObject.SetActive(false);
+        ManualWeapon.gameObject.SetActive(false);
+        AutoWeapon.gameObject.SetActive(true);
+        Grenade.gameObject.SetActive(false);
+        Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(AutoWeapon.Ammo);
+        AttackCoolTime = AutoWeapon.CoolTime;
     }
     public void SwapToGrenade()
     {
-        if (sceneType != Scene.GameScene)
-            return;
         if (CreatureState != CreatureState.Idle)
             return;
         if (PlayerWeaponType == PlayerWeaponType.Grenade)
             return;
+        if (Grenade.Weapon == null)
+            return;
         SwapPlayer();
         PlayerWeaponType = PlayerWeaponType.Grenade;
-        _meleeWeapon.gameObject.SetActive(false);
-        _manualWeapon.gameObject.SetActive(false);
-        _autoWeapon.gameObject.SetActive(false);
-        _grenade.gameObject.SetActive(true);
+        MeleeWeapon.gameObject.SetActive(false);
+        ManualWeapon.gameObject.SetActive(false);
+        AutoWeapon.gameObject.SetActive(false);
+        Grenade.gameObject.SetActive(true);
     }
     public void ThrowPlayer()
     {
-        if (Grenade == 0)
+        if (Grenade.Count == 0)
             return;
         if (CreatureState != CreatureState.Idle)
             return;
-
+        if (Grenade.Weapon == null)
+            return;
         CreatureState = CreatureState.Throw;
 
-        _grenade.Use(this, _ThrowPos.position, transform.forward);
+        Grenade.Use(this, _throwPos.position, transform.forward);
 
         SetAnimationDelay(0.6f);
     }
@@ -412,6 +477,8 @@ public class PlayerController : CreatureController
             return;
         if (PlayerWeaponType != PlayerWeaponType.Manual && PlayerWeaponType != PlayerWeaponType.Auto)
             return;
+        if (Ammo.Count== 0)
+            return;
 
         CreatureState = CreatureState.Reload;
 
@@ -419,17 +486,22 @@ public class PlayerController : CreatureController
 
         int ammoCount;
 
-        if (PlayerWeaponType == PlayerWeaponType.Manual)
+        switch(PlayerWeaponType)
         {
-            ammoCount = Mathf.Min(_manualWeapon.maxAmmo - _manualWeapon.ammo, Ammo);
-            _manualWeapon.ammo += ammoCount;
-            Managers.Game.TotalAmmo -= ammoCount;    
-        }
-        else if(PlayerWeaponType == PlayerWeaponType.Auto) 
-        {
-            ammoCount = Mathf.Min(_autoWeapon.maxAmmo - _autoWeapon.ammo,Ammo);
-            _autoWeapon.ammo += ammoCount;
-            Managers.Game.TotalAmmo -= ammoCount;
+            case PlayerWeaponType.Manual:
+                ammoCount = Mathf.Min(ManualWeapon.MaxAmmo - ManualWeapon.Ammo, Ammo.Count);
+                ManualWeapon.Ammo += ammoCount;
+                Ammo.Count -= ammoCount;
+                Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(ManualWeapon.Ammo);
+                Inventory.UseItem(Ammo.ItemData.Name, ammoCount);
+                break;
+            case PlayerWeaponType.Auto:
+                ammoCount = Mathf.Min(AutoWeapon.MaxAmmo - AutoWeapon.Ammo, Ammo.Count);
+                AutoWeapon.Ammo += ammoCount;
+                Ammo.Count -= ammoCount;
+                Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(AutoWeapon.Ammo);
+                Inventory.UseItem(Ammo.ItemData.Name, ammoCount);
+                break;
         }
     }
     public void UsePotion()
@@ -437,7 +509,7 @@ public class PlayerController : CreatureController
         if (Potion == 0)
             return;
 
-        Managers.Game.Potion -= 1;
+        Consumable.Count -= 1;
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -450,8 +522,9 @@ public class PlayerController : CreatureController
     {
         if (CreatureState == CreatureState.Dead)
             return;
-
+        StopAllCoroutines();
         CreatureState = CreatureState.Dead;
+        SetAnimationDelay(1.25f);
     }
     private void OnCollisionEnter(Collision other)
     {
@@ -490,6 +563,10 @@ public class PlayerController : CreatureController
     IEnumerator CoWaitAnimation(float delay)
     {
         yield return new WaitForSeconds(delay);
+        if (CreatureState == CreatureState.Dead)
+        {
+            Managers.UI.ShowPopup<UI_GameResultPopup>();
+        }
         CreatureState = CreatureState.Idle;
     }
     void SetAnimationDelay(float delay)
@@ -508,14 +585,14 @@ public class PlayerController : CreatureController
         yield return new WaitForSeconds(delay);
         while (true)
         {
-            if (_autoWeapon.ammo == 0)
+            if (AutoWeapon.Ammo == 0)
             {
                 ReloadPlayer();
                 StopAutoAttack();
                 break;
             }
             CreatureState = CreatureState.Shot;
-            _autoWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_SubMachineGun");
+            AutoWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_SubMachineGun");
             yield return new WaitForSeconds(delay);
         }
     }

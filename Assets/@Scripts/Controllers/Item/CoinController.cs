@@ -16,6 +16,10 @@ public class CoinController : ItemController
         SetInfo();
         return true;
     }
+    private void FixedUpdate()
+    {
+        
+    }
     void SetInfo()
     {
         ObjectType = Define.ObjectType.Coin;
