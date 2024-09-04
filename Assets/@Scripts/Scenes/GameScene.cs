@@ -16,7 +16,7 @@ public class GameScene : BaseScene
     SpawningPool spawningPool;
     [SerializeField]
     Timer _timer;
-    WaveType _waveType;
+    public virtual SpawningPool SpawningPool { get { return spawningPool; } set { spawningPool = value; } }
     void Start()
     {
         Start_init();
@@ -67,6 +67,7 @@ public class GameScene : BaseScene
     {
         shopNPC.gameObject.SetActive(false);
         questNPC.gameObject.SetActive(false);
+        spawningPool.SetInfo(25000);
         spawningPool.gameObject.SetActive(true);
         spawningPool.StartSpawn();
     }
@@ -76,6 +77,7 @@ public class GameScene : BaseScene
         questNPC.gameObject.SetActive(true);
         spawningPool.gameObject.SetActive(false);
         spawningPool.StopSpawn();
+        Managers.UI.GetSceneUI<UI_GameScene>().DisActivaBossHpBar();
     }
     private void OnDestroy()
     {

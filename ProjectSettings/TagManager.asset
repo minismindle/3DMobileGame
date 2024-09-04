@@ -18,6 +18,7 @@ TagManager:
   - Heart
   - Shop
   - Quest
+  - SpawningPool
   layers:
   - Default
   - TransparentFX

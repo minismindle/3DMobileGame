@@ -37,7 +37,5 @@ public class UI_GameResultPopup : UI_Base
         Managers.Object.DespawnAllMonsters();
         Managers.Object.DespawnAllProjectiles();
         Managers.UI.ClosePopup();
-        Managers.Clear();
-        //Managers.Scene.LoadScene(Define.Scene.GameScene);
     }
 }

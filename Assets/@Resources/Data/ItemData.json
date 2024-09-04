@@ -3,7 +3,7 @@
     {
       "DataId": 20000,
       "Name": "Ammo",
-      "Image": "IconAmmo.sprite",
+      "Image": "IconAmmo",
       "ItemType": 4,
       "WeaponType": 0,
       "Consumable": true
@@ -11,7 +11,7 @@
     {
       "DataId": 20001,
       "Name": "Potion",
-      "Image": "IconPotion.sprite",
+      "Image": "IconPotion",
       "ItemType": 3,
       "WeaponType": 0,
       "Consumable": true
@@ -19,7 +19,7 @@
     {
       "DataId": 20002,
       "Name": "Hammer",
-      "Image": "IconHammer.sprite",
+      "Image": "IconHammer",
       "ItemType": 1,
       "WeaponType": 1,
       "Consumable": false
@@ -27,7 +27,7 @@
     {
       "DataId": 20003,
       "Name": "HandGun",
-      "Image": "IconHandGun.sprite",
+      "Image": "IconHandGun",
       "ItemType": 1,
       "WeaponType": 2,
       "Consumable": false
@@ -35,7 +35,7 @@
     {
       "DataId": 20004,
       "Name": "SubMachineGun",
-      "Image": "IconSubMachineGun.sprite",
+      "Image": "IconSubMachineGun",
       "ItemType": 1,
       "WeaponType": 3,
       "Consumable": false
@@ -43,7 +43,7 @@
     {
       "DataId": 20005,
       "Name": "FragGrenade",
-      "Image": "IconFragGrenade.sprite",
+      "Image": "IconFragGrenade",
       "ItemType": 2,
       "Consumable": true
     }

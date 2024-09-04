@@ -134,11 +134,12 @@ namespace Data
     [Serializable]
     public class StageData
     {
-        public int StageLevel;
-        public int ClearCount;
+        public int DataId;
+        public int BossSpawnCount;
         public int MaxCount;
         public float SpawnInterval;
-        public MonsterName MonsterName;
+        public List<string> MonsterNames;
+        public string BossName;
     }
     [Serializable]
 
@@ -149,7 +150,7 @@ namespace Data
         {
             Dictionary<int,StageData> dict = new Dictionary<int,StageData>();
             foreach (StageData stagedata in stages)
-                dict.Add(stagedata.StageLevel, stagedata);
+                dict.Add(stagedata.DataId, stagedata);
             return dict;    
         }
     }

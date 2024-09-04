@@ -104,8 +104,12 @@ public class MonsterController : CreatureController
         _coDead = null;
         Managers.Object.Despawn(this);
         Managers.Game.KillCount++;
+        if (ObjectType == Define.ObjectType.BossMonster) 
+        {
+            Managers.UI.ShowPopup<UI_GameResultPopup>(); 
+        }
     }
-    public void OnDeadState()
+    void OnDeadState()
     {
         if (_coDead != null)
             return;

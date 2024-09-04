@@ -9,7 +9,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MeleeWeaponController : WeaponController
 {
-    
     public void Use()
     {
         StartAttack(ItemData.Name);
@@ -94,7 +93,7 @@ public class MeleeWeaponController : WeaponController
         if (_owner.CreatureState == CreatureState.Dead)
             return;
 
-        monster.OnDotDamage(_owner, 10);
+        monster.OnDotDamage(_owner, 50);
     }
 
     public override void Clear()

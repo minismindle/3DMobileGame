@@ -30,20 +30,23 @@ public class ObjectManager
 		else if (type == typeof(MonsterController))
 		{
 			GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
-			go.transform.position = position;
+			//go.transform.position = position;
 
 			MonsterController mc = go.GetOrAddComponent<MonsterController>();
 			Monsters.Add(mc);
 			mc.Init();
+			mc.transform.position = position;
 			return mc as T;
 		}
         else if (type == typeof(BossController))
         {
             GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
-            go.transform.position = position;
+            //go.transform.position = position;
 
             BossController bc = go.GetOrAddComponent<BossController>();
             Monsters.Add(bc);
+			bc.Init();
+			bc.transform.position = position;
 
             return bc as T;
         }

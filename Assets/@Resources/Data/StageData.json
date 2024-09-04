@@ -1,32 +1,16 @@
 {
   "stages": [
     {
-      "StageLevel": 1,
-      "ClearCount": 5,
-      "MaxCount": 4,
+      "DataId": 25000,
+      "BossSpawnCount": 5,
+      "MaxCount": 5,
       "SpawnInterval": 1,
-      "MonsterName": 1
-    },
-    {
-      "StageLevel": 2,
-      "ClearCount": 5,
-      "MaxCount": 4,
-      "SpawnInterval": 1,
-      "MonsterName": 2
-    },
-    {
-      "StageLevel": 3,
-      "ClearCount": 5,
-      "MaxCount": 4,
-      "SpawnInterval": 1,
-      "MonsterName": 3
-    },
-    {
-      "StageLevel": 4,
-      "ClearCount": 1,
-      "MaxCount": 1,
-      "SpawnInterval": 0,
-      "MonsterName": 4
+      "MonsterNames": [
+        "MonsterA",
+        "MonsterB",
+        "MonsterC"
+      ],
+      "BossName": "Boss"
     }
   ]
 }

@@ -6,6 +6,7 @@ using UnityEditor.Build.Pipeline.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityEngine.ResourceManagement.Diagnostics;
 using static Define;
 using static UnityEngine.GraphicsBuffer;
 
@@ -103,6 +104,9 @@ public class ProjectileController : BaseController
                 break;
             case ObjectType.Monster: 
                 MonsterProjectile(collision); 
+                break;
+            case ObjectType.BossMonster:
+                MonsterProjectile(collision);
                 break;
         }
 

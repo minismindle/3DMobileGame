@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 400598554}
   m_Layer: 0
   m_Name: SpawningPool
-  m_TagString: Quest
+  m_TagString: SpawningPool
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5218,6 +5218,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251a8648e165f8c4a981940512ff828a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stageData:
+    DataId: 0
+    BossSpawnCount: 0
+    MaxCount: 0
+    SpawnInterval: 0
+    MonsterNames: []
+    BossName: 
 --- !u!4 &461402097 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2440095803248850997, guid: cd8e3c00b0f28f0419943b46a579c6fc,
@@ -10665,6 +10672,7 @@ MonoBehaviour:
   shopNPC: {fileID: 161680548}
   questNPC: {fileID: 756519946}
   spawningPool: {fileID: 400598554}
+  _timer: {fileID: 0}
 --- !u!1001 &1141478594
 PrefabInstance:
   m_ObjectHideFlags: 0

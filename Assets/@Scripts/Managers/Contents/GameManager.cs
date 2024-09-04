@@ -38,10 +38,10 @@ public class GameManager
 			OnKillCountChanged?.Invoke(value);
 		}
 	}
-    #endregion
+	#endregion
 
-	#region 이동
-	Vector3 _moveDir;
+    #region 이동
+    Vector3 _moveDir;
 
 	public event Action<Vector3> OnMoveDirChanged;
 

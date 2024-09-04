@@ -63,6 +63,7 @@ public class PlayerController : CreatureController
         ManualWeapon.gameObject.SetActive(false);
         AutoWeapon.gameObject.SetActive(false);
         Grenade.gameObject.SetActive(false);
+        PlayerWeaponType = PlayerWeaponType.None;
         Managers.Game.KillCount = 0;
         ChangeColor(Color.white);
         HP = MaxHP;

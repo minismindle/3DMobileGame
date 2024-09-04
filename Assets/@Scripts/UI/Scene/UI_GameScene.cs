@@ -12,15 +12,14 @@ using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 
 public class UI_GameScene : UI_Base
 {
+    GameObject bossStateGroup;
     public virtual int GrenadeCount {  get; set; }  
     public virtual int ConsumableCount {  get; set; }   
 
     enum GameObjects
     {
         GuageFront,
-        ExpSliderObject,
-        HpSliderObject,
-        BossStageGroup,
+        BossStateGroup,
         TimeGroup,
     }
     enum Texts
@@ -69,6 +68,8 @@ public class UI_GameScene : UI_Base
     }
     public void BindEvents()
     {
+        bossStateGroup = GetObject((int)GameObjects.BossStateGroup).gameObject;
+        DisActivaBossHpBar();
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerDownAttackButton, null,Define.UIEvent.PointerDown);
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerUpAttackButton,null,Define.UIEvent.PointerUp);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
@@ -202,25 +203,25 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.HPText).gameObject.GetComponent<TextMeshProUGUI>().text = HP.ToString();   
     }
-    public void SetGemCountRatio(float ratio)
-    {
-        GetObject((int)GameObjects.ExpSliderObject).GetComponent<Slider>().value = ratio;
-    }
-    public void SetHpBar(float ratio)
-    {
-        GetObject((int)GameObjects.HpSliderObject).GetComponent<Slider>().value = ratio;
-    }
     public void SetStageInfo(int stage)
     {
         GetText((int)Texts.WaveText).text = $"Wave {stage}"; 
     }
-    public void SetTimeInfo(float time)
+    public void SetTimeInfo(int time)
     {
         GetText((int)Texts.TimeText).text = SetTimeText((int)time);
     }
+    public void ActiveBossHpBar()
+    {
+        bossStateGroup.SetActive(true);
+    }
+    public void DisActivaBossHpBar()
+    {
+        bossStateGroup.SetActive(false);
+    }
     public void SetBossHpBar(float ratio)
     {
-        GetObject((int)GameObjects.GuageFront).gameObject.GetComponent<RectTransform>();
+        GetObject((int)GameObjects.GuageFront).gameObject.GetComponent<RectTransform>().localScale = new Vector3(ratio,1,1);
     }
     string SetTimeText(int time)
     {

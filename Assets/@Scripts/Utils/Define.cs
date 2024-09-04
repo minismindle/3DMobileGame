@@ -127,6 +127,7 @@ public class Define
     }
     public enum MonsterName
     {
+        None,
         MonsterA,
         MonsterB,
         MonsterC,

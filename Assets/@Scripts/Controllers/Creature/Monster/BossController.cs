@@ -7,9 +7,24 @@ using static UnityEngine.GraphicsBuffer;
 
 public class BossController : MonsterController
 {
-    public Transform _missilePos1;
-    public Transform _missilePos2;
-    public Transform _rockPos;
+    [SerializeField]
+    Transform _missilePos1;
+    [SerializeField]
+    Transform _missilePos2;
+    [SerializeField]
+    Transform _rockPos;
+    public override int HP 
+    { 
+        get
+        {
+            return base.HP;
+        }
+        set
+        {
+            base.HP = value; 
+            Managers.UI.GetSceneUI<UI_GameScene>().SetBossHpBar((float)value/(float)MaxHP);
+        }
+    }
     enum BossSkillType
     {
         Tanut,
@@ -74,13 +89,15 @@ public class BossController : MonsterController
     public override void SetInfo(int templateID)
     {
         base.SetInfo(templateID);
-        HP = 100;
+        MaxHP = 100;
+        HP = MaxHP;
         ManualWeapon = GetComponent<ManualWeaponController>();
         MeleeWeapon = GetComponent<MeleeWeaponController>();   
         AttackRange = 40f;
         MonsterName = MonsterName.Boss;
-        ObjectType = ObjectType.Monster;
+        ObjectType = ObjectType.BossMonster;
         CreatureState = CreatureState.Idle;
+        Managers.UI.GetSceneUI<UI_GameScene>().ActiveBossHpBar();
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
