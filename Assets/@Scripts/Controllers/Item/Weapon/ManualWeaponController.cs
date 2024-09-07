@@ -1,4 +1,5 @@
 using Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,18 @@ using static UnityEngine.UI.GridLayoutGroup;
 
 public class ManualWeaponController : WeaponController
 {
+    public event Action OnManualWeaponClear;
     public virtual int MaxAmmo { get; set; } = 40;
     public virtual int Ammo { get; set; } = 0;
     public override bool Init()
     {
         base.Init();
         return true;
+    }
+    protected override void SubScribe()
+    {
+        Managers.Game.Player.OnSetManualWeapon -= SetInfo;
+        Managers.Game.Player.OnSetManualWeapon += SetInfo;
     }
     public void Use(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
@@ -22,11 +29,6 @@ public class ManualWeaponController : WeaponController
     IEnumerator CoShootManualWeapon(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
     {
         GenerateProjectile(owner, startPos, dir, rotation, prefabName);
-        if (owner.ObjectType == Define.ObjectType.Player)
-        {
-            Ammo -= 1;
-            Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(Ammo);
-        }
         yield return null;
     }
     void Attack(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation, string prefabName)
@@ -38,14 +40,8 @@ public class ManualWeaponController : WeaponController
     #endregion
     public override void SetInfo(CreatureController owner,ItemData itemData)
     {
+        base.SetInfo(owner, itemData);  
         WeaponType = Define.WeaponType.Manual;
-        ObjectType = Define.ObjectType.Weapon;
-        ItemData = itemData;   
-        _weapon = this.transform.Find(itemData.Name).gameObject;
-        _owner = owner;
-        _weapon.SetActive(true);
-        _equip = true;
-        CoolTime = 0.1f;
     }
     void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir, Quaternion rotation,string prefabName)
     {
@@ -56,5 +52,6 @@ public class ManualWeaponController : WeaponController
     {
         base.Clear();
         Ammo = 0;
+        OnManualWeaponClear?.Invoke();
     }
 }

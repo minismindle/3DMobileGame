@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        //if (_mode == Define.CameraMode.QuarterView)
+        if (_mode == Define.CameraMode.QuarterView)
         {
             if (_player.IsValid() == false)
             {
@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
 
     public void SetQuarterView(Vector3 delta)
     {
-       // _mode = Define.CameraMode.QuarterView;
+        _mode = Define.CameraMode.QuarterView;
         _delta = delta;
     }
 }

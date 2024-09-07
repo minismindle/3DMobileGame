@@ -10,7 +10,7 @@ public class ItemController : BaseController
     public virtual Define.ItemType ItemType { get; set; } = Define.ItemType.None;
 
     public virtual ItemData ItemData {  get; set; } 
-    private int _count;
+    protected int _count;
     protected bool  _equip;
     public virtual bool Equip 
     { 

@@ -11,7 +11,10 @@ public class BaseController : MonoBehaviour
     {
         Init();
     }
-
+    private void Start()
+    {
+        SubScribe();
+    }
     bool _init = false;
     public virtual bool Init()
     {
@@ -31,6 +34,10 @@ public class BaseController : MonoBehaviour
 
     }
     public virtual void SetInfo(int templateID)
+    {
+
+    }
+    protected virtual void SubScribe()
     {
 
     }

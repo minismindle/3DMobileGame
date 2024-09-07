@@ -1,23 +1,21 @@
 using Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ConsumableController : ItemController
 {
+    public event Action<int> OnConsumableCountChanged;
+    public event Action OnConsumableClear;
     public override int Count
     {
         get { return base.Count; }
         set
         {
             base.Count = value;
-            Managers.UI.GetSceneUI<UI_GameScene>().SetConsumableCount(Count);
-            if(Count == 0)
-            {
-                base.Clear();
-                Managers.UI.GetSceneUI<UI_GameScene>().ClearConsumableSlot();
-                Managers.Game.Player.Inventory.ClearConsumableSlot();
-            }
+            OnConsumableCountChanged?.Invoke(value);
+            if (Count == 0) { base.Clear(); OnConsumableClear?.Invoke(); }
         }
     }
     public override bool Init()
@@ -25,19 +23,25 @@ public class ConsumableController : ItemController
         base.Init();
         return true;
     }
+    protected override void SubScribe()
+    {
+        Managers.Game.Player.OnSetConsumable -= SetInfo;
+        Managers.Game.Player.OnSetConsumable += SetInfo;
+    }
     public void Use()
     {
-        Count -= 1;
+        if (Count == 0)
+            return;
+
         switch (ItemData.Name) 
         {
             case "Potion":
                 Managers.Game.Player.HP += 100;
-                if(Managers.Game.Player.HP >= Managers.Game.Player.MaxHP)
-                {
-                    Managers.Game.Player.HP = Managers.Game.Player.MaxHP;
-                }
+                Managers.Game.Player.HP = Mathf.Min(Managers.Game.Player.HP,Managers.Game.Player.MaxHP);
                 break;
         }
+
+        Count -= 1;
     }
     public void SetInfo(CreatureController owner, ItemData itemData, int count)
     {

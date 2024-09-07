@@ -26,11 +26,6 @@ public class UI_InventorySlot : UI_Base
     {
         SlotCountText,
     }
-    
-    private void Awake()
-    {
-        Init();
-    }
     public override bool Init()
     {
         if (base.Init() == false)
@@ -41,7 +36,7 @@ public class UI_InventorySlot : UI_Base
         BindEvents();
         return true;
     }
-    public void BindEvents()
+    protected override void BindEvents()
     {
         this.gameObject.BindEvent(SelectSlot);
     }

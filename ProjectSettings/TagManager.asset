@@ -19,6 +19,7 @@ TagManager:
   - Shop
   - Quest
   - SpawningPool
+  - BackToVillage
   layers:
   - Default
   - TransparentFX

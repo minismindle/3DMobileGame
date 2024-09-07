@@ -1,13 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AmmoController : ItemController
 {
+    public event Action<int> OnAmmoCountChanged;
     public override int Count 
     {
         get { return base.Count; }
-        set { base.Count = value; Managers.UI.GetSceneUI<UI_GameScene>().SetTotalAmmoCount(Count);} 
+        set { base.Count = value; OnAmmoCountChanged?.Invoke(value);} 
     }
     public override bool Init()
     {

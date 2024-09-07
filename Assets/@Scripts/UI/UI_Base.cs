@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 using UnityEngine.UI;
 
 public abstract class UI_Base : MonoBehaviour
@@ -21,11 +22,15 @@ public abstract class UI_Base : MonoBehaviour
 		return true;
 	}
 
-	private void Start()
+	private void Awake()
 	{
 		Init();
 	}
-	protected void Bind<T>(Type type) where T : UnityEngine.Object
+    private void Start()
+    {
+		Subscribe();
+    }
+    protected void Bind<T>(Type type) where T : UnityEngine.Object
 	{
 		string[] names = Enum.GetNames(type);
 		UnityEngine.Object[] objects = new UnityEngine.Object[names.Length];
@@ -42,13 +47,19 @@ public abstract class UI_Base : MonoBehaviour
 				Debug.Log($"Failed to bind({names[i]})");
 		}
 	}
-
 	protected void BindObject(Type type) { Bind<GameObject>(type); }
 	protected void BindImage(Type type) { Bind<Image>(type); }
 	protected void BindText(Type type) { Bind<TMP_Text>(type); }
 	protected void BindButton(Type type) { Bind<Button>(type); }
 	protected void BindToggle(Type type) { Bind<Toggle>(type); }
+	protected virtual void BindEvents()
+	{
 
+	}
+    protected virtual void Subscribe()
+	{
+
+	}
 
 	protected T Get<T>(int idx) where T : UnityEngine.Object
 	{

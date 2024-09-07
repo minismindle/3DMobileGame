@@ -9,6 +9,8 @@ using Data;
 public class GameManager
 {
 	public PlayerController Player { get { return Managers.Object?.Player; } }
+	public BossController Boss { get { return Managers.Object?.Boss; } }
+
 	#region 재화
 
 	int _gold = 0;
@@ -55,6 +57,13 @@ public class GameManager
             _moveDir.y = 0;
             OnMoveDirChanged?.Invoke(_moveDir);
 		}
+	}
+    #endregion
+
+    #region 보스소환
+	public void SpawnBoss()
+	{
+
 	}
     #endregion
 }

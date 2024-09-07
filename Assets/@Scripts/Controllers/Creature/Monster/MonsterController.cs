@@ -74,6 +74,7 @@ public class MonsterController : CreatureController
     IEnumerator CoStartDotDamage(BaseController attacker, int damage)
     {
         OnDamaged(attacker, damage);
+        InvokeMonsterData();
         ChangeColor(Color.red);
         yield return new WaitForSeconds(0.3f);
         ChangeColor(Color.white);
@@ -104,10 +105,6 @@ public class MonsterController : CreatureController
         _coDead = null;
         Managers.Object.Despawn(this);
         Managers.Game.KillCount++;
-        if (ObjectType == Define.ObjectType.BossMonster) 
-        {
-            Managers.UI.ShowPopup<UI_GameResultPopup>(); 
-        }
     }
     void OnDeadState()
     {

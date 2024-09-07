@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,8 +10,10 @@ using UnityEngine.UIElements;
 public class ObjectManager
 {
 	public PlayerController Player { get; private set; }
+	public BossController Boss { get; private set; }
 	public HashSet<MonsterController> Monsters { get; } = new HashSet<MonsterController>();
 	public HashSet<ProjectileController> Projectiles { get; } = new HashSet<ProjectileController>();
+	public HashSet<CoinController> Coins { get; } = new HashSet<CoinController> ();	
 	public T Spawn<T>(Vector3 position,Quaternion rotation, int templateID = 0, string prefabName = "") where T : BaseController
 	{
 		System.Type type = typeof(T);
@@ -44,7 +47,7 @@ public class ObjectManager
             //go.transform.position = position;
 
             BossController bc = go.GetOrAddComponent<BossController>();
-            Monsters.Add(bc);
+			Boss = bc;
 			bc.Init();
 			bc.transform.position = position;
 
@@ -61,6 +64,17 @@ public class ObjectManager
 			pc.Init();
 			return pc as T;
 		}
+		else if(type == typeof(CoinController))
+		{
+            GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
+            go.transform.position = position;
+            go.transform.rotation = rotation;
+
+            CoinController cc = go.GetOrAddComponent<CoinController>();
+			Coins.Add(cc);
+            cc.Init();
+            return cc as T;
+        }
 		return null;
 	}
 	
@@ -88,6 +102,11 @@ public class ObjectManager
 			Projectiles.Remove(obj as ProjectileController);
 			Managers.Resource.Destroy(obj.gameObject);
 		}
+		else if(type == typeof(CoinController))
+		{
+			Coins.Remove(obj as CoinController);
+			Managers.Resource.Destroy (obj.gameObject);	
+		}
 	}
 	public void DespawnAllMonsters()
 	{
@@ -102,6 +121,13 @@ public class ObjectManager
 		
 		foreach(var projectile in projectiles) 
 			Despawn<ProjectileController>(projectile);
+	}
+	public void DespawnAllCoins()
+	{
+		var coins = Coins.ToList();
+
+		foreach (var coin in coins)
+			Despawn<CoinController>(coin);
 	}
 	public void Clear()
 	{

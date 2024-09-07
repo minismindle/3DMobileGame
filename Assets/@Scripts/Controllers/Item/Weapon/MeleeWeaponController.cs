@@ -1,4 +1,5 @@
 using Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -9,6 +10,8 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MeleeWeaponController : WeaponController
 {
+    public event Action OnMeleeWeaponClear;
+    public event Action<CreatureController, ItemData> OnSetMeleeWeapon;
     public void Use()
     {
         StartAttack(ItemData.Name);
@@ -33,20 +36,22 @@ public class MeleeWeaponController : WeaponController
     #endregion
     public override bool Init()
     {
-        base.Init();
+        if (base.Init() == false)
+            return false;
+        
         return true;
+    }
+    protected override void SubScribe()
+    {
+        Managers.Game.Player.OnSetMeleeWeapon -= SetInfo;
+        Managers.Game.Player.OnSetMeleeWeapon += SetInfo;
     }
     public override void SetInfo( CreatureController owner,ItemData itemData) 
     {
+        base.SetInfo(owner, itemData);
         WeaponType = WeaponType.Melee;
-        ObjectType = ObjectType.Weapon;
-        ItemData = itemData;   
-        _weapon = transform.Find(itemData.Name).gameObject;
         _collider = _weapon.GetComponent<BoxCollider>();
         _trailRenderer = _weapon.GetComponentInChildren<TrailRenderer>();
-        _owner = owner;
-        _equip = true;
-        CoolTime = 0.6f;
     }
     private void OnTriggerEnter(Collider target)
     {
@@ -99,6 +104,6 @@ public class MeleeWeaponController : WeaponController
     public override void Clear()
     {
         base.Clear();
-        
+        OnMeleeWeaponClear?.Invoke();
     }
 }

@@ -22,10 +22,21 @@ public class WeaponController : ItemController
         base.Init();
         return true;
     }
+    public override void SetInfo(CreatureController owner, ItemData itemData)
+    {
+        base.SetInfo(owner, itemData);
+        ObjectType = Define.ObjectType.Weapon;
+        ItemData = itemData;
+        _weapon = this.transform.Find(itemData.Name).gameObject;
+        _weapon.SetActive(true);
+        _owner = owner;
+        _equip = true;
+    }
     public override void Clear()
     {
         base.Clear();
         _weapon = null;
         gameObject.SetActive(false);
+        Managers.Game.Player.PlayerWeaponType = Define.PlayerWeaponType.None;
     }
 }

@@ -26,10 +26,6 @@ public class UI_ShopSlot : UI_Base
     {
         PriceText,
     }
-    private void Awake()
-    {
-        Init();
-    }
     public override bool Init()
     {
         if (base.Init() == false)
@@ -40,7 +36,7 @@ public class UI_ShopSlot : UI_Base
         BindEvents();
         return true;
     }
-    public void BindEvents()
+    protected override void BindEvents()
     {
         GetImage((int)Images.ItemImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(_itemdata.Image);
         GetText((int)Texts.PriceText).gameObject.GetComponent<TextMeshProUGUI>().text = _price.ToString();

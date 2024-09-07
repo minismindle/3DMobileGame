@@ -1,29 +1,32 @@
 using Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GrenadeController : WeaponController 
 {
+    public event Action<int> OnGrenadeCountChanged;
+    public event Action OnGrenadeClear;
     public override int Count 
     { 
         get { return base.Count; }
         set 
         {
             base.Count = value;
-            Managers.UI.GetSceneUI<UI_GameScene>().SetGrenadeCount(Count);
-            if (Count == 0) 
-            {
-                base.Clear();
-                Managers.UI.GetSceneUI<UI_GameScene>().ClearGrenadeSlot();
-                Managers.Game.Player.Inventory.ClearGrenadeSlot();
-            }   
+            OnGrenadeCountChanged?.Invoke(value);
+            if (Count == 0) { base.Clear(); OnGrenadeClear?.Invoke();}
         }
     }
     public override bool Init()
     {
         base.Init();
         return true;
+    }
+    protected override void SubScribe()
+    {
+        Managers.Game.Player.OnSetGrenade -= SetInfo;
+        Managers.Game.Player.OnSetGrenade += SetInfo;
     }
     public void Use(CreatureController owner, Vector3 startPos, Vector3 dir)
     {
@@ -46,14 +49,12 @@ public class GrenadeController : WeaponController
     #endregion
     public void SetInfo(CreatureController owner,ItemData itemData,int count)
     {
+        base.SetInfo(owner, itemData);
         ItemType = Define.ItemType.Grenade;
         WeaponType = Define.WeaponType.Grenade;
-        ItemData = itemData;   
         ProjectileName = itemData.Name;
         CoolTime = 0.6f;
         Count = count;
-        _weapon = this.transform.Find(itemData.Name).gameObject;   
-        _equip = true;
     }
     void GenerateProjectile(CreatureController owner, Vector3 startPos, Vector3 dir)
     {
@@ -63,6 +64,6 @@ public class GrenadeController : WeaponController
     public override void Clear()
     {
         base.Clear();
-        Count = 0;  
+        Count = 0;
     }
 }

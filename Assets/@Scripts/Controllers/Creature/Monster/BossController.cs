@@ -1,36 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using static Define;
 using static UnityEngine.GraphicsBuffer;
-
+enum BossSkillType
+{
+    Tanut,
+    SKill1,
+    Skill2,
+}
 public class BossController : MonsterController
 {
+    public event Action OnBossDead;
+
     [SerializeField]
     Transform _missilePos1;
     [SerializeField]
     Transform _missilePos2;
     [SerializeField]
     Transform _rockPos;
-    public override int HP 
-    { 
-        get
-        {
-            return base.HP;
-        }
-        set
-        {
-            base.HP = value; 
-            Managers.UI.GetSceneUI<UI_GameScene>().SetBossHpBar((float)value/(float)MaxHP);
-        }
-    }
-    enum BossSkillType
-    {
-        Tanut,
-        SKill1,
-        Skill2,
-    }
     public override void UpdateAnimation()
     {
         switch (CreatureState)
@@ -49,6 +39,7 @@ public class BossController : MonsterController
                 break;
             case CreatureState.Dead:
                 _animator.SetTrigger("DoDie");
+                OnBossDead?.Invoke();   
                 break;
         }
     }
@@ -61,7 +52,7 @@ public class BossController : MonsterController
         Target = player;
         AttackMonster();
 
-        if (Target != null)
+        if (Target != null || CreatureState == CreatureState.Idle)
             TurnMonster(Target.transform.position);
     }
     public override void IdleMonster()
@@ -92,12 +83,13 @@ public class BossController : MonsterController
         MaxHP = 100;
         HP = MaxHP;
         ManualWeapon = GetComponent<ManualWeaponController>();
-        MeleeWeapon = GetComponent<MeleeWeaponController>();   
         AttackRange = 40f;
         MonsterName = MonsterName.Boss;
-        ObjectType = ObjectType.BossMonster;
-        CreatureState = CreatureState.Idle;
-        Managers.UI.GetSceneUI<UI_GameScene>().ActiveBossHpBar();
+        ObjectType = ObjectType.BossMonster;    
+    }
+    protected override void SubScribe()
+    {
+        InvokeMonsterData();
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -111,6 +103,7 @@ public class BossController : MonsterController
         StopRandomSkill();
         _nav.SetDestination(transform.position);
         base.OnDead();
+        OnBossDead?.Invoke();
     }
     private void FixedUpdate()
     {
@@ -163,7 +156,7 @@ public class BossController : MonsterController
         }
         else if(dist <= AttackRange)
         {
-            _randomSkill = Random.Range((int)BossSkillType.SKill1, (int)BossSkillType.Skill2 + 1);
+            _randomSkill = UnityEngine.Random.Range((int)BossSkillType.SKill1, (int)BossSkillType.Skill2 + 1);
         }
     }
     void StartRandomSkill()

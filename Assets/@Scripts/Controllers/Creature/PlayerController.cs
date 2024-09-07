@@ -17,7 +17,17 @@ public class PlayerController : CreatureController
     Vector3 _moveDir = Vector3.zero;
     Vector3 _shootDir = Vector3.zero;
 
-    public UI_Inventory Inventory;
+    #region Action
+    public event Action<int> OnSetPlayerMaxHp;
+    public event Action<int> OnSetPlayerHp;
+    public event Action<int> OnSetAmmo;
+    public event Action<CreatureController, ItemData> OnSetMeleeWeapon;
+    public event Action<CreatureController, ItemData> OnSetManualWeapon;
+    public event Action<CreatureController, ItemData> OnSetAutoWeapon;
+    public event Action<CreatureController, ItemData,int> OnSetGrenade;
+    public event Action<CreatureController, ItemData,int> OnSetConsumable;
+    public event Action<PlayerController> PlayerInfoUpdate;
+    #endregion
 
     [SerializeField]
     Transform _shootPos;
@@ -25,15 +35,16 @@ public class PlayerController : CreatureController
     Transform _throwPos;
     [SerializeField]
     AmmoController _ammo;
+    public virtual UI_Inventory Inventory { get; set; }
 
     public virtual AmmoController Ammo {  get { return _ammo; } set { _ammo = value; } }
     public override int HP 
-    { get {return base.HP; } set { base.HP = value; Managers.UI.GetSceneUI<UI_GameScene>().SetPlayerHP(HP); } }
+    { get {return base.HP; } set { base.HP = value; OnSetPlayerHp?.Invoke(value); } }
     public override int MaxHP 
-    { get { return base.MaxHP; } set { base.MaxHP = value; Managers.UI.GetSceneUI<UI_GameScene>().SetPlayerMaxHP(MaxHP); } }
-    PlayerWeaponType PlayerWeaponType;
+    { get { return base.MaxHP; } set { base.MaxHP = value; OnSetPlayerMaxHp?.Invoke(value); } }
+    public  PlayerData PlayerData { get { return PlayerData; } set { PlayerData = value; } }
+    public virtual PlayerWeaponType PlayerWeaponType {  get; set; }
     RaycastHit slopeHit;
-
 
     public Vector3 MoveDir
     {
@@ -52,11 +63,17 @@ public class PlayerController : CreatureController
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
-        MaxHP = 1000;
-        HP = MaxHP;
+        
         return true;
     }
-
+    private void Start()
+    {
+        
+    }
+    protected override void SubScribe()
+    {
+        
+    }
     public void Resurrection()
     {
         MeleeWeapon.gameObject.SetActive(false);
@@ -124,6 +141,8 @@ public class PlayerController : CreatureController
     #endregion
     public override void SetInfo(int templateID)
     {
+        MaxHP = 1000;
+        HP = MaxHP;
     }
     public override void SetInfoInit(int templateID)
     {
@@ -238,33 +257,23 @@ public class PlayerController : CreatureController
         switch (itemData.WeaponType)
         {
             case WeaponType.Melee:
-                MeleeWeapon.SetInfo(this, itemData);
-                Managers.UI.GetSceneUI<UI_GameScene>().SetMeleeWeaponSlot(itemData.Image);
-                Inventory.SetMeleeWeaponSlot(itemData.Image);
+                OnSetMeleeWeapon?.Invoke(this,itemData);
                 break;
             case WeaponType.Manual:
-                ManualWeapon.SetInfo(this, itemData);
-                Managers.UI.GetSceneUI<UI_GameScene>().SetManualWeaponSlot(itemData.Image);
-                Inventory.SetManualWeaponSlot(itemData.Image);
+                OnSetManualWeapon?.Invoke(this,itemData);    
                 break;
             case WeaponType.Auto:
-                AutoWeapon.SetInfo( this, itemData);
-                Managers.UI.GetSceneUI<UI_GameScene>().SetAutoWeaponSlot(itemData.Image);
-                Inventory.SetAutoWeaponSlot(itemData.Image);
+                OnSetAutoWeapon?.Invoke(this, itemData);  
                 break;
         }
     }
-    public void EquipGrenade(ItemData itemData,int count)
+    void EquipGrenade(ItemData itemData,int count)
     {
-        Grenade.SetInfo(this,itemData,count);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetGrenadeSlot(itemData.Image);
-        Inventory.SetGrenadeSlot(itemData.Image);
+        OnSetGrenade?.Invoke(this,itemData,count); 
     }
-    public void EquipConsumable(ItemData itemData,int count)
+    void EquipConsumable(ItemData itemData,int count)
     {
-        Consumable.SetInfo(this,itemData,count); 
-        Managers.UI.GetSceneUI<UI_GameScene>().SetConsumableSlot(itemData.Image);
-        Inventory.SetConsumableSlot(itemData.Image);
+        OnSetConsumable?.Invoke(this,itemData,count);  
     }
     public void ReturnMeleeWeaponToInventory()
     {
@@ -273,9 +282,6 @@ public class PlayerController : CreatureController
         Inventory.ClearMeleeWeaponSlot();
         Inventory.InsertItem(MeleeWeapon.ItemData,1);
         MeleeWeapon.Clear();
-        Managers.UI.GetSceneUI<UI_GameScene>().ClearMeleeWeaponSlot();
-        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
-        PlayerWeaponType = PlayerWeaponType.None;
     }
     public void ReturnManualWeaponToInventory()
     {
@@ -286,9 +292,6 @@ public class PlayerController : CreatureController
         Inventory.ClearManualWeaponSlot();
         Inventory.InsertItem(ManualWeapon.ItemData, 1);
         ManualWeapon.Clear();
-        Managers.UI.GetSceneUI<UI_GameScene>().ClearManualWeaponSlot();
-        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
-        PlayerWeaponType = PlayerWeaponType.None;
     }
     public void ReturnAutoWeaponToInventory()
     {
@@ -299,9 +302,6 @@ public class PlayerController : CreatureController
         Inventory.ClearAutoWeaponSlot();    
         Inventory.InsertItem(AutoWeapon.ItemData, 1);
         AutoWeapon.Clear();
-        Managers.UI.GetSceneUI<UI_GameScene>().ClearAutoWeaponSlot();
-        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
-        PlayerWeaponType = PlayerWeaponType.None;
     }
     public void ReturnGrenadeToInventory()
     {
@@ -312,7 +312,6 @@ public class PlayerController : CreatureController
         Grenade.Clear();
         Inventory.ClearGrenadeSlot();
         Inventory.InsertItem(itemData, count);
-        Managers.UI.GetSceneUI<UI_GameScene>().ClearGrenadeSlot();
     }
     public void ReturnConsumableToInventory()
     {
@@ -323,7 +322,6 @@ public class PlayerController : CreatureController
         Consumable.Clear();
         Inventory.ClearConsumableSlot();    
         Inventory.InsertItem(itemData, count);
-        Managers.UI.GetSceneUI<UI_GameScene>().ClearConsumableSlot();
     }
     public void JumpPlayer()
     {
@@ -344,7 +342,7 @@ public class PlayerController : CreatureController
 
         _rigid.AddForce(MoveDir * 30f, ForceMode.Impulse);
 
-        SetAnimationDelay(0.8f);
+        SetAnimationDelay(1f);
     }
     public void SwingPlayer()
     {
@@ -374,6 +372,8 @@ public class PlayerController : CreatureController
             }
             CreatureState = CreatureState.Shot;
             ManualWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_HandGun");
+            ManualWeapon.Ammo -= 1;
+            OnSetAmmo?.Invoke(ManualWeapon.Ammo);
             SetAnimationDelay(0.1f);
         }
         else if (PlayerWeaponType == PlayerWeaponType.Auto)
@@ -404,7 +404,7 @@ public class PlayerController : CreatureController
         ManualWeapon.gameObject.SetActive(false);
         AutoWeapon.gameObject.SetActive(false);
         Grenade.gameObject.SetActive(false);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetNoneWeaponAmmoCount();
+        OnSetAmmo?.Invoke(0);
         AttackCoolTime = MeleeWeapon.CoolTime;
     }
     public void SwapToManualWeapon()
@@ -423,7 +423,7 @@ public class PlayerController : CreatureController
         ManualWeapon.gameObject.SetActive(true);
         AutoWeapon.gameObject.SetActive(false);
         Grenade.gameObject.SetActive(false);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(ManualWeapon.Ammo);
+        OnSetAmmo?.Invoke(ManualWeapon.Ammo);
         AttackCoolTime = ManualWeapon.CoolTime;
     }
     public void SwapToAutoWeapon()
@@ -440,7 +440,7 @@ public class PlayerController : CreatureController
         ManualWeapon.gameObject.SetActive(false);
         AutoWeapon.gameObject.SetActive(true);
         Grenade.gameObject.SetActive(false);
-        Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(AutoWeapon.Ammo);
+        OnSetAmmo?.Invoke(AutoWeapon.Ammo);
         AttackCoolTime = AutoWeapon.CoolTime;
     }
     public void SwapToGrenade()
@@ -457,6 +457,7 @@ public class PlayerController : CreatureController
         ManualWeapon.gameObject.SetActive(false);
         AutoWeapon.gameObject.SetActive(false);
         Grenade.gameObject.SetActive(true);
+        OnSetAmmo?.Invoke(0);
     }
     public void ThrowPlayer()
     {
@@ -493,24 +494,24 @@ public class PlayerController : CreatureController
                 ammoCount = Mathf.Min(ManualWeapon.MaxAmmo - ManualWeapon.Ammo, Ammo.Count);
                 ManualWeapon.Ammo += ammoCount;
                 Ammo.Count -= ammoCount;
-                Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(ManualWeapon.Ammo);
-                Inventory.UseItem(Ammo.ItemData.Name, ammoCount);
+                OnSetAmmo?.Invoke(ManualWeapon.Ammo);
+                Inventory.UseItem(Ammo.ItemData.Name, ammoCount); 
                 break;
             case PlayerWeaponType.Auto:
                 ammoCount = Mathf.Min(AutoWeapon.MaxAmmo - AutoWeapon.Ammo, Ammo.Count);
                 AutoWeapon.Ammo += ammoCount;
                 Ammo.Count -= ammoCount;
-                Managers.UI.GetSceneUI<UI_GameScene>().SetAmmoCount(AutoWeapon.Ammo);
+                OnSetAmmo?.Invoke(AutoWeapon.Ammo);
                 Inventory.UseItem(Ammo.ItemData.Name, ammoCount);
                 break;
         }
     }
     public void UsePotion()
     {
-        if (Potion == 0)
+        if (Consumable.Count == 0)
             return;
 
-        Consumable.Count -= 1;
+        Consumable.Use();
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -545,7 +546,7 @@ public class PlayerController : CreatureController
         {
             case "Coin":
                 CoinController _coin = other.gameObject.GetComponent<CoinController>();
-                Gold += _coin.GetCoin();
+                Managers.Game.Gold += _coin.GetCoin();
                 Managers.Object.Despawn(_coin);
                 break;
             case "Shop":
@@ -594,6 +595,8 @@ public class PlayerController : CreatureController
             }
             CreatureState = CreatureState.Shot;
             AutoWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_SubMachineGun");
+            AutoWeapon.Ammo -= 1;
+            OnSetAmmo?.Invoke(AutoWeapon.Ammo);
             yield return new WaitForSeconds(delay);
         }
     }

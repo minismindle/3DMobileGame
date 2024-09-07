@@ -30,6 +30,8 @@ public class SpawningPool : MonoBehaviour
     }
 	public void StopSpawn()
 	{
+        isSpawnBoss = true;
+        Managers.Object.DespawnAllMonsters();
         if (_coUpdateSpawningPool != null)
             StopCoroutine(CoUpdateSpawningPool());
         _coUpdateSpawningPool = null;
@@ -42,6 +44,7 @@ public class SpawningPool : MonoBehaviour
 		SpawnInterval = stageData.SpawnInterval;
 		MonsterNames = stageData.MonsterNames;	
 		BossName = stageData.BossName;
+		isSpawnBoss = false;
     }
     IEnumerator CoUpdateSpawningPool()
 	{
@@ -60,21 +63,8 @@ public class SpawningPool : MonoBehaviour
             return;
         if (monsterCount >= MaxCount)
             return;
-        if (Managers.Game.KillCount >= StageData.BossSpawnCount)
-		{
-			SpawnBoss();
-			return;
-		}
 
 		Vector3 spawnPos = Utils.GenerateMonsterSpawnPosition(transform.position, 20, 30);
 		Managers.Object.Spawn<MonsterController>(spawnPos,transform.rotation,0, monsterName);
-	}
-	void SpawnBoss()
-	{
-        isSpawnBoss = true;
-		Managers.Object.DespawnAllMonsters();
-        Boss = Managers.Object.Spawn<BossController>(transform.position, transform.rotation, 0, "Boss");
-		StopSpawn();
-        return;
 	}
 }

@@ -50,11 +50,6 @@ public class UI_GameScene : UI_Base
         ReloadButton,
         DiveButton
     }
-    private void Awake()
-    {
-        Init();
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -66,10 +61,10 @@ public class UI_GameScene : UI_Base
         BindEvents();
         return true;
     }
-    public void BindEvents()
+    protected override void BindEvents()
     {
         bossStateGroup = GetObject((int)GameObjects.BossStateGroup).gameObject;
-        DisActivaBossHpBar();
+        bossStateGroup.SetActive(false);
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerDownAttackButton, null,Define.UIEvent.PointerDown);
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerUpAttackButton,null,Define.UIEvent.PointerUp);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
@@ -80,6 +75,41 @@ public class UI_GameScene : UI_Base
         GetImage((int)Images.AutoWeaponImage).gameObject.BindEvent(OnClickAutoWeaponSlotImage);
         GetImage((int)Images.GrenadeImage).gameObject.BindEvent(OnClickGrenadeSlotImage);
         GetImage((int)Images.ConsumableImage).gameObject.BindEvent(OnClickConsumableImage);
+    }
+    protected override void Subscribe()
+    {
+        Managers.Game.Player.Consumable.OnConsumableCountChanged -= SetConsumableCount;
+        Managers.Game.Player.Consumable.OnConsumableCountChanged += SetConsumableCount;
+        Managers.Game.Player.Grenade.OnGrenadeCountChanged -= SetGrenadeCount;
+        Managers.Game.Player.Grenade.OnGrenadeCountChanged += SetGrenadeCount;
+        Managers.Game.Player.Ammo.OnAmmoCountChanged -= SetTotalAmmoCount;
+        Managers.Game.Player.Ammo.OnAmmoCountChanged += SetTotalAmmoCount;
+        Managers.Game.Player.Consumable.OnConsumableClear -= ClearConsumableSlot;
+        Managers.Game.Player.Consumable.OnConsumableClear += ClearConsumableSlot;
+        Managers.Game.Player.Grenade.OnGrenadeClear -= ClearGrenadeSlot;
+        Managers.Game.Player.Grenade.OnGrenadeClear += ClearGrenadeSlot;
+        Managers.Game.Player.AutoWeapon.OnAutoWeaponClear -= ClearAutoWeaponSlot;
+        Managers.Game.Player.AutoWeapon.OnAutoWeaponClear += ClearAutoWeaponSlot;
+        Managers.Game.Player.ManualWeapon.OnManualWeaponClear -= ClearManualWeaponSlot;
+        Managers.Game.Player.ManualWeapon.OnManualWeaponClear += ClearManualWeaponSlot;
+        Managers.Game.Player.MeleeWeapon.OnMeleeWeaponClear -= ClearMeleeWeaponSlot;
+        Managers.Game.Player.MeleeWeapon.OnMeleeWeaponClear += ClearMeleeWeaponSlot;
+        Managers.Game.Player.OnSetMeleeWeapon -= SetMeleeWeaponSlot;
+        Managers.Game.Player.OnSetMeleeWeapon += SetMeleeWeaponSlot;
+        Managers.Game.Player.OnSetManualWeapon -= SetManualWeaponSlot;
+        Managers.Game.Player.OnSetManualWeapon += SetManualWeaponSlot;
+        Managers.Game.Player.OnSetAutoWeapon -= SetAutoWeaponSlot;
+        Managers.Game.Player.OnSetAutoWeapon += SetAutoWeaponSlot;
+        Managers.Game.Player.OnSetGrenade -= SetGrenadeSlot;
+        Managers.Game.Player.OnSetGrenade += SetGrenadeSlot;
+        Managers.Game.Player.OnSetConsumable -= SetConsumableSlot;
+        Managers.Game.Player.OnSetConsumable += SetConsumableSlot;
+        Managers.Game.Player.OnSetPlayerMaxHp -= SetPlayerMaxHP;
+        Managers.Game.Player.OnSetPlayerMaxHp += SetPlayerMaxHP;
+        Managers.Game.Player.OnSetPlayerHp -= SetPlayerHP;
+        Managers.Game.Player.OnSetPlayerHp += SetPlayerHP;
+        Managers.Game.Player.OnSetAmmo -= SetAmmoText;
+        Managers.Game.Player.OnSetAmmo += SetAmmoText;
     }
     public void OnClickEquipButton()
     {
@@ -103,7 +133,7 @@ public class UI_GameScene : UI_Base
     }
     public void OnClickConsumableImage() 
     {
-        Managers.Game.Player.Consumable.Use();
+        Managers.Game.Player.UsePotion();
     }
     public void OnClickJumpButton()
     {
@@ -121,45 +151,50 @@ public class UI_GameScene : UI_Base
     {
         Managers.Game.Player.ReloadPlayer();
     }
-    public void SetMeleeWeaponSlot(string imageName)
+    public void SetMeleeWeaponSlot(CreatureController owner,ItemData itemData)
     {
-        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
+    }
+    public void SetAutoWeaponSlot(CreatureController owner, ItemData itemData)
+    {
+        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
+    }
+    public void SetManualWeaponSlot(CreatureController owner, ItemData itemData)
+    {
+        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
+    }
+    public void SetGrenadeSlot(CreatureController owner, ItemData itemData, int count)
+    {
+        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
+    }
+    public void SetConsumableSlot(CreatureController owner, ItemData itemData, int count)
+    {
+        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
     }
     public void ClearMeleeWeaponSlot()
     {
         GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = null;
-    }
-    public void SetAutoWeaponSlot(string imageName) 
-    {
-        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        SetNoneWeaponAmmoCount();
     }
     public void ClearAutoWeaponSlot()
     {
         GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = null;
-    }
-    public void SetManualWeaponSlot(string imageName)
-    {
-        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        SetNoneWeaponAmmoCount();
     }
     public void ClearManualWeaponSlot()
     {
         GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = null;
-    }
-    public void SetGrenadeSlot(string imageName) 
-    {
-        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        SetNoneWeaponAmmoCount();
     }
     public void ClearGrenadeSlot()
     {
         GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = null;
-    }
-    public void SetConsumableSlot(string imageName) 
-    {
-        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
     }
     public void ClearConsumableSlot()
     {
         GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = null;
+        GetText((int)Texts.ConsumableCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
     }
     public void SetGold(int gold)
     {
@@ -167,25 +202,40 @@ public class UI_GameScene : UI_Base
     }
     public void SetGrenadeCount(int count)
     {
-        GrenadeCount = count;
-
-        if(GrenadeCount > 0)
-            GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = GrenadeCount.ToString();
-        else
-            GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
+        if (count == 0)
+            return;
+        GetText((int)Texts.GrenadeCountText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();            
     }
     public void SetConsumableCount(int count)
     {
-        ConsumableCount = count;
-
-        if(ConsumableCount > 0)
-            GetText((int)Texts.ConsumableCountText).gameObject.GetComponent<TextMeshProUGUI>().text = ConsumableCount.ToString();
-        else
-            GetText((int)Texts.ConsumableCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
+        if (count == 0) 
+            return; 
+        GetText((int)Texts.ConsumableCountText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
     }
-    public void SetAmmoCount(int count)
+    public void SetAmmoText(int count)
     {
-        GetText((int)Texts.MaxAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString(); 
+        switch(Managers.Game.Player.PlayerWeaponType)
+        {
+            case Define.PlayerWeaponType.None:
+                SetNoneWeaponAmmoCount();
+                break;
+            case Define.PlayerWeaponType.Melee:
+                SetNoneWeaponAmmoCount();
+                break;
+            case Define.PlayerWeaponType.Manual:
+                SetWeaponAmmoCount(count);
+                break;
+            case Define.PlayerWeaponType.Auto:
+                SetWeaponAmmoCount(count);
+                break;
+            case Define.PlayerWeaponType.Grenade:
+                SetNoneWeaponAmmoCount();
+                break;
+        }
+    }
+    public void SetWeaponAmmoCount(int count)
+    {
+        GetText((int)Texts.MaxAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
     }
     public void SetNoneWeaponAmmoCount()
     {
@@ -211,17 +261,17 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.TimeText).text = SetTimeText((int)time);
     }
-    public void ActiveBossHpBar()
+    public void MonsterInfoUpdate(MonsterController boss)
     {
-        bossStateGroup.SetActive(true);
-    }
-    public void DisActivaBossHpBar()
-    {
-        bossStateGroup.SetActive(false);
-    }
-    public void SetBossHpBar(float ratio)
-    {
-        GetObject((int)GameObjects.GuageFront).gameObject.GetComponent<RectTransform>().localScale = new Vector3(ratio,1,1);
+        if(boss.CreatureState != Define.CreatureState.Dead)
+        {
+            bossStateGroup.SetActive(true);
+            GetObject((int)GameObjects.GuageFront).gameObject.GetComponent<RectTransform>().localScale = new Vector3((float)boss.HP/(float)boss.MaxHP, 1, 1);
+        }
+        else if(boss.CreatureState == Define.CreatureState.Dead)
+        {
+            bossStateGroup.SetActive(false);
+        }
     }
     string SetTimeText(int time)
     {

@@ -13,10 +13,14 @@ public class GameScene : BaseScene
     [SerializeField]
     NPCController questNPC;
     [SerializeField]
-    SpawningPool spawningPool;
-    [SerializeField]
+    GameObject backToVillageZone;
     Timer _timer;
+    SpawningPool spawningPool;
+    UI_GameScene ui;
+    BossController boss;
+    StageData stageData;
     public virtual SpawningPool SpawningPool { get { return spawningPool; } set { spawningPool = value; } }
+    public virtual GameObject BackToVillageZone { get { return backToVillageZone; } set { backToVillageZone = value; } } 
     void Start()
     {
         Start_init();
@@ -27,7 +31,8 @@ public class GameScene : BaseScene
 
         SceneType = Define.Scene.GameScene;
 
-        Managers.UI.ShowSceneUI<UI_GameScene>();
+        ui =  Managers.UI.ShowSceneUI<UI_GameScene>();
+        spawningPool = gameObject.GetOrAddComponent<SpawningPool>();
 
         var player = Managers.Object.Spawn<PlayerController>(Vector3.zero, transform.rotation);
 
@@ -35,15 +40,16 @@ public class GameScene : BaseScene
 
         Camera.main.GetComponent<CameraController>()._player = player.gameObject;
 
-        Managers.Game.OnGoldCountChanged -= HandleOnGoldCountChanged;
-        Managers.Game.OnGoldCountChanged += HandleOnGoldCountChanged;
+        Managers.Game.OnGoldCountChanged -= OnGoldCountChanged;
+        Managers.Game.OnGoldCountChanged += OnGoldCountChanged;
+        Managers.Game.OnKillCountChanged -= OnKillCountChanged;
+        Managers.Game.OnKillCountChanged += OnKillCountChanged;
 
         Managers.UI.ShowPopup<UI_Inventory>();
         Managers.UI.CloseAllPopup();
 
         Init();
     }
-  
     protected override void Init()
     {
         Managers.Game.Gold = 10000000;
@@ -56,34 +62,54 @@ public class GameScene : BaseScene
     {
     }
 
-    public void HandleOnGoldCountChanged(int gold)
+    public void OnGoldCountChanged(int gold)
 	{
         Managers.Game.Player.Gold = gold;
-        Managers.UI.GetSceneUI<UI_GameScene>().SetGold(gold);
+        ui.SetGold(gold);
         if (Managers.Game.Player.Inventory != null)
             Managers.Game.Player.Inventory.SetGold(gold);
     }
+    public void OnKillCountChanged(int killcount)
+    {
+        if(killcount == stageData.MaxCount)
+        {
+            spawningPool.StopSpawn();
+            boss = Managers.Object.Spawn<BossController>(spawningPool.gameObject.transform.position,transform.rotation,0, stageData.BossName);
+            boss.OnBossDead -= OnBossDead;  
+            boss.OnBossDead += OnBossDead;  
+            boss.MonsterInfoUpdate -= ui.MonsterInfoUpdate;  
+            boss.MonsterInfoUpdate += ui.MonsterInfoUpdate;  
+        }
+    }
     public void OnStage()
     {
+        Managers.Data.StageDataDic.TryGetValue(25000, out stageData);
         shopNPC.gameObject.SetActive(false);
         questNPC.gameObject.SetActive(false);
         spawningPool.SetInfo(25000);
-        spawningPool.gameObject.SetActive(true);
         spawningPool.StartSpawn();
     }
     public void OutStage()
     {
         shopNPC.gameObject.SetActive(true);
         questNPC.gameObject.SetActive(true);
-        spawningPool.gameObject.SetActive(false);
-        spawningPool.StopSpawn();
-        Managers.UI.GetSceneUI<UI_GameScene>().DisActivaBossHpBar();
+    }
+    void OnBossDead()
+    {
+        StartCoroutine(CoEndStage());
+    }
+    IEnumerator CoEndStage()
+    {
+        yield return new WaitForSeconds(3f);
+        Managers.UI.ShowPopup<UI_GameResultPopup>();
+        OutStage();
     }
     private void OnDestroy()
     {
         if (Managers.Game != null)
         {
-            Managers.Game.OnGoldCountChanged -= HandleOnGoldCountChanged;
+            Managers.Game.OnGoldCountChanged -= OnGoldCountChanged;
+            Managers.Game.OnKillCountChanged -= OnKillCountChanged; 
         }
     }
 }

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using static Define;
 using TMPro;
+using System.Runtime.InteropServices;
 
 public class UI_Inventory : UI_Base
 {
@@ -34,10 +35,6 @@ public class UI_Inventory : UI_Base
     {
         GoldText,
     }
-    private void Awake()
-    {
-        Init();
-    }
     public override bool Init()
     {
         if (base.Init() == false)
@@ -51,7 +48,7 @@ public class UI_Inventory : UI_Base
         BindEvents();
         return true;
     }
-    public void BindEvents()
+    protected override void BindEvents()
     {
         GetButton((int)Buttons.ExitInventoryButton).gameObject.BindEvent(OnClickExitInventoryButton);
         GetImage((int)Images.MeleeWeaponImage).gameObject.BindEvent(OnClickMeleeWeaponImage);
@@ -59,6 +56,29 @@ public class UI_Inventory : UI_Base
         GetImage((int)Images.AutoWeaponImage).gameObject.BindEvent(OnClickAutoWeaponImage);
         GetImage((int)Images.GrenadeImage).gameObject.BindEvent(OnClickGrenadeImage);
         GetImage((int)Images.ConsumableImage).gameObject.BindEvent(OnClickConsumableImage);
+    }
+    protected override void Subscribe()
+    {
+        Managers.Game.Player.Consumable.OnConsumableClear -= ClearConsumableSlot;
+        Managers.Game.Player.Consumable.OnConsumableClear += ClearConsumableSlot;
+        Managers.Game.Player.Grenade.OnGrenadeClear -= ClearGrenadeSlot;
+        Managers.Game.Player.Grenade.OnGrenadeClear += ClearGrenadeSlot;
+        Managers.Game.Player.AutoWeapon.OnAutoWeaponClear -= ClearAutoWeaponSlot;
+        Managers.Game.Player.AutoWeapon.OnAutoWeaponClear += ClearAutoWeaponSlot;
+        Managers.Game.Player.ManualWeapon.OnManualWeaponClear -= ClearManualWeaponSlot;
+        Managers.Game.Player.ManualWeapon.OnManualWeaponClear += ClearManualWeaponSlot;
+        Managers.Game.Player.MeleeWeapon.OnMeleeWeaponClear -= ClearMeleeWeaponSlot;
+        Managers.Game.Player.MeleeWeapon.OnMeleeWeaponClear += ClearMeleeWeaponSlot;
+        Managers.Game.Player.OnSetMeleeWeapon -= SetMeleeWeaponSlot;
+        Managers.Game.Player.OnSetMeleeWeapon += SetMeleeWeaponSlot;
+        Managers.Game.Player.OnSetManualWeapon -= SetManualWeaponSlot;
+        Managers.Game.Player.OnSetManualWeapon += SetManualWeaponSlot;
+        Managers.Game.Player.OnSetAutoWeapon -= SetAutoWeaponSlot;
+        Managers.Game.Player.OnSetAutoWeapon += SetAutoWeaponSlot;
+        Managers.Game.Player.OnSetGrenade -= SetGrenadeSlot;
+        Managers.Game.Player.OnSetGrenade += SetGrenadeSlot;
+        Managers.Game.Player.OnSetConsumable -= SetConsumableSlot;
+        Managers.Game.Player.OnSetConsumable += SetConsumableSlot;
     }
     public void InsertItem(ItemData itemData,int count)
     {
@@ -242,25 +262,25 @@ public class UI_Inventory : UI_Base
     {
         Managers.UI.ClosePopup();
     }
-    public void SetMeleeWeaponSlot(string imageName)
+    public void SetMeleeWeaponSlot(CreatureController owner,ItemData itemData)
     {
-        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.MeleeWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
     }
-    public void SetAutoWeaponSlot(string imageName)
+    public void SetAutoWeaponSlot(CreatureController owner, ItemData itemData)
     {
-        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.AutoWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
     }
-    public void SetManualWeaponSlot(string imageName)
+    public void SetManualWeaponSlot(CreatureController owner, ItemData itemData)
     {
-        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.ManualWeaponImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
     }
-    public void SetGrenadeSlot(string imageName)
+    public void SetGrenadeSlot(CreatureController owner, ItemData itemData,int count)
     {
-        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.GrenadeImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
     }
-    public void SetConsumableSlot(string imageName)
+    public void SetConsumableSlot(CreatureController owner, ItemData itemData, int count)
     {
-        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(imageName);
+        GetImage((int)Images.ConsumableImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(itemData.Image);
     }
     public void SetGold(int gold)
     {
