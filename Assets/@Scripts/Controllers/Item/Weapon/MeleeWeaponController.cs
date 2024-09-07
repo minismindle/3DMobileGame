@@ -11,7 +11,6 @@ using static UnityEngine.GraphicsBuffer;
 public class MeleeWeaponController : WeaponController
 {
     public event Action OnMeleeWeaponClear;
-    public event Action<CreatureController, ItemData> OnSetMeleeWeapon;
     public void Use()
     {
         StartAttack(ItemData.Name);

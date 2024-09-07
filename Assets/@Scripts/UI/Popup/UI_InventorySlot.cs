@@ -25,6 +25,7 @@ public class UI_InventorySlot : UI_Base
     enum Texts
     {
         SlotCountText,
+        ItemSummaryText
     }
     public override bool Init()
     {
@@ -85,6 +86,7 @@ public class UI_InventorySlot : UI_Base
         _itemData = itemData;
         _count = count;
         GetImage((int)Images.SlotItemImage).gameObject.GetComponent<Image>().sprite = Managers.Resource.Load<Sprite>(_itemData.Image);
+        GetText((int)Texts.ItemSummaryText).gameObject.GetComponent<TextMeshProUGUI>().text = itemData.Name;
         SetCountText(count);
         _empty = false; 
     }
@@ -107,5 +109,6 @@ public class UI_InventorySlot : UI_Base
         _itemData = null;
         GetImage((int)Images.SlotItemImage).gameObject.GetComponent<Image>().sprite = null;
         GetText((int)Texts.SlotCountText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
+        GetText((int)Texts.ItemSummaryText).gameObject.GetComponent<TextMeshProUGUI>().text = null;
     }
 }

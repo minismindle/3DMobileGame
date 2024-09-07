@@ -18,6 +18,7 @@ public class PlayerController : CreatureController
     Vector3 _shootDir = Vector3.zero;
 
     #region Action
+    public event Action OnPlayerDead;
     public event Action<int> OnSetAmmo;
     public event Action<CreatureController, ItemData> OnSetMeleeWeapon;
     public event Action<CreatureController, ItemData> OnSetManualWeapon;
@@ -524,6 +525,7 @@ public class PlayerController : CreatureController
             return;
         StopAllCoroutines();
         CreatureState = CreatureState.Dead;
+        OnPlayerDead?.Invoke();
         SetAnimationDelay(1.25f);
     }
     private void OnCollisionEnter(Collision other)
@@ -563,10 +565,6 @@ public class PlayerController : CreatureController
     IEnumerator CoWaitAnimation(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (CreatureState == CreatureState.Dead)
-        {
-            Managers.UI.ShowPopup<UI_GameResultPopup>();
-        }
         CreatureState = CreatureState.Idle;
     }
     void SetAnimationDelay(float delay)

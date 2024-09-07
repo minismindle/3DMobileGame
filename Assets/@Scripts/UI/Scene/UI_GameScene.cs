@@ -33,6 +33,7 @@ public class UI_GameScene : UI_Base
         TotalAmmoText,
         GrenadeCountText,
         ConsumableCountText,
+        ItemSummaryText
     }
     enum Images
     {

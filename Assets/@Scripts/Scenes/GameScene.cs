@@ -12,15 +12,13 @@ public class GameScene : BaseScene
     NPCController shopNPC;
     [SerializeField]
     NPCController questNPC;
-    [SerializeField]
-    GameObject backToVillageZone;
-    Timer _timer;
+
+    Timer timer;
     SpawningPool spawningPool;
     UI_GameScene ui;
     BossController boss;
     StageData stageData;
     public virtual SpawningPool SpawningPool { get { return spawningPool; } set { spawningPool = value; } }
-    public virtual GameObject BackToVillageZone { get { return backToVillageZone; } set { backToVillageZone = value; } } 
     void Start()
     {
         Start_init();
@@ -40,6 +38,8 @@ public class GameScene : BaseScene
 
         Camera.main.GetComponent<CameraController>()._player = player.gameObject;
 
+        player.OnPlayerDead -= OnPlayerDead;
+        player.OnPlayerDead += OnPlayerDead;
         player.PlayerInfoUpdate -= ui.PlayerInfoUpdate;
         player.PlayerInfoUpdate += ui.PlayerInfoUpdate;
 
@@ -74,7 +74,7 @@ public class GameScene : BaseScene
     }
     public void OnKillCountChanged(int killcount)
     {
-        if(killcount == 5)
+        if(killcount == stageData.BossSpawnCount)
         {
             spawningPool.StopSpawn();
             StopAllCoroutines();
@@ -82,7 +82,8 @@ public class GameScene : BaseScene
             boss.OnBossDead -= OnBossDead;  
             boss.OnBossDead += OnBossDead;  
             boss.MonsterInfoUpdate -= ui.MonsterInfoUpdate;  
-            boss.MonsterInfoUpdate += ui.MonsterInfoUpdate;  
+            boss.MonsterInfoUpdate += ui.MonsterInfoUpdate;
+            boss.InvokeMonsterData();
         }
     }
     public void OnStage()
@@ -101,17 +102,20 @@ public class GameScene : BaseScene
     #region 보스 사망시 스테이지 종료
     void OnBossDead()
     {
-        StartCoroutine(CoEndStage());
+        StartCoroutine(CoEndStage(3f));
     }
-    IEnumerator CoEndStage()
+    IEnumerator CoEndStage(float delay)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(delay);
         Managers.UI.ShowPopup<UI_GameResultPopup>();
         OutStage();
     }
     #endregion
     #region 플레이어 사망시 스테이지 종료
-
+    void OnPlayerDead()
+    {
+        StartCoroutine(CoEndStage(1.25f));
+    }
     #endregion
     private void OnDestroy()
     {
