@@ -69,15 +69,15 @@ public class Utils
 
 		return parsedColor;
 	}
-	public static Vector2 GenerateMonsterSpawnPosition(Vector2 characterPosition, float minDistance = 10f, float maxDistance = 20f)
+	public static Vector2 GenerateMonsterSpawnPosition(Vector3 characterPosition, float minDistance = 10f, float maxDistance = 20f)
 	{
 		float angle = Random.Range(0, 360) * Mathf.Deg2Rad;
 		float distance = Random.Range(minDistance, maxDistance);
 
 		float xDist = Mathf.Cos(angle) * distance;
-		float yDist = Mathf.Sin(angle) * distance;
+		float zDist = Mathf.Sin(angle) * distance;
 
-		Vector2 spawnPosition = characterPosition + new Vector2(xDist, yDist);
+		Vector3 spawnPosition = characterPosition + new Vector3(xDist, 0,zDist);
 
 		return spawnPosition;
 	}

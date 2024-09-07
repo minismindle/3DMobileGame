@@ -88,7 +88,7 @@ public class MonsterCController : MonsterController
     public override bool Init()
     {
         base.Init();
-        SetInfo(3);
+        SetInfo(0);
         return true;
     }
     public override void SetInfo(int templateID)
@@ -99,8 +99,7 @@ public class MonsterCController : MonsterController
         ScanRange = 25f;
         AttackRange = 15f;
         MonsterName = MonsterName.MonsterC;
-        _nav.enabled = true;
-        _rigid.isKinematic = false;
+        StopAttack();
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -113,8 +112,6 @@ public class MonsterCController : MonsterController
     {
         StopAttack();
         _nav.SetDestination(transform.position);
-        _nav.enabled = false;
-        _rigid.isKinematic = true;
         base.OnDead();
     }
     #region Attack

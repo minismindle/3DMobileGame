@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa41e65d8f3bcf84d89d2a04a4a6e512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _hp: 0
   sceneType: 0
   _meleeWeapon: {fileID: 0}
   _manualWeapon: {fileID: 0}
@@ -704,7 +704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa41e65d8f3bcf84d89d2a04a4a6e512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _hp: 0
   sceneType: 0
   _meleeWeapon: {fileID: 0}
   _manualWeapon: {fileID: 0}

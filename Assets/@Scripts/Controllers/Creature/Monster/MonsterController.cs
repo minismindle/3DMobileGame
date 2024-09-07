@@ -49,6 +49,7 @@ public class MonsterController : CreatureController
     public override bool Init()
     {
         base.Init();
+        
         return true;
     }
     public override void SetInfo(int templateID)
@@ -60,6 +61,10 @@ public class MonsterController : CreatureController
         _collider = GetComponentInChildren<Collider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
         ObjectType = ObjectType.Monster;
+        _nav.enabled = true;
+        _rigid.isKinematic = false;
+        _coDead = null;
+        _coDotDamage = null;
         CreatureState = CreatureState.Idle;
     }
     public void InvokeMonsterData()
@@ -99,6 +104,8 @@ public class MonsterController : CreatureController
     Coroutine _coDead;
     IEnumerator CoDead()
     {
+        _nav.enabled = false;
+        _rigid.isKinematic = true;
         ChangeColor(Color.black);
         CreatureState = Define.CreatureState.Dead;
         yield return new WaitForSeconds(3.0f);

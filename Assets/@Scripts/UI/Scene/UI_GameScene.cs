@@ -104,10 +104,6 @@ public class UI_GameScene : UI_Base
         Managers.Game.Player.OnSetGrenade += SetGrenadeSlot;
         Managers.Game.Player.OnSetConsumable -= SetConsumableSlot;
         Managers.Game.Player.OnSetConsumable += SetConsumableSlot;
-        Managers.Game.Player.OnSetPlayerMaxHp -= SetPlayerMaxHP;
-        Managers.Game.Player.OnSetPlayerMaxHp += SetPlayerMaxHP;
-        Managers.Game.Player.OnSetPlayerHp -= SetPlayerHP;
-        Managers.Game.Player.OnSetPlayerHp += SetPlayerHP;
         Managers.Game.Player.OnSetAmmo -= SetAmmoText;
         Managers.Game.Player.OnSetAmmo += SetAmmoText;
     }
@@ -245,14 +241,6 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.TotalAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
     }
-    public void SetPlayerMaxHP(int maxHP)
-    {
-        GetText((int)Texts.MaxHPText).gameObject.GetComponent<TextMeshProUGUI>().text = maxHP.ToString();   
-    }
-    public void SetPlayerHP(int HP)
-    {
-        GetText((int)Texts.HPText).gameObject.GetComponent<TextMeshProUGUI>().text = HP.ToString();   
-    }
     public void SetStageInfo(int stage)
     {
         GetText((int)Texts.WaveText).text = $"Wave {stage}"; 
@@ -272,6 +260,11 @@ public class UI_GameScene : UI_Base
         {
             bossStateGroup.SetActive(false);
         }
+    }
+    public void PlayerInfoUpdate(PlayerController  player)
+    {
+        GetText((int)Texts.HPText).gameObject.GetComponent<TextMeshProUGUI>().text = player.HP.ToString();
+        GetText((int)Texts.MaxHPText).gameObject.GetComponent<TextMeshProUGUI>().text = player.MaxHP.ToString();
     }
     string SetTimeText(int time)
     {

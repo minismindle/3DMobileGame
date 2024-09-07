@@ -9,15 +9,15 @@ public class CreatureController : BaseController
 {
     protected float _speed = 10.0f;
 
-    [SerializeField]
+
     protected Animator                  _animator;
     protected Collider                  _collider;
     protected Rigidbody                 _rigid;
     protected Material                  _material;
     protected NavMeshAgent              _nav;
     protected MeshRenderer[]            _meshrenderers;
-    
 
+    [SerializeField]
     private int _hp = 0;
     private int _maxHp = 0;
 

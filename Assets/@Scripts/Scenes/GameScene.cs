@@ -40,6 +40,9 @@ public class GameScene : BaseScene
 
         Camera.main.GetComponent<CameraController>()._player = player.gameObject;
 
+        player.PlayerInfoUpdate -= ui.PlayerInfoUpdate;
+        player.PlayerInfoUpdate += ui.PlayerInfoUpdate;
+
         Managers.Game.OnGoldCountChanged -= OnGoldCountChanged;
         Managers.Game.OnGoldCountChanged += OnGoldCountChanged;
         Managers.Game.OnKillCountChanged -= OnKillCountChanged;
@@ -71,9 +74,10 @@ public class GameScene : BaseScene
     }
     public void OnKillCountChanged(int killcount)
     {
-        if(killcount == stageData.MaxCount)
+        if(killcount == 5)
         {
             spawningPool.StopSpawn();
+            StopAllCoroutines();
             boss = Managers.Object.Spawn<BossController>(spawningPool.gameObject.transform.position,transform.rotation,0, stageData.BossName);
             boss.OnBossDead -= OnBossDead;  
             boss.OnBossDead += OnBossDead;  
@@ -94,6 +98,7 @@ public class GameScene : BaseScene
         shopNPC.gameObject.SetActive(true);
         questNPC.gameObject.SetActive(true);
     }
+    #region 보스 사망시 스테이지 종료
     void OnBossDead()
     {
         StartCoroutine(CoEndStage());
@@ -104,6 +109,10 @@ public class GameScene : BaseScene
         Managers.UI.ShowPopup<UI_GameResultPopup>();
         OutStage();
     }
+    #endregion
+    #region 플레이어 사망시 스테이지 종료
+
+    #endregion
     private void OnDestroy()
     {
         if (Managers.Game != null)

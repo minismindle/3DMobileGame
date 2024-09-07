@@ -64,7 +64,7 @@ public class SpawningPool : MonoBehaviour
         if (monsterCount >= MaxCount)
             return;
 
-		Vector3 spawnPos = Utils.GenerateMonsterSpawnPosition(transform.position, 20, 30);
+		Vector3 spawnPos = Utils.GenerateMonsterSpawnPosition(transform.position, 15, 30);
 		Managers.Object.Spawn<MonsterController>(spawnPos,transform.rotation,0, monsterName);
 	}
 }

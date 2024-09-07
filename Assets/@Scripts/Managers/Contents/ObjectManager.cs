@@ -37,9 +37,10 @@ public class ObjectManager
 
 			MonsterController mc = go.GetOrAddComponent<MonsterController>();
 			Monsters.Add(mc);
-			mc.Init();
+			
 			mc.transform.position = position;
-			return mc as T;
+            mc.Init();
+            return mc as T;
 		}
         else if (type == typeof(BossController))
         {

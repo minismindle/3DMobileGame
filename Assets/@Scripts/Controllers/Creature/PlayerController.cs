@@ -18,8 +18,6 @@ public class PlayerController : CreatureController
     Vector3 _shootDir = Vector3.zero;
 
     #region Action
-    public event Action<int> OnSetPlayerMaxHp;
-    public event Action<int> OnSetPlayerHp;
     public event Action<int> OnSetAmmo;
     public event Action<CreatureController, ItemData> OnSetMeleeWeapon;
     public event Action<CreatureController, ItemData> OnSetManualWeapon;
@@ -38,11 +36,6 @@ public class PlayerController : CreatureController
     public virtual UI_Inventory Inventory { get; set; }
 
     public virtual AmmoController Ammo {  get { return _ammo; } set { _ammo = value; } }
-    public override int HP 
-    { get {return base.HP; } set { base.HP = value; OnSetPlayerHp?.Invoke(value); } }
-    public override int MaxHP 
-    { get { return base.MaxHP; } set { base.MaxHP = value; OnSetPlayerMaxHp?.Invoke(value); } }
-    public  PlayerData PlayerData { get { return PlayerData; } set { PlayerData = value; } }
     public virtual PlayerWeaponType PlayerWeaponType {  get; set; }
     RaycastHit slopeHit;
 
@@ -63,16 +56,13 @@ public class PlayerController : CreatureController
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
-        
+        MaxHP = 1000;
+        HP = MaxHP;
         return true;
-    }
-    private void Start()
-    {
-        
     }
     protected override void SubScribe()
     {
-        
+        InvokePlayerData();
     }
     public void Resurrection()
     {
@@ -141,13 +131,19 @@ public class PlayerController : CreatureController
     #endregion
     public override void SetInfo(int templateID)
     {
-        MaxHP = 1000;
-        HP = MaxHP;
+
     }
     public override void SetInfoInit(int templateID)
     {
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
+    }
+    public void InvokePlayerData()
+    {
+        if (this.IsValid() && gameObject.IsValid()) 
+        {
+            PlayerInfoUpdate?.Invoke(this);
+        }
     }
     void FixedUpdate()
     {
@@ -512,6 +508,7 @@ public class PlayerController : CreatureController
             return;
 
         Consumable.Use();
+        InvokePlayerData();
     }
     public override void OnDamaged(BaseController attacker, int damage)
     {
@@ -519,6 +516,7 @@ public class PlayerController : CreatureController
             return;
 
         base.OnDamaged(attacker, 10);
+        InvokePlayerData();
     }
     protected override void OnDead()
     {

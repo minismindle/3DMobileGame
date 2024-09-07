@@ -29,6 +29,7 @@ public class UI_GameResultPopup : UI_Base
         StopAllCoroutines();
         Managers.Game.Player.transform.position = Vector3.zero;
         Managers.Game.Player.Resurrection();
+        Managers.Game.Boss.IdleMonster();
         Managers.Object.DespawnAllMonsters();
         Managers.Object.DespawnAllProjectiles();
         Managers.Object.DespawnAllCoins();
