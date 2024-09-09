@@ -59,11 +59,4 @@ public class GameManager
 		}
 	}
     #endregion
-
-    #region 보스소환
-	public void SpawnBoss()
-	{
-
-	}
-    #endregion
 }

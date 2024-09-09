@@ -86,7 +86,7 @@ namespace Data
     public class PlayerData
     {
         public int DataId;
-        public int PrefabName;
+        public string PrefabName;
         public int MaxHP;
         public int MaxAmmo;
         public int MaxGrenade;

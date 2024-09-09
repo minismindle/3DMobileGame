@@ -188,6 +188,7 @@ public class ProjectileController : BaseController
                 _rigid.angularVelocity = Vector3.zero;
                 _meshRenderer.gameObject.SetActive(false);
                 AttackNearestMonster(transform.position, 10f, Vector3.down, 0f, LayerMask.GetMask("Monster"),100);
+                Managers.Sound.Play("FragGrenadeSound", Define.Sound.Effect, 1f, 0.5f);
                 yield return new WaitForSeconds(3.0f);
                 _trailRenderer.Clear();
                 break;
@@ -263,8 +264,8 @@ public class ProjectileController : BaseController
         scaleValue = 0.1f;
         while (true)
         {
-            angularPower += 0.02f;
-            scaleValue += 0.01f;
+            angularPower += 0.5f;
+            scaleValue += 0.02f;
             scaleValue = Mathf.Min(1,scaleValue);
             angularPower = Mathf.Min(5,angularPower);
             transform.localScale = Vector3.one * scaleValue;

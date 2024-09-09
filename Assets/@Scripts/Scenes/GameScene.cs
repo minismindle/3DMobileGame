@@ -51,11 +51,12 @@ public class GameScene : BaseScene
         Managers.UI.ShowPopup<UI_Inventory>();
         Managers.UI.CloseAllPopup();
 
-        Init();
+        Managers.Sound.Play("MainBGM", Define.Sound.Bgm,1,0.5f);
+        Managers.Game.Gold = 10000000;
     }
     protected override void Init()
     {
-        Managers.Game.Gold = 10000000;
+        
     }
     public override void Clear()
     {

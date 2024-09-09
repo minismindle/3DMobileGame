@@ -3,25 +3,25 @@
     {
       "DataId": 10000,
       "PrefabName": "MonsterA",
-      "MaxHP": 30,
-      "ScanRange": 20,
+      "MaxHP": 25,
+      "ScanRange": 50,
       "AttackRange": 2,
       "Attack": 10
     },
     {
       "DataId": 11000,
       "PrefabName": "MonsterB",
-      "MaxHP": 30,
-      "ScanRange": 20,
+      "MaxHP": 35,
+      "ScanRange": 50,
       "AttackRange": 2,
-      "Attack": 10
+      "Attack": 15
     },
     {
       "DataId": 12000,
       "PrefabName": "MonsterC",
-      "MaxHP": 30,
-      "ScanRange": 25,
-      "AttackRange": 15
+      "MaxHP": 45,
+      "ScanRange": 50,
+      "AttackRange": 25
     },
     {
       "DataId": 13000,

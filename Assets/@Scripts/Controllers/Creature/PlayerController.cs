@@ -48,6 +48,7 @@ public class PlayerController : CreatureController
     public override bool Init()
     {
         base.Init();
+        SetInfo(1);
         _rigid = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponent<CapsuleCollider>();
@@ -57,8 +58,7 @@ public class PlayerController : CreatureController
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
-        MaxHP = 1000;
-        HP = MaxHP;
+        
         return true;
     }
     protected override void SubScribe()
@@ -74,6 +74,8 @@ public class PlayerController : CreatureController
         PlayerWeaponType = PlayerWeaponType.None;
         Managers.Game.KillCount = 0;
         ChangeColor(Color.white);
+        if (HP > 0)
+            return;
         HP = MaxHP;
     }
     void OnDestroy()
@@ -132,7 +134,8 @@ public class PlayerController : CreatureController
     #endregion
     public override void SetInfo(int templateID)
     {
-
+        MaxHP = 1000;
+        HP = MaxHP;
     }
     public override void SetInfoInit(int templateID)
     {
@@ -369,6 +372,7 @@ public class PlayerController : CreatureController
             }
             CreatureState = CreatureState.Shot;
             ManualWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_HandGun");
+            Managers.Sound.Play("HandgunSound", Define.Sound.Effect, 1f, 0.5f);
             ManualWeapon.Ammo -= 1;
             OnSetAmmo?.Invoke(ManualWeapon.Ammo);
             SetAnimationDelay(0.1f);
@@ -591,6 +595,7 @@ public class PlayerController : CreatureController
             }
             CreatureState = CreatureState.Shot;
             AutoWeapon.Use(this, _shootPos.position, transform.forward, transform.rotation, "Bullet_SubMachineGun");
+            Managers.Sound.Play("SubMachinegunSound", Define.Sound.Effect, 1f, 0.5f);
             AutoWeapon.Ammo -= 1;
             OnSetAmmo?.Invoke(AutoWeapon.Ammo);
             yield return new WaitForSeconds(delay);

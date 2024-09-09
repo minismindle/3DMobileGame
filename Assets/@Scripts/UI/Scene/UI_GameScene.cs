@@ -242,14 +242,7 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.TotalAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
     }
-    public void SetStageInfo(int stage)
-    {
-        GetText((int)Texts.WaveText).text = $"Wave {stage}"; 
-    }
-    public void SetTimeInfo(int time)
-    {
-        GetText((int)Texts.TimeText).text = SetTimeText((int)time);
-    }
+
     public void MonsterInfoUpdate(MonsterController boss)
     {
         if(boss.CreatureState != Define.CreatureState.Dead)
@@ -267,28 +260,5 @@ public class UI_GameScene : UI_Base
         GetText((int)Texts.HPText).gameObject.GetComponent<TextMeshProUGUI>().text = player.HP.ToString();
         GetText((int)Texts.MaxHPText).gameObject.GetComponent<TextMeshProUGUI>().text = player.MaxHP.ToString();
     }
-    string SetTimeText(int time)
-    {
-        string timeText = "";
-        if (time < 10)
-        {
-            timeText = $"00:0{time}";
-        }
-        else if (time < 60)
-        {
-            timeText = $"00:{time}";
-        }
-        else if (time < 600)
-        {
-            if (time % 60 < 10)
-                timeText = $"0{time / 60}:0{time % 60}";
-            else
-                timeText = $"0{time / 60}:{time % 60}";
-        }
-        else if (time == 10)
-        {
-            timeText = "10:00";
-        }
-        return timeText;
-    }
+
 }

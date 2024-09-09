@@ -11,7 +11,7 @@ public class TitleScene : BaseScene
     void SetInfo()
     {
         Managers.UI.ShowSceneUI<UI_TitleScene>();
-        //Managers.Sound.Play("",Define.Sound.Bgm);
+        
         SceneType = Define.Scene.TitleScene;
         var eventsystem = Managers.Resource.Instantiate("EventSystem.prefab");
         eventsystem.name = "@EventSystem";

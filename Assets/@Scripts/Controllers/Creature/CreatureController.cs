@@ -17,7 +17,6 @@ public class CreatureController : BaseController
     protected NavMeshAgent              _nav;
     protected MeshRenderer[]            _meshrenderers;
 
-    [SerializeField]
     private int _hp = 0;
     private int _maxHp = 0;
 

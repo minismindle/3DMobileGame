@@ -130,7 +130,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 125a25173ce8f974591434d86cd0403d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
   sceneType: 0
   _meleeWeapon: {fileID: 4606302115142741946}
   _manualWeapon: {fileID: 6416965612866032312}

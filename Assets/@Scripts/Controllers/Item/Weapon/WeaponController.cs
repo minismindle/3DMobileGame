@@ -31,6 +31,7 @@ public class WeaponController : ItemController
         _weapon.SetActive(true);
         _owner = owner;
         _equip = true;
+        gameObject.SetActive(false);
     }
     public override void Clear()
     {

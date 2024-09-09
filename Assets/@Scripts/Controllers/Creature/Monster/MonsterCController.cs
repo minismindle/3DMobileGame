@@ -88,17 +88,19 @@ public class MonsterCController : MonsterController
     public override bool Init()
     {
         base.Init();
-        SetInfo(0);
+        SetInfo(12000);
         return true;
     }
     public override void SetInfo(int templateID)
     {
         base.SetInfo(templateID);
-        ManualWeapon = GetComponent<ManualWeaponController>();
-        HP = 30;
-        ScanRange = 25f;
-        AttackRange = 15f;
+        Managers.Data.MonsterDataDic.TryGetValue(templateID, out var data);
+        MaxHP = data.MaxHP;
+        HP = MaxHP;
+        ScanRange = data.ScanRange;
+        AttackRange = data.AttackRange;
         MonsterName = MonsterName.MonsterC;
+        ManualWeapon = GetComponent<ManualWeaponController>();
         StopAttack();
     }
     public override void OnDamaged(BaseController attacker, int damage)

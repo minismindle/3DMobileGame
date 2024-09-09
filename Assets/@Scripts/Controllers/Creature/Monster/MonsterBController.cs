@@ -89,16 +89,18 @@ public class MonsterBController : MonsterController
     public override bool Init()
     {
         base.Init();
-        SetInfo(0);
+        SetInfo(11000);
 
         return true;
     }
     public override void SetInfo(int templateID)
     {
-        base.SetInfo(templateID);   
-        HP = 20;
-        ScanRange = 40f;
-        AttackRange = 2f;
+        base.SetInfo(templateID);
+        Managers.Data.MonsterDataDic.TryGetValue(templateID, out var data);
+        MaxHP = data.MaxHP;
+        HP = MaxHP;
+        ScanRange = data.ScanRange;
+        AttackRange = data.AttackRange;
         MonsterName = MonsterName.MonsterB;
         StopAttack();
     }

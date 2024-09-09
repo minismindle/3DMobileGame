@@ -74,16 +74,17 @@ public class BossController : MonsterController
     public override bool Init()
     {
         base.Init();
-        SetInfo(0);
+        SetInfo(13000);
         return true;
     }
     public override void SetInfo(int templateID)
     {
         base.SetInfo(templateID);
-        MaxHP = 100;
+        Managers.Data.MonsterDataDic.TryGetValue(templateID, out var data); 
+        MaxHP = data.MaxHP;
         HP = MaxHP;
         ManualWeapon = GetComponent<ManualWeaponController>();
-        AttackRange = 40f;
+        AttackRange = data.AttackRange;
         MonsterName = MonsterName.Boss;
         ObjectType = ObjectType.BossMonster;    
     }
