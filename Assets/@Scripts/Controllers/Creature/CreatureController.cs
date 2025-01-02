@@ -20,8 +20,8 @@ public class CreatureController : BaseController
     private int _hp = 0;
     private int _maxHp = 0;
 
-
-    Define.CreatureState _creatureState = Define.CreatureState.Idle;
+    [SerializeField]
+    private Define.CreatureState _creatureState = Define.CreatureState.Idle;
     public Define.Scene sceneType = Define.Scene.None;
     [SerializeField]
     MeleeWeaponController _meleeWeapon;

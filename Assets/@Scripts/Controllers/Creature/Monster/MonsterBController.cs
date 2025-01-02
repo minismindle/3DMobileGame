@@ -101,6 +101,7 @@ public class MonsterBController : MonsterController
         HP = MaxHP;
         ScanRange = data.ScanRange;
         AttackRange = data.AttackRange;
+        Score = data.Score;
         MonsterName = MonsterName.MonsterB;
         StopAttack();
     }

@@ -28,7 +28,7 @@ public class GameManager
     #endregion
 
     #region 전투
-    int _killCount;
+    int _killCount = 0;
 	public event Action<int> OnKillCountChanged;
 
 	public int KillCount
@@ -38,6 +38,21 @@ public class GameManager
 		{
 			_killCount = value; 
 			OnKillCountChanged?.Invoke(value);
+		}
+	}
+	#endregion
+
+    #region 점수
+    int _score = 0;
+	public event Action<int> OnScoreChanged;
+
+	public int Score
+	{
+		get { return _score; }
+		set
+		{
+            _score = value;
+            OnScoreChanged?.Invoke(value);
 		}
 	}
 	#endregion

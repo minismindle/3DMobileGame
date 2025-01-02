@@ -7,7 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/@Scenes/GameScene.unity
-    guid: c850ee8c3b14cc8459e7e186857cf567
+    guid: 25500dcca661f544c9333b50d038dfc9
   - enabled: 1
     path: Assets/@Scenes/GameScene.unity
     guid: 25500dcca661f544c9333b50d038dfc9
@@ -24,3 +24,4 @@ EditorBuildSettings:
       guid: 9c05fbfda7b19e048b5f05b9afbf32ba, type: 2}
     com.unity.addressableassets: {fileID: 11400000, guid: f4bc7605dcbbd954e83041f7c0ae0a2a,
       type: 2}
+  m_UseUCBPForAssetBundles: 0

@@ -14,8 +14,8 @@ using static Define;
 
 public class PlayerController : CreatureController
 {
-    Vector3 _moveDir = Vector3.zero;
-    Vector3 _shootDir = Vector3.zero;
+    private Vector3 _moveDir = Vector3.zero;
+    private Vector3 _shootDir = Vector3.zero;
 
     #region Action
     public event Action OnPlayerDead;
@@ -29,21 +29,29 @@ public class PlayerController : CreatureController
     #endregion
 
     [SerializeField]
-    Transform _shootPos;
+    private Transform _shootPos;
     [SerializeField]
-    Transform _throwPos;
+    private Transform _throwPos;
     [SerializeField]
-    AmmoController _ammo;
-    public virtual UI_Inventory Inventory { get; set; }
-
-    public virtual AmmoController Ammo {  get { return _ammo; } set { _ammo = value; } }
-    public virtual PlayerWeaponType PlayerWeaponType {  get; set; }
+    private AmmoController _ammo;
+    [SerializeField]
+    private PlayerWeaponType _playerWeaponType;
+    public  UI_Inventory Inventory { get; set; }
+    public  AmmoController Ammo {  get { return _ammo; } set { _ammo = value; } }
+    public PlayerWeaponType PlayerWeaponType { get { return _playerWeaponType; } set { _playerWeaponType = value; } }
     RaycastHit slopeHit;
 
     public Vector3 MoveDir
     {
         get { return _moveDir; }
         set { _moveDir = value.normalized; }
+    }
+    private void Update()
+    {
+        if(Input.GetKey(KeyCode.W))
+        {
+            Debug.Log("W");
+        }
     }
     public override bool Init()
     {
@@ -53,12 +61,11 @@ public class PlayerController : CreatureController
         _animator = GetComponentInChildren<Animator>();
         _collider = GetComponent<CapsuleCollider>();
         _meshrenderers = GetComponentsInChildren<MeshRenderer>();
-        _rigid.velocity = Vector3.zero;
+        _rigid.linearVelocity = Vector3.zero;
         Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
         ObjectType = ObjectType.Player;
         CreatureState = CreatureState.Idle;
         PlayerWeaponType = PlayerWeaponType.None;
-        
         return true;
     }
     protected override void SubScribe()
@@ -228,7 +235,7 @@ public class PlayerController : CreatureController
     }
     void FreezeVelocity()
     {
-        _rigid.velocity = Vector3.zero;
+        _rigid.linearVelocity = Vector3.zero;
         _rigid.angularVelocity = Vector3.zero;
     }
     void TurnPlayer()
@@ -346,14 +353,16 @@ public class PlayerController : CreatureController
     }
     public void SwingPlayer()
     {
-
+        Debug.Log("swing");
         if (CreatureState != CreatureState.Idle)
+            return;
+        if (CreatureState == CreatureState.Swing)
             return;
         CreatureState = CreatureState.Swing;
 
         MeleeWeapon.Use();
 
-        SetAnimationDelay(AttackCoolTime);
+        SetAnimationDelay(0.6f);
     }
     public void ShotPlayer()
     {

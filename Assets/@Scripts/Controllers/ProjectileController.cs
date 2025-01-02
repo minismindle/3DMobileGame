@@ -6,7 +6,6 @@ using UnityEditor.Build.Pipeline.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
-using UnityEngine.ResourceManagement.Diagnostics;
 using static Define;
 using static UnityEngine.GraphicsBuffer;
 
@@ -19,7 +18,7 @@ public class ProjectileController : BaseController
 	Vector3 _spawnPos;
     Vector3 _dir;
 	Vector3 _target;
-    Quaternion _rotation; // ÅºÈ¯¿¡¼­ Å¸±ê±îÁöÀÇ È¸Àü°¢
+    Quaternion _rotation; // ÅºÈ¯ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½
     float angularPower;
     float scaleValue;
     float speed;
@@ -58,7 +57,7 @@ public class ProjectileController : BaseController
             case "Missile_Boss":
                 _dir = (Managers.Game.Player.transform.position + new Vector3(0,2f,0) - transform.position).normalized;
                 _rotation = Quaternion.LookRotation(_dir);
-                _rigid.velocity = _dir * 20;
+                _rigid.linearVelocity = _dir * 20;
                 _rigid.MoveRotation(Quaternion.RotateTowards(transform.rotation, _rotation, 20));
                 break;
         }
@@ -78,13 +77,13 @@ public class ProjectileController : BaseController
                 _rigid.AddTorque(Vector3.back * 10, ForceMode.Impulse);
                 break;
             case "Bullet_SubMachineGun":
-                _rigid.velocity = _dir * 30;
+                _rigid.linearVelocity = _dir * 30;
                 break;
             case "Bullet_HandGun":
-                _rigid.velocity = _dir * 25;
+                _rigid.linearVelocity = _dir * 25;
                 break;
             case "Missile":
-                _rigid.velocity = _dir * 20;
+                _rigid.linearVelocity = _dir * 20;
                 break;
             case "Missile_Boss":
                 break;
@@ -154,15 +153,15 @@ public class ProjectileController : BaseController
         switch (_prefabName)
         {
             case "Missile":
-                target.OnDotDamage(_owner, 10);
+                target.OnDotDamage(_owner, 20);
                 StopDestroy();
                 Managers.Object.Despawn(this);
                 break;
             case "Rock_Boss":
-                target.OnDotDamage(_owner, 10);
+                target.OnDotDamage(_owner, 200);
                 break;
             case "Missile_Boss":
-                target.OnDotDamage(_owner, 10);
+                target.OnDotDamage(_owner, 50);
                 StopDestroy();  
                 Managers.Object.Despawn(this);  
                 break;
@@ -184,7 +183,7 @@ public class ProjectileController : BaseController
                 break;
             case "FragGrenade":
                 yield return new WaitForSeconds(2.0f);
-                _rigid.velocity = Vector3.zero;
+                _rigid.linearVelocity = Vector3.zero;
                 _rigid.angularVelocity = Vector3.zero;
                 _meshRenderer.gameObject.SetActive(false);
                 AttackNearestMonster(transform.position, 10f, Vector3.down, 0f, LayerMask.GetMask("Monster"),100);
@@ -262,15 +261,17 @@ public class ProjectileController : BaseController
     {
         angularPower = 2f;
         scaleValue = 0.1f;
+        _rigid.linearVelocity = Vector3.zero;   
+        _rigid.angularVelocity = Vector3.zero;
         while (true)
         {
-            angularPower += 0.5f;
-            scaleValue += 0.02f;
+            angularPower += 0.2f;
+            scaleValue += 0.01f;
             scaleValue = Mathf.Min(1,scaleValue);
             angularPower = Mathf.Min(5,angularPower);
             transform.localScale = Vector3.one * scaleValue;
             _rigid.AddTorque(transform.right * angularPower, ForceMode.Acceleration);
-            _rigid.velocity = _dir * scaleValue * 20;
+            _rigid.linearVelocity = _dir * scaleValue * 20;
             yield return null;
         }
     }
@@ -284,13 +285,15 @@ public class ProjectileController : BaseController
 
     void StopRockBoss()
     {
-        StopCoroutine(_coProjectile);    
+        if(_coProjectile != null)
+            StopCoroutine(_coProjectile);
+        _coProjectile = null;
     }
     #endregion
 
     public void DestroyProjectile()
 	{
-        _rigid.velocity = Vector3.zero;
+        _rigid.linearVelocity = Vector3.zero;
         _rigid.angularVelocity = Vector3.zero;
         Managers.Object.Despawn(this);
 	}

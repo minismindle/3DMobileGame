@@ -9,10 +9,12 @@ using Unity.VisualScripting;
 using UnityEngine.Events;
 using Data;
 using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class UI_GameScene : UI_Base
 {
-    GameObject bossStateGroup;
+    private GameObject bossStateGroup;
+    private GameObject scoreGroup;
     public virtual int GrenadeCount {  get; set; }  
     public virtual int ConsumableCount {  get; set; }   
 
@@ -20,7 +22,7 @@ public class UI_GameScene : UI_Base
     {
         GuageFront,
         BossStateGroup,
-        TimeGroup,
+        ScoreGroup,
     }
     enum Texts
     {
@@ -33,7 +35,8 @@ public class UI_GameScene : UI_Base
         TotalAmmoText,
         GrenadeCountText,
         ConsumableCountText,
-        ItemSummaryText
+        ItemSummaryText,
+        ScoreText
     }
     enum Images
     {
@@ -65,7 +68,9 @@ public class UI_GameScene : UI_Base
     protected override void BindEvents()
     {
         bossStateGroup = GetObject((int)GameObjects.BossStateGroup).gameObject;
+        scoreGroup = GetObject((int) GameObjects.ScoreGroup).gameObject;
         bossStateGroup.SetActive(false);
+        scoreGroup.SetActive(false);
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerDownAttackButton, null,Define.UIEvent.PointerDown);
         GetButton((int)Buttons.AttackButton).gameObject.BindEvent(OnPointerUpAttackButton,null,Define.UIEvent.PointerUp);
         GetButton((int)Buttons.JumpButton).gameObject.BindEvent(OnClickJumpButton);
@@ -197,6 +202,10 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.GoldText).gameObject.GetComponent<TextMeshProUGUI>().text = gold.ToString();
     }
+    public void SetScore(int score)
+    {
+        GetText((int)Texts.ScoreText).gameObject.GetComponent<TextMeshProUGUI>().text = score.ToString();
+    }
     public void SetGrenadeCount(int count)
     {
         if (count == 0)
@@ -242,7 +251,6 @@ public class UI_GameScene : UI_Base
     {
         GetText((int)Texts.TotalAmmoText).gameObject.GetComponent<TextMeshProUGUI>().text = count.ToString();
     }
-
     public void MonsterInfoUpdate(MonsterController boss)
     {
         if(boss.CreatureState != Define.CreatureState.Dead)
@@ -260,5 +268,12 @@ public class UI_GameScene : UI_Base
         GetText((int)Texts.HPText).gameObject.GetComponent<TextMeshProUGUI>().text = player.HP.ToString();
         GetText((int)Texts.MaxHPText).gameObject.GetComponent<TextMeshProUGUI>().text = player.MaxHP.ToString();
     }
-
+    public void ActiveScore()
+    {
+        scoreGroup.SetActive(true);
+    }
+    public void DisActiveScore()
+    {
+        scoreGroup.SetActive(false);
+    }
 }

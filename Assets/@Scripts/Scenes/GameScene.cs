@@ -9,16 +9,20 @@ using static Define;
 public class GameScene : BaseScene
 {
     [SerializeField]
-    NPCController shopNPC;
+    private NPCController shopNPC;
     [SerializeField]
-    NPCController questNPC;
+    private NPCController questNPC;
 
-    Timer timer;
-    SpawningPool spawningPool;
-    UI_GameScene ui;
-    BossController boss;
-    StageData stageData;
-    public virtual SpawningPool SpawningPool { get { return spawningPool; } set { spawningPool = value; } }
+    private Timer               timer;
+    private SpawningPool        spawningPool;
+    private UI_GameScene        ui;
+    private BossController      boss;
+    private StageData           stageData;
+    public virtual SpawningPool SpawningPool 
+    { 
+        get { return spawningPool; } 
+        set { spawningPool = value; } 
+    }
     void Start()
     {
         Start_init();
@@ -31,6 +35,7 @@ public class GameScene : BaseScene
 
         ui =  Managers.UI.ShowSceneUI<UI_GameScene>();
         spawningPool = gameObject.GetOrAddComponent<SpawningPool>();
+        timer = gameObject.GetOrAddComponent<Timer>();
 
         var player = Managers.Object.Spawn<PlayerController>(Vector3.zero, transform.rotation);
 
@@ -47,11 +52,13 @@ public class GameScene : BaseScene
         Managers.Game.OnGoldCountChanged += OnGoldCountChanged;
         Managers.Game.OnKillCountChanged -= OnKillCountChanged;
         Managers.Game.OnKillCountChanged += OnKillCountChanged;
+        Managers.Game.OnScoreChanged -= OnScoreChanged;
+        Managers.Game.OnScoreChanged += OnScoreChanged;
 
         Managers.UI.ShowPopup<UI_Inventory>();
         Managers.UI.CloseAllPopup();
 
-        Managers.Sound.Play("MainBGM", Define.Sound.Bgm,1,0.5f);
+        //Managers.Sound.Play("MainBGM", Define.Sound.Bgm,1,0.5f);
         Managers.Game.Gold = 10000000;
     }
     protected override void Init()
@@ -77,15 +84,15 @@ public class GameScene : BaseScene
     {
         if(killcount == stageData.BossSpawnCount)
         {
-            spawningPool.StopSpawn();
-            StopAllCoroutines();
             boss = Managers.Object.Spawn<BossController>(spawningPool.gameObject.transform.position,transform.rotation,0, stageData.BossName);
-            boss.OnBossDead -= OnBossDead;  
-            boss.OnBossDead += OnBossDead;  
             boss.MonsterInfoUpdate -= ui.MonsterInfoUpdate;  
             boss.MonsterInfoUpdate += ui.MonsterInfoUpdate;
             boss.InvokeMonsterData();
         }
+    }
+    public void OnScoreChanged(int score)
+    {
+        ui.SetScore(score);
     }
     public void OnStage()
     {
@@ -94,28 +101,30 @@ public class GameScene : BaseScene
         questNPC.gameObject.SetActive(false);
         spawningPool.SetInfo(25000);
         spawningPool.StartSpawn();
+        timer.StartTimer();
+        ui.ActiveScore();
     }
     public void OutStage()
     {
+        Managers.Object.Despawn(boss);
+        Managers.Game.KillCount = 0;
+        Managers.Game.Score = 0;    
         shopNPC.gameObject.SetActive(true);
         questNPC.gameObject.SetActive(true);
+        spawningPool.StopSpawn();
+        timer.StopTimer();
+        ui.DisActiveScore();    
     }
-    #region 보스 사망시 스테이지 종료
-    void OnBossDead()
+    #region 플레이어 사망시 스테이지 종료
+    void OnPlayerDead()
     {
-        StartCoroutine(CoEndStage(3f));
+        StartCoroutine(CoEndStage(1.25f));
     }
     IEnumerator CoEndStage(float delay)
     {
         yield return new WaitForSeconds(delay);
         Managers.UI.ShowPopup<UI_GameResultPopup>();
         OutStage();
-    }
-    #endregion
-    #region 플레이어 사망시 스테이지 종료
-    void OnPlayerDead()
-    {
-        StartCoroutine(CoEndStage(1.25f));
     }
     #endregion
     private void OnDestroy()

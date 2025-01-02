@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using DG.Tweening;
 
 public class CoinController : ItemController
 {
@@ -18,8 +19,9 @@ public class CoinController : ItemController
     }
     private void FixedUpdate()
     {
-        
+        transform.Rotate(new Vector3(0,75f,0) * Time.deltaTime);
     }
+    
     void SetInfo()
     {
         ObjectType = Define.ObjectType.Coin;
@@ -29,13 +31,13 @@ public class CoinController : ItemController
         switch(CoinType) 
         {
             case Define.CoinType.Bronze:
-                _gold = 5;
+                _gold = 50;
                 break;
             case Define.CoinType.Silver:
-                _gold = 15; 
+                _gold = 100; 
                 break;
             case Define.CoinType.Gold:
-                _gold = 25;
+                _gold = 200;
                 break;
         }
         return _gold;

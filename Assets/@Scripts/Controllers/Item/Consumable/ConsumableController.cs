@@ -15,7 +15,11 @@ public class ConsumableController : ItemController
         {
             base.Count = value;
             OnConsumableCountChanged?.Invoke(value);
-            if (Count == 0) { base.Clear(); OnConsumableClear?.Invoke(); }
+            if (Count == 0) 
+            { 
+                base.Clear(); 
+                OnConsumableClear?.Invoke(); 
+            }
         }
     }
     public override bool Init()

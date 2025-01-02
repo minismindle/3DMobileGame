@@ -99,6 +99,7 @@ public class MonsterCController : MonsterController
         HP = MaxHP;
         ScanRange = data.ScanRange;
         AttackRange = data.AttackRange;
+        Score = data.Score;
         MonsterName = MonsterName.MonsterC;
         ManualWeapon = GetComponent<ManualWeaponController>();
         StopAttack();

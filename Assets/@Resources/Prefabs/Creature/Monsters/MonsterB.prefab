@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aba5bc692c528d84c9d4ae3576d2eb45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 0
+  _creatureState: 0
   sceneType: 0
   _meleeWeapon: {fileID: 0}
   _manualWeapon: {fileID: 0}
@@ -136,7 +136,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8960490796316632776, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5084a2898f8f55840931eb7419d779e2, type: 2}
     - target: {fileID: -8679921383154817045, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
@@ -216,7 +216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3818824636959225221, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5084a2898f8f55840931eb7419d779e2, type: 2}
     - target: {fileID: -2917561728969970577, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
@@ -226,7 +226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2298401190775492070, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5084a2898f8f55840931eb7419d779e2, type: 2}
     - target: {fileID: -2282220337652264415, guid: 98a47f1cd28823f4b8ab7f52d3d506fb,
@@ -291,7 +291,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &1218583633
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -305,6 +305,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

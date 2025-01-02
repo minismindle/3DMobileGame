@@ -66,6 +66,7 @@ namespace Data
         public float AttackRange;
         public float ScanRange;
         public int Attack;
+        public int Score;
     }
     [Serializable]
     public class MonsterDataLoader : ILoader<int, MonsterData>
@@ -80,7 +81,6 @@ namespace Data
         }
     }
     #endregion
-
     #region PlayerData
     [Serializable]
     public class PlayerData
@@ -106,7 +106,6 @@ namespace Data
         }
     }
     #endregion
-
     #region ProjectileData
     [Serializable]
     public class ProjectileData
@@ -129,7 +128,6 @@ namespace Data
         }
     }
     #endregion
-
     #region StageData
     [Serializable]
     public class StageData
@@ -153,6 +151,13 @@ namespace Data
                 dict.Add(stagedata.DataId, stagedata);
             return dict;    
         }
+    }
+    #endregion
+    #region SaveData
+    [Serializable]
+    public class SaveData
+    {
+
     }
     #endregion
 }

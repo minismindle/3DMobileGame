@@ -20,7 +20,7 @@ public class LoadScene : BaseScene
         var eventsystem = Managers.Resource.Instantiate("EventSystem.prefab");
         eventsystem.name = "@EventSystem";
         DontDestroyOnLoad(eventsystem);
-        Managers.Scene.LoadScene(Define.Scene.GameScene);
+        Managers.Scene.LoadScene(Define.Scene.TitleScene);
     }
     public override void Clear()
     {

@@ -18,6 +18,7 @@ public class MonsterController : CreatureController
     public MonsterName MonsterName { get; set; }
     public virtual float ScanRange { get; set; } 
     public virtual float AttackRange { get; set; } 
+    public virtual int Score {  get; set; } 
     public GameObject Target { get; set; }
 
     protected MonsterName _monsterName;
@@ -43,7 +44,7 @@ public class MonsterController : CreatureController
     }
     public virtual void FreezeVelocity()
     {
-        _rigid.velocity = Vector3.zero;
+        _rigid.linearVelocity = Vector3.zero;
         _rigid.angularVelocity = Vector3.zero;
     }
     public override bool Init()
@@ -110,14 +111,21 @@ public class MonsterController : CreatureController
         CreatureState = Define.CreatureState.Dead;
         yield return new WaitForSeconds(3.0f);
         _coDead = null;
+        ItemSpawn();
         Managers.Object.Despawn(this);
         Managers.Game.KillCount++;
+        Managers.Game.Score += Score;
     }
     void OnDeadState()
     {
         if (_coDead != null)
             return;
         _coDead = StartCoroutine(CoDead()); 
+    }
+    
+    protected void ItemSpawn()
+    {
+        Managers.Object.Spawn<CoinController>(transform.position, transform.rotation, 0, "Coin_Gold");
     }
     #endregion
 

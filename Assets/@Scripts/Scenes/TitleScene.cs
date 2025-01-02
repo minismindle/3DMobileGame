@@ -6,13 +6,14 @@ public class TitleScene : BaseScene
 {
     void Start()
     {
-        Init();
+        SceneType = Define.Scene.TitleScene;
+
+        Managers.Data.Init();
+
+        Managers.UI.ShowSceneUI<UI_TitleScene>();
     }
     void SetInfo()
     {
-        Managers.UI.ShowSceneUI<UI_TitleScene>();
-        
-        SceneType = Define.Scene.TitleScene;
         var eventsystem = Managers.Resource.Instantiate("EventSystem.prefab");
         eventsystem.name = "@EventSystem";
     }

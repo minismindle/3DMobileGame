@@ -13,8 +13,6 @@ enum BossSkillType
 }
 public class BossController : MonsterController
 {
-    public event Action OnBossDead;
-
     [SerializeField]
     Transform _missilePos1;
     [SerializeField]
@@ -39,7 +37,6 @@ public class BossController : MonsterController
                 break;
             case CreatureState.Dead:
                 _animator.SetTrigger("DoDie");
-                OnBossDead?.Invoke();   
                 break;
         }
     }
@@ -52,7 +49,9 @@ public class BossController : MonsterController
         Target = player;
         AttackMonster();
 
-        if (Target != null || CreatureState == CreatureState.Idle)
+        if (Target == null)
+            return;
+        if(CreatureState == CreatureState.Idle)
             TurnMonster(Target.transform.position);
     }
     public override void IdleMonster()
@@ -85,6 +84,7 @@ public class BossController : MonsterController
         HP = MaxHP;
         ManualWeapon = GetComponent<ManualWeaponController>();
         AttackRange = data.AttackRange;
+        Score = data.Score;
         MonsterName = MonsterName.Boss;
         ObjectType = ObjectType.BossMonster;    
     }
@@ -104,7 +104,6 @@ public class BossController : MonsterController
         StopRandomSkill();
         _nav.SetDestination(transform.position);
         base.OnDead();
-        OnBossDead?.Invoke();
     }
     private void FixedUpdate()
     {
@@ -123,7 +122,6 @@ public class BossController : MonsterController
         while (true)
         {
             yield return new WaitForSeconds(3.0f);
-            CreatureState = CreatureState.Idle;
             SetRandomSKill();
             switch (_randomSkill)
             {
@@ -132,17 +130,21 @@ public class BossController : MonsterController
                     _nav.SetDestination(Target.transform.position);
                     yield return new WaitForSeconds(2f);
                     _nav.SetDestination(transform.position);
+                    CreatureState = CreatureState.Idle;
                     break;
                 case (int)BossSkillType.SKill1:
                     CreatureState = CreatureState.Skill1;
                     ManualWeapon.Use(this, _missilePos1.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
                     yield return new WaitForSeconds(0.5f);
                     ManualWeapon.Use(this, _missilePos2.transform.position, transform.forward, this.transform.rotation, "Missile_Boss");
+                    yield return new WaitForSeconds(0.5f);
+                    CreatureState = CreatureState.Idle;
                     break;
                 case (int)BossSkillType.Skill2:
                     CreatureState = CreatureState.Skill2;
                     ManualWeapon.Use(this, _rockPos.transform.position, transform.forward, this.transform.rotation, "Rock_Boss");
-                    yield return new WaitForSeconds(3.0f);
+                    yield return new WaitForSeconds(1.0f);
+                    CreatureState = CreatureState.Idle;
                     break;
             }
         }

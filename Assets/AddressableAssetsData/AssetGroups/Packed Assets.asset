@@ -13,18 +13,10 @@ MonoBehaviour:
   m_Name: Packed Assets
   m_EditorClassIdentifier: 
   m_GroupName: Packed Assets
-  m_Data:
-    m_SerializedData: []
   m_GUID: 8c11bce0e3c501e40a98552290a67ade
   m_SerializeEntries:
-  - m_GUID: ab4b63bcbbe8a1d45b37bb1be6c3ccfc
-    m_Address: IconAmmo
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9a9110922af7ccc4e9cf541b89975dbd
-    m_Address: IconFragGrenade
+  - m_GUID: 6208b99fd498de1409802c5fd7a8feb9
+    m_Address: IconSubMachineGun
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -35,8 +27,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f21928a3b7f2a6a4080f5260affa08d2
-    m_Address: IconHandGun
+  - m_GUID: 9a9110922af7ccc4e9cf541b89975dbd
+    m_Address: IconFragGrenade
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -47,8 +39,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6208b99fd498de1409802c5fd7a8feb9
-    m_Address: IconSubMachineGun
+  - m_GUID: ab4b63bcbbe8a1d45b37bb1be6c3ccfc
+    m_Address: IconAmmo
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f21928a3b7f2a6a4080f5260affa08d2
+    m_Address: IconHandGun
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
