@@ -13,45 +13,8 @@ MonoBehaviour:
   m_Name: Projectile
   m_EditorClassIdentifier: 
   m_GroupName: Projectile
-  m_Data:
-    m_SerializedData: []
   m_GUID: d1f7028199d223d40a3edfb860b8ca44
-  m_SerializeEntries:
-  - m_GUID: 3842cbe56aa9f504f88834e0c1946a46
-    m_Address: Bullet
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 9496193ab9608ab4cb7075965d4f76ff
-    m_Address: Bullet_HandGun
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 88330e974e1661e4b8b990b0116507f5
-    m_Address: Bullet_SubMachineGun
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 87aff79491b96674d808cfbc987c17e9
-    m_Address: FragGrenade
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 45fafb1d61153494cb85310f993aa5ca
-    m_Address: Missile
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 50e7f7cd6a4e20544803ae9978a43ec5
-    m_Address: Missile_Boss
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: c49bd73e6df5cd84e85e421b183064f8
-    m_Address: Rock_Boss
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:

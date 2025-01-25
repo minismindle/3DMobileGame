@@ -13,35 +13,8 @@ MonoBehaviour:
   m_Name: Item
   m_EditorClassIdentifier: 
   m_GroupName: Item
-  m_Data:
-    m_SerializedData: []
   m_GUID: 0d6871fcd2fb8174693533434d0867bd
-  m_SerializeEntries:
-  - m_GUID: 1adf4771a2a84ef4eaaadba340ae7c77
-    m_Address: Ammo
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 0e113227866241e4c9359331abc0718b
-    m_Address: Hammer
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: def9561722ca3f740adfbe9966d21cda
-    m_Address: HandGun
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 437ad4dccfddbb64b9b2bb88be07abe4
-    m_Address: Potion
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-  - m_GUID: 55d971a0c49e912459a9b5719327456c
-    m_Address: SubMachineGun
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:

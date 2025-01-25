@@ -13,34 +13,8 @@ MonoBehaviour:
   m_Name: Sound
   m_EditorClassIdentifier: 
   m_GroupName: Sound
-  m_Data:
-    m_SerializedData: []
   m_GUID: 441e3ee8d0300674bb4e5007035949f7
-  m_SerializeEntries:
-  - m_GUID: 1269e749a4a7db54ca101e6b982a0290
-    m_Address: MainBGM
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6739c01659ad96d47987f4ddee226b36
-    m_Address: HandgunSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 34b439bf70b80a6409eadecc6be92d68
-    m_Address: SubMachinegunSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1fd31868d68903d4f9e2c4a3b7ef98f3
-    m_Address: FragGrenadeSound
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:

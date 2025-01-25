@@ -14,43 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Packed Assets
   m_GUID: 8c11bce0e3c501e40a98552290a67ade
-  m_SerializeEntries:
-  - m_GUID: 6208b99fd498de1409802c5fd7a8feb9
-    m_Address: IconSubMachineGun
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7727a42333cb97541a45b274311702e0
-    m_Address: IconHammer
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9a9110922af7ccc4e9cf541b89975dbd
-    m_Address: IconFragGrenade
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a7c0229300d613043824e94f6c825dd3
-    m_Address: IconPotion
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ab4b63bcbbe8a1d45b37bb1be6c3ccfc
-    m_Address: IconAmmo
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f21928a3b7f2a6a4080f5260affa08d2
-    m_Address: IconHandGun
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:

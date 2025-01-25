@@ -14,61 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: UI
   m_GUID: 112f8acb9351b5e4482bcad6ab8d10c3
-  m_SerializeEntries:
-  - m_GUID: 200da182a667d9942b5df21d974c8913
-    m_Address: UI_TitleScene.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 45167f71314ce42409f560a609924e98
-    m_Address: UI_GameResultPopup.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 548a94f970312594bb2d7200fcda890d
-    m_Address: UI_Shop.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 55d1dc134c110954fa9e1585e808fba5
-    m_Address: UI_InventorySlot.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 566cb01a134c7534c801423648d6bec9
-    m_Address: UI_Joystick.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 60690d43349eec644b947a8f16683f02
-    m_Address: UI_Inventory.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cdf16d0632ae6794894ec27860c3af21
-    m_Address: UI_GameScene.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: db1c0d23a8d9ce64b89a31e42bc8a2c9
-    m_Address: UI_ShopSlot
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f6e6be36428917e4a91013887f1e3d71
-    m_Address: EventSystem.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fe56fd36c2439444cb73b4c913b51869, type: 2}
   m_SchemaSet:
